@@ -31,6 +31,7 @@ with lib; {
         # media, storage
         koel.enable = true;
         caldav.enable = true;
+        immich.enable = true;
         git.enable = true;
         git-runner.enable = true;
 
