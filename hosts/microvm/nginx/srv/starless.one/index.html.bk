@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAYhJREFUOE+lkzFIAmEUx5/UwUVD6CiCU9im33WbQ+ByDnGFNMXBuTXoeEhUNhhGw406tOkNTddREnguQotb9+lmNQm3S0NwcJ0XnyCc1smV3/re+/G9////QrDiCy2bTyaTJ6Q+GAxu/fqWAkql0vNkMgFZlvcCAXieH5qmeW8YxhUA2PV6/YMMFgqFLQCgWJYtR6PRo1arlZgB537AMExV07SzWq02lGX5tNfrPbiuC+l0+lCSpJtisbiTy+WuDcM4/xUAALQkSTiTyZDGxng8zpPGcDjc0DQt3+12CRgBgOUHWAOAfZqmDyiKem82m5ekURTFim3b25ZlPQLAEwA4cwCiNsdxx/F4fDeVSm0ihEDXdUsURaIFKIpywXHcBsYY+v3+52g0eul0OnfEnakGXgBCaApot9szgKsoSjmbzU4BGOOfAI9F654V3sggqQmCUHEcJ+FZ4SuwiMSFSCQSTESWZauqqv7fRp7nX03TVP2CxDBMORaL+QdpMa5/jvIiYOVjCnLp32l73hFxmGeTAAAAAElFTkSuQmCC"/>
+<head/>
+<body
+  style="position: fixed; left: 0px; right: 0px; top: 0px; bottom: 0px; overflow: hidden; margin: 0; padding: 0;"
+>
+  <canvas
+    id="canvas"
+    style="width: 100%; height: 100%; padding: 0;margin: 0;"
+  ></canvas>
+  <script>
+    const canvas = document.getElementById("canvas");
+    const c = canvas.getContext("2d");
+
+    let w;
+    let h;
+
+    const setCanvasExtents = () => {
+      w = document.body.clientWidth;
+      h = document.body.clientHeight;
+      canvas.width = w;
+      canvas.height = h;
+    };
+
+    setCanvasExtents();
+
+    window.onresize = () => {
+      setCanvasExtents();
+    };
+
+    const makeStars = count => {
+      const out = [];
+      for (let i = 0; i < count; i++) {
+        const s = {
+          x: Math.random() * 1600 - 800,
+          y: Math.random() * 900 - 450,
+          z: Math.random() * 1000
+        };
+        out.push(s);
+      }
+      return out;
+    };
+
+    let stars = makeStars(10000);
+
+    const clear = () => {
+      c.fillStyle = "black";
+      c.fillRect(0, 0, canvas.width, canvas.height);
+    };
+
+    const putPixel = (x, y, brightness) => {
+      const intensity = brightness * 255;
+      const rgb = "rgb(" + intensity + "," + intensity + "," + intensity + ")";
+      c.fillStyle = rgb;
+      c.fillRect(x, y, 1, 1);
+    };
+
+    const moveStars = distance => {
+      const count = stars.length;
+      for (var i = 0; i < count; i++) {
+        const s = stars[i];
+        s.z -= distance;
+        while (s.z <= 1) {
+          s.z += 1000;
+        }
+      }
+    };
+
+    let prevTime;
+    const init = time => {
+      prevTime = time;
+      requestAnimationFrame(tick);
+    };
+
+    const tick = time => {
+      let elapsed = time - prevTime;
+      prevTime = time;
+
+      moveStars(elapsed * 0.15);
+
+      clear();
+
+      const cx = w / 2;
+      const cy = h / 2;
+
+      const count = stars.length;
+      for (var i = 0; i < count; i++) {
+        const star = stars[i];
+
+        const x = cx + star.x / (star.z * 0.001);
+        const y = cy + star.y / (star.z * 0.001);
+
+        if (x < 0 || x >= w || y < 0 || y >= h) {
+          continue;
+        }
+
+        const d = star.z / 1150.0;
+        const b = 1 - d * d;
+
+        putPixel(x, y, b);
+      }
+
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(init);
+  </script>
+</body>

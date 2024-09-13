@@ -1,0 +1,5 @@
+#!/usr/bin/env fish
+set hwmon $argv[1]
+echo $argv[2] > /sys/class/hwmon/hwmon"$hwmon"/pwm1_enable
+echo $argv[2] > /sys/class/hwmon/hwmon"$hwmon"/pwm3_enable
+echo $argv[2] > /sys/class/hwmon/hwmon"$hwmon"/pwm4_enable

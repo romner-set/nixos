@@ -1,0 +1,6 @@
+nft flush chain inet mullvad forward
+nft flush chain inet mullvad output
+nft flush chain inet mullvad input
+nft chain inet mullvad forward \{ policy accept\; \}
+nft chain inet mullvad output \{ policy accept\; \}
+nft chain inet mullvad input \{ policy accept\; \}

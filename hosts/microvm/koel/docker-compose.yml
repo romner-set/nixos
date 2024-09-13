@@ -1,0 +1,70 @@
+version: '3'
+services:
+  koel:
+    image: phanan/koel
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - '8080:80'
+    env_file:
+      - /secrets/env
+    environment:
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=database
+      - DB_USERNAME=koel
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=koel
+      - DB_PORT=5432
+      - MEDIA_PATH=/music
+      - APP_MAX_SCAN_TIME=60000
+      - MEMORY_LIMIT=8192
+      - STREAMING_METHOD=x-sendfile
+      - SCOUT_DRIVER=meilisearch
+      - MEILISEARCH_HOST=meilisearch:7700
+      - MEILISEARCH_KEY=${MEILISEARCH_KEY}
+      - TRANSCODE_FLAC=false
+      - FFMPEG_PATH=
+      - OUTPUT_BIT_RATE=
+      - ALLOW_DOWNLOAD=true
+      - FORCE_HTTPS=true
+      - PUSHER_APP_CLUSTER=eu
+      - LASTFM_API_KEY=${LASTFM_API_KEY}
+      - LASTFM_API_SECRET=${LASTFM_API_SECRET}
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+      - PUSHER_APP_ID=${PUSHER_APP_ID}
+      - PUSHER_APP_KEY=${PUSHER_APP_KEY}
+      - PUSHER_APP_SECRET=${PUSHER_APP_SECRET}
+    volumes:
+      - /music:/music:ro
+      - /data/covers:/var/www/html/public/img/covers
+      - /data/search_index:/var/www/html/storage/search-indexes
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.5
+    restart: always
+    env_file:
+      - /secrets/env
+    environment:
+      - MEILI_MASTER_KEY=${MEILISEARCH_KEY}
+      - MEILI_ENV=production
+      - MEILI_HTTP_ADDR=0.0.0.0:7700
+      - MEILI_NO_ANALYTICS=true
+      - MEILI_MAX_INDEXING_MEMORY=8G
+      - MEILI_MAX_INDEXING_THREADS=4
+    volumes:
+      - /data/meili_data:/meili_data
+
+  database:
+    image: postgres:13
+    restart: always
+    env_file:
+      - /secrets/env
+    volumes:
+      - /data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=koel
+      - POSTGRES_USER=koel
+      - POSTGRES_PASSWORD=${DB_PASSWORD}

@@ -1,0 +1,62 @@
+#!/run/current-system/sw/bin/bash
+
+# Get the number of CPUs
+num_cpus=$(nproc --all)
+
+cpu_util=()
+cpu_stat1=()
+cpu_stat2=()
+get_cpu_utilization() {
+    # Read CPU statistics
+    readarray -t cpu_stat1 </proc/stat
+    sleep 0.5
+    readarray -t cpu_stat2 </proc/stat
+
+    for ((i=0; i<num_cpus; i++)); do
+        # Calculate CPU utilization
+        cpu_stat1_line=(${cpu_stat1[i+1]})
+        cpu_stat2_line=(${cpu_stat2[i+1]})
+        idle1=${cpu_stat1_line[4]}
+        idle2=${cpu_stat2_line[4]}
+        total1=0
+        total2=0
+        for j in ${cpu_stat1_line[@]}; do
+            total1=$((total1+$j))
+        done
+        for j in ${cpu_stat2_line[@]}; do
+            total2=$((total2+$j))
+        done
+        idle=$((idle2-idle1))
+        total=$((total2-total1))
+        cpu_utilization=$((100*(total-idle)/total))
+        cpu_util[$i]=$cpu_utilization
+    done
+}
+
+# Function to get CPU frequency
+get_cpu_frequency() {
+    readarray -t cpu_freq <<< $(cat /proc/cpuinfo | grep "cpu MHz" | awk '{print $4}')
+}
+
+# Display CPU utilization and frequency
+get_cpu_utilization
+get_cpu_frequency
+
+get_max_length() {
+    local max_length=0
+    for element in "${@}"; do
+        local length=${#element}
+        if (( length > max_length )); then
+            max_length=$length
+        fi
+    done
+    echo "$max_length"
+}
+
+# Calculate maximum lengths
+max_length_cpu_util=$(get_max_length "${cpu_util[@]}")
+max_length_cpu_freq=$(get_max_length "${cpu_freq[@]}")
+
+for i in {0..31}; do
+    printf "%-5s %*s %*s\n" "$i" "$((max_length_cpu_util+1))" "${cpu_util[$i]}%" "$((max_length_cpu_freq+7))" "${cpu_freq[$i]} MHz"
+done

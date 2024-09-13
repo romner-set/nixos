@@ -1,0 +1,21 @@
+on:
+  schedule:
+    - cron: '0 1 * * *' # runs daily at 01:00 UTC
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Update inputs
+        run: nix flake update latest latest-unstable disko sops-nix
+
+      - uses: https://github.com/stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Auto-updated flake.lock inputs
+          commit_user_name: update-bot
+          commit_user_email: noreply@cynosure.red
+          commit_author: update-bot <noreply@cynosure.red>

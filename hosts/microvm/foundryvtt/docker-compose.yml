@@ -1,0 +1,24 @@
+version: "2"
+services:
+  foundry:
+    image: felddy/foundryvtt:11
+    hostname: foundryvtt.cynosure.red
+    volumes:
+      - /data:/data
+    env_file:
+      - /secrets/env
+    environment:
+      - FOUNDRY_PASSWORD=${FOUNDRY_PASSWORD}
+      - FOUNDRY_USERNAME=${FOUNDRY_USERNAME}
+      - FOUNDRY_ADMIN_KEY=${FOUNDRY_ADMIN_KEY}
+      - FOUNDRY_HOSTNAME=foundryvtt.cynosure.red
+      - FOUNDRY_IP_DISCOVERY=false
+      - FOUNDRY_MINIFY_STATIC_FILES=true
+      - FOUNDRY_PROXY_PORT=443
+      - FOUNDRY_PROXY_SSL=true
+      - FOUNDRY_TELEMETRY=false
+      - CONTAINER_PRESERVE_CONFIG=true
+    ports:
+      - 30000:30000
+    storage_opt:
+      size: '1G'
