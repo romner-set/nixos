@@ -11,7 +11,7 @@ with lib; {
     system.autoUpgrade = {
       enable = true;
       dates = "04:30";
-      flake = toString inputs.self;
+      flake = "git+https://git.${config.networking.domain}/romner-set/nixos";
       allowReboot = true;
       randomizedDelaySec = "60min";
     };
