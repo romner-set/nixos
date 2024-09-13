@@ -1,7 +1,8 @@
 cfg: {
   id = 9;
 
-  udpPorts = [853];
+  udpPorts = [53 853];
+  tcpPorts = [53];
   vcpu = cfg.defaults.vcpu.max;
 
   shares = [

@@ -19,12 +19,12 @@ with lib; let
       {
         ipv4 = "162.55.33.86";
         ipv6 = "2a01:4f8:c010:91ac::1";
-        cert-key = "Mz0Djp8W1LIl5oazGfY2Hr3oPqTj93Z8acvXDs4Ms58="; # pubkeys, safe to expose
+        cert-key = "Dz14HoMs3cuczSYTUscntbB7ZRb7JAGg98/pP+Rv0tk="; # pubkeys, safe to expose
       }
       {
         ipv4 = "144.24.191.4";
         ipv6 = "2603:c020:8016:9fff::fff";
-        cert-key = "WnHKA98GSQcJm1X6NLSFTEfU9NiHS/kQeZmgPWsFRRc=";
+        cert-key = "CYBwKpSfuc8T91RR7vQxmngdE58zxXZk4p+R+WWYLew=";
       }
     ];
   };
@@ -75,9 +75,9 @@ in {
       keyFiles = ["/secrets/acme.conf"];
       settings = {
         server = rec {
-          listen = ["::1@53"];
+          listen = ["0.0.0.0@53" "::@53"];
           listen-quic = ["0.0.0.0@853" "::@853"];
-          identity = "${config.networking.hostName}.${domain}";
+          identity = "${config.cfg.microvm.host.hostName}.${domain}";
           nsid = identity;
           version = "KnotDNS";
           #automatic-acl = "on";
