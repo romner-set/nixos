@@ -134,7 +134,6 @@
             };
           }) (builtins.attrNames (builtins.readDir ./hosts/server)))
           ++
-          /*
           #
           # ARM VPSs
           #
@@ -149,7 +148,6 @@
             };
           }) (builtins.attrNames (builtins.readDir ./hosts/vps)))
           ++
-          */
           #
           # MicroVMs
           #

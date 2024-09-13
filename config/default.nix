@@ -4,6 +4,6 @@
     ./desktop
     ./server
     ./microvm
-    #./vps
+    ./vps
   ];
 }

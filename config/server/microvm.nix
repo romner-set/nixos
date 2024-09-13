@@ -186,15 +186,16 @@ in {
   config.microvm = mkIf cfg.enable {
     host.enable = lib.mkForce true;
 
-    vms = mapAttrs' (name: vm: {
-      name = "${config.networking.hostName}:${name}";
-      value = rec {
-        flake = inputs.self;
-        updateFlake = "git+file:///etc/nixos";
-        #restartIfChanged = true;
-      };
-    })
-    vmsEnabled;
+    vms =
+      mapAttrs' (name: vm: {
+        name = "${config.networking.hostName}:${name}";
+        value = rec {
+          flake = inputs.self;
+          updateFlake = "git+file:///etc/nixos";
+          #restartIfChanged = true;
+        };
+      })
+      vmsEnabled;
   };
 
   /*
