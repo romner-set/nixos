@@ -2,5 +2,6 @@
 
 cd /var/lib/microvms
 for vm in *
-	microvm -Ru $vm
+	microvm -u $vm
 end
+systemctl restart microvm@\*
