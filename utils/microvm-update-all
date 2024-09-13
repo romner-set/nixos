@@ -1,0 +1,6 @@
+#!/usr/bin/env fish
+
+cd /var/lib/microvms
+for vm in *                                                                                                                                                                                                                                     
+	microvm -Ru $vm &
+end
