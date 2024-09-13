@@ -1,0 +1,12 @@
+#!/usr/bin/env fish
+# Update after adding/removing VMs
+
+microvm -u $hostname:authelia
+microvm -u $hostname:nginx
+microvm -u $hostname:unbound
+microvm -u $hostname:nameserver
+
+systemctl restart microvm@$hostname:authelia &
+systemctl restart microvm@$hostname:nginx &
+systemctl restart microvm@$hostname:unbound &
+systemctl restart microvm@$hostname:nameserver
