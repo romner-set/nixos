@@ -36,6 +36,11 @@ in {
         SHOW_USER_EMAIL = false;
       };
 
+      repository = {
+        ENABLE_PUSH_CREATE_USER = true;
+        ENABLE_PUSH_CREATE_ORG = true;
+      };
+
       # Sending emails is completely optional
       # You can send a test email from the web UI at:
       # Profile Picture > Site Administration > Configuration >  Mailer Configuration
