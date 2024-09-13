@@ -18,7 +18,7 @@ in {
 
     settings = {
       session.COOKIE_SECURE = true;
-      #service.DISABLE_REGISTRATION = true;
+      service.DISABLE_REGISTRATION = true;
 
       server = rec {
         DOMAIN = "git.${domain}";
