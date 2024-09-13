@@ -1,7 +1,7 @@
 cfg: {
   id = 101;
   udpPorts = [34197];
-  mem = cfg.defaults.mem.max;
+  mem = cfg.defaults.mem.high;
   vcpu = cfg.defaults.vcpu.max;
 
   shares = [

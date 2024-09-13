@@ -3,13 +3,11 @@
   pkgs,
   config,
   unstable,
-  vmsEnabled,
-  vms,
-  hostNetwork,
   ...
 }:
 with lib; let
-  inherit (hostNetwork) ipv4 ipv6;
+  inherit (config.cfg.microvm.host) net vms vmsEnabled;
+  inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
 
   #snippetsDir = ./../../../common/nginx/global;

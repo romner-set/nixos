@@ -2,12 +2,11 @@
   lib,
   pkgs,
   config,
-  hostNetwork,
-  vms,
   ...
 }:
 with lib; let
-  inherit (hostNetwork) ipv4 ipv6;
+  inherit (config.cfg.microvm.host) vms net;
+  inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
 
   cfg = {

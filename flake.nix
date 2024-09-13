@@ -43,20 +43,6 @@
     formatter.x86_64-linux = latest.legacyPackages.x86_64-linux.alejandra;
     formatter.aarch64-linux = latest.legacyPackages.aarch64-linux.alejandra;
 
-    ### Channel configs ###
-
-    # Latest
-    /*
-      channels.latest.config.allowUnfreePredicate = pkg:
-      builtins.elem (server.lib.getName pkg) [
-        "zerotierone" # microvm game servers
-      ];
-    channels.latest-unstable.config.allowUnfreePredicate = pkg:
-      builtins.elem (server-unstable.lib.getName pkg) [
-        "factorio-headless" # microvm
-      ];
-    */
-
     ### Hosts ###
 
     nixosConfigurations = let
@@ -82,7 +68,10 @@
           ./config
         ];
 
-        extraArgs = {inherit inputs outputs;};
+        extraArgs = {
+          inherit inputs outputs;
+          misc = {};
+        };
       };
     in
       builtins.mapAttrs (name: host: let
@@ -109,9 +98,10 @@
 
           modules =
             shared.modules
+            ++ (host.modules or [])
             ++ [
               {_module.args = shared.extraArgs // (host.extraArgs or {});}
-              ./hosts/${host.preset}/${name}
+              ./hosts/${host.preset}/${host.hostName or name}
               ./presets/${host.preset}.nix
             ];
         }) (
@@ -143,8 +133,8 @@
               channels.unstable.ref = server-unstable;
             };
           }) (builtins.attrNames (builtins.readDir ./hosts/server)))
-          /*
           ++
+          /*
           #
           # ARM VPSs
           #
@@ -158,22 +148,37 @@
               channels.unstable.ref = latest-unstable;
             };
           }) (builtins.attrNames (builtins.readDir ./hosts/vps)))
-          /*
           ++
-          #
-          # MicroVMs - NOT imported from flake, defined in config/server/microvm.nix
-          #
-          (map (name: {
-            inherit name;
-            value = {
-              system = "x86_64-linux";
-              preset = "microvm";
-
-              channels.nixpkgs.ref = latest;
-              channels.unstable.ref = latest-unstable;
-            };
-          }) (builtins.attrNames (builtins.readDir ./hosts/microvm)))
           */
+          #
+          # MicroVMs
+          #
+          (latest.lib.lists.concatMap (hypervisorName: (
+            map (selfName: {
+              name = "${hypervisorName}:${selfName}";
+              value = rec {
+                hostName = selfName;
+
+                system = "x86_64-linux";
+                preset = "microvm";
+
+                channels.nixpkgs.ref = latest;
+                channels.unstable.ref = latest-unstable;
+
+                channels.nixpkgs.config.allowUnfreePredicate = pkg:
+                  builtins.elem (channels.nixpkgs.ref.lib.getName pkg) [
+                    "zerotierone"
+                  ];
+                channels.unstable.config.allowUnfreePredicate = pkg:
+                  builtins.elem (channels.unstable.ref.lib.getName pkg) [
+                    "factorio-headless"
+                  ];
+
+                modules = [./hosts/server/${hypervisorName}/meta.nix];
+                extraArgs.misc = {inherit hypervisorName selfName;};
+              };
+            }) (builtins.attrNames (builtins.readDir ./hosts/microvm))
+          )) (builtins.attrNames (builtins.readDir ./hosts/server)))
         )
       );
   };

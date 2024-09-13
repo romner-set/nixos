@@ -72,6 +72,11 @@ with lib; {
     fsType = "zfs";
   };
 
+  fileSystems."/var/log" = {
+    device = "nvme/nix/log";
+    fsType = "zfs";
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/A7FB-24B0";
     fsType = "vfat";

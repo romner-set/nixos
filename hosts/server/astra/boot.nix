@@ -15,4 +15,7 @@ with lib; {
     "rcu_nocb_poll"
     "irqaffinity=8,9,10,11,12,13,14,15,24,25,26,27,28,29,30,31"
   ];
+
+  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "r8169"];
+  boot.kernelModules = ["nct6775"]; # fan PWM
 }

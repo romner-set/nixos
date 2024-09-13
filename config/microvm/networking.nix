@@ -2,8 +2,6 @@
   config,
   configLib,
   lib,
-  hostNetwork,
-  vms,
   ...
 }:
 with lib; let
@@ -17,7 +15,8 @@ with lib; let
     else ""
   }${mac}";
 
-  inherit (hostNetwork) ipv4 ipv6;
+  inherit (config.cfg.microvm.host) vms net;
+  inherit (net) ipv4 ipv6;
 in {
   options.cfg.microvm.net = {
     enable = mkEnableOption "";

@@ -2,7 +2,7 @@ cfg: {
   id = 4;
   tcpPorts = [8080];
   vcpu = cfg.defaults.vcpu.max;
-  mem = cfg.default.mem.high;
+  mem = cfg.defaults.mem.high;
 
   locations."/" = {
     proto = "http";

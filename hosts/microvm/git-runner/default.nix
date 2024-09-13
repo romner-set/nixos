@@ -19,7 +19,7 @@ in {
         "ubuntu-latest:docker://node:16-bullseye"
         "ubuntu-22.04:docker://node:16-bullseye"
         "ubuntu-20.04:docker://node:16-bullseye"
-        "ubuntu-18.04:docker://node:16-buster"     
+        "ubuntu-18.04:docker://node:16-buster"
         ## optionally provide native execution on the host:
         # "native:host"
       ];

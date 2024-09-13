@@ -2,11 +2,10 @@
   lib,
   pkgs,
   config,
-  vms,
   ...
 }:
 with lib; let
-  inherit (vms.${config.networking.hostName}.config) syncthing;
+  #TODO: inherit (config.cfg.microvm.host.vms.${config.networking.hostName}.config) syncthing;
 in {
   config = {
     boot.kernel.sysctl = {
@@ -29,6 +28,7 @@ in {
           relaysEnabled = false;
           localAnnounceEnabled = false;
         };
+        /*
         devices = syncthing.devices;
         folders =
           builtins.mapAttrs (dir: devs: {
@@ -36,6 +36,7 @@ in {
             devices = devs;
           })
           syncthing.dirs;
+        */
       };
     };
   };

@@ -9,12 +9,7 @@ with lib; {
   networking.domain = "cynosure.red";
   system.stateVersion = "23.11";
 
-  cfg.core.services.ssh.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDhEXbX8s18h6eUmXh8c7b6zZtUAgZGRrEiFZcLYY8gg grapheneos"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP4AA0SE0Q9I8d4U1aXeLcGhp1httDnwdsuRJPiKAi5f main@Apollo"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEXOe3PWMsjyWrXBG1hv1YSmNUNGBBLLWOJeqDGXoyhS main@Hyperion"
-  ];
-
+  # NOTE: this file is directly imported by microVMs, so needs to be available in all servers using them
   cfg.server = {
     microvm = {
       enable = true;
@@ -87,26 +82,5 @@ with lib; {
         };
       };
     };
-
-    libvirt.hugepages = {
-      enable = true;
-      count = 64;
-    };
-
-    power.ignoreKeys = true;
-    /*
-      disks.standbyOnBoot = {
-      enable = true;
-      disks = [
-        "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
-        "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
-        "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
-        "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
-      ];
-    };
-    */
   };
-
-  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "r8169"];
-  boot.kernelModules = ["nct6775"]; # fan PWM
 }

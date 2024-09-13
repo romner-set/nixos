@@ -9,6 +9,7 @@
 }:
 with lib; let
   cfg = config.cfg.server.microvm;
+  vmsEnabled = filterAttrs (_: vm: vm.enable) cfg.vms;
 in {
   options.cfg.server.microvm = {
     enable = mkEnableOption "";
@@ -64,7 +65,7 @@ in {
       type = with types;
         attrsOf (submodule ({name, ...}: {
           options = {
-            enable = mkEnableOption "vm ${name}";
+            enable = mkEnableOption "";
             name = mkOption {
               type = types.str;
               default = name;
@@ -167,7 +168,37 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
+  # VM metadata - always defined
+  config.cfg.server.microvm.vms = listToAttrs (map (name: {
+      inherit name;
+      value = import (configLib.relativeToRoot "./hosts/microvm/${name}/meta.nix") cfg;
+    })
+    (builtins.attrNames (builtins.readDir (configLib.relativeToRoot "./hosts/microvm"))));
+
+  # `config = mkIf cfg.enable` causes problems with above, so everything else defined separately
+  config.sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.secrets) vmsEnabled);
+
+  config.systemd.services."microvm-virtiofsd@".serviceConfig.TimeoutStopSec = 1;
+
+  config.users.users.microvm = mkIf cfg.enable {
+    extraGroups = lib.mkForce ["keys"]; # allow access to sops keys
+  };
+  config.microvm = mkIf cfg.enable {
+    host.enable = lib.mkForce true;
+
+    vms = mapAttrs' (name: vm: {
+      name = "${config.networking.hostName}:${name}";
+      value = rec {
+        flake = inputs.self;
+        updateFlake = "git+file:///etc/nixos";
+        #restartIfChanged = true;
+      };
+    })
+    vmsEnabled;
+  };
+
+  /*
+    config = mkIf cfg.enable (let
     vmsEnabled = filterAttrs (_: vm: vm.enable) cfg.vms;
   in {
     cfg.server.microvm.vms = listToAttrs (map (name: {
@@ -261,4 +292,5 @@ in {
       })
       vmsEnabled;
   });
+  */
 }
