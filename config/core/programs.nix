@@ -48,6 +48,7 @@ in {
         molly-guard
 
         # essential
+        fastfetch
         neofetch
         btop
         wget
