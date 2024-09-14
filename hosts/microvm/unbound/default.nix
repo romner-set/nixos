@@ -24,11 +24,9 @@ in {
                    "::1/128 allow"
             "10.47.0.0/16 allow" #TODO
                    "${ipv4.subnet.microvm}.0/24 allow"
-                   "${ipv4.subnet.microvmHost}.0/24 allow"
                    "${ipv4.publicSubnetAddr}/${toString ipv4.publicSubnetSize} allow"
                    "${ipv6.prefix}${ipv6.subnet.lan}::/64 allow"
                    "${ipv6.subnet.microvm}::/64 allow"
-                   "${ipv6.subnet.microvmHost}::/64 allow"
             */
           ];
           ede = "yes";

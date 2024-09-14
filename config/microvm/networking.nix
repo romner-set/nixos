@@ -29,41 +29,22 @@ in {
       networks = {
         "40-wan" = {
           matchConfig.PermanentMACAddress = fullMAC;
+          #matchConfig.Type = "ether";
           networkConfig.LinkLocalAddressing = "no";
           addresses = [
-            {
-              addressConfig = {
-                Address = "${ipv4.subnet.microvm}.${toString self.id}/32";
-                Peer = "${ipv4.subnet.microvmHost}.${toString self.id}/32";
-              };
-            }
-            {
-              addressConfig = {
-                Address = "${ipv6.subnet.microvm}::${toString self.id}/128";
-                Peer = "${ipv6.subnet.microvmHost}::${toString self.id}/128";
-              };
-            }
+            {addressConfig = {Address = "${ipv4.subnet.microvm}.${toString self.id}/32";};}
+            {addressConfig = {Address = "${ipv6.subnet.microvm}::${toString self.id}/128";};}
+            {addressConfig = {Address = "${ipv6.subnet.microvmPublic}::${toString self.id}/128";};}
           ];
           routes = [
-            {routeConfig.Gateway = "${ipv4.subnet.microvmHost}.${toString self.id}";}
-            {routeConfig.Gateway = "${ipv6.subnet.microvmHost}::${toString self.id}";}
+            {
+              # fe80::1 is only used to discover MAC addr, so it works for IPv4 as well (magic)
+              routeConfig.Gateway = "fe80::1";
+              routeConfig.Source = "${ipv4.subnet.microvm}.${toString self.id}";
+            }
+            {routeConfig.Gateway = "fe80::1";}
           ];
           linkConfig.RequiredForOnline = "routable";
-          extraConfig = let
-            fullHostMAC = "02:00:00:00:00:${
-              if stringLength mac == 1
-              then "0"
-              else ""
-            }${mac}";
-          in ''
-            [Neighbor]
-            Address=${ipv4.subnet.microvmHost}.${toString self.id}
-            LinkLayerAddress=${fullHostMAC}
-
-            [Neighbor]
-            Address=${ipv6.subnet.microvmHost}::${toString self.id}
-            LinkLayerAddress=${fullHostMAC}
-          '';
         };
       };
     };

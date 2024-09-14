@@ -46,10 +46,6 @@ in {
       gateway = mkOption {type = types.str;};
 
       subnet = {
-        microvmHost = mkOption {
-          type = types.str;
-          default = "172.30.0"; # doesn't include host /24 part
-        };
         microvm = mkOption {
           type = types.str;
           default = "172.30.1";
@@ -64,15 +60,11 @@ in {
       gateway = mkOption {type = types.str;};
 
       subnet = {
-        #TODO: add public addresses
-        microvmHost = mkOption {
-          type = types.str;
-          default = "fda4:7b0e:05b2:0";
-        };
         microvm = mkOption {
           type = types.str;
           default = "fda4:7b0e:05b2:1";
         };
+        microvmPublic = mkOption {type = types.str;};
       };
     };
   };
@@ -166,41 +158,18 @@ in {
               LinkLocalAddressing = "no";
               DHCP = "no";
             };
-            addresses = [
-              {
-                addressConfig = {
-                  Address = "${ipv4.subnet.microvmHost}.${toString vmData.id}/32";
-                  Peer = "${ipv4.subnet.microvm}.${toString vmData.id}/32";
-                };
-              }
-              {
-                addressConfig = {
-                  Address = "${ipv6.subnet.microvmHost}::${toString vmData.id}/128";
-                  Peer = "${ipv6.subnet.microvm}::${toString vmData.id}/128";
-                };
-              }
-            ];
+            addresses = [{addressConfig = {Address = "fe80::1/128";};}];
             linkConfig.MACAddress = "02:00:00:00:00:${
               if stringLength mac == 1
               then "0"
               else ""
             }${mac}";
             linkConfig.RequiredForOnline = "routable";
-            extraConfig = let
-              fullMAC = "02:00:00:00:01:${
-                if stringLength mac == 1
-                then "0"
-                else ""
-              }${mac}";
-            in ''
-              [Neighbor]
-              Address=${ipv4.subnet.microvm}.${toString vmData.id}
-              LinkLayerAddress=${fullMAC}
-
-              [Neighbor]
-              Address=${ipv6.subnet.microvm}::${toString vmData.id}
-              LinkLayerAddress=${fullMAC}
-            '';
+            routes = [
+              {routeConfig.Destination = "${ipv4.subnet.microvm}.${toString vmData.id}/32";}
+              {routeConfig.Destination = "${ipv6.subnet.microvm}::${toString vmData.id}/128";}
+              {routeConfig.Destination = "${ipv6.subnet.microvmPublic}::${toString vmData.id}/128";}
+            ];
           }))
         (filterAttrs (_: vm: vm.enable) config.cfg.server.microvm.vms))
       ];

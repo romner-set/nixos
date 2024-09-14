@@ -66,10 +66,7 @@ with lib; {
         gateway = "10.47.0.1";
         subnetSize = 24;
 
-        subnet = {
-          microvm = "172.30.1";
-          microvmHost = "172.30.0";
-        };
+        subnet.microvm = "172.30.1";
       };
 
       ipv6 = {
@@ -79,7 +76,7 @@ with lib; {
 
         subnet = {
           microvm = "fda4:7b0e:05b2:1";
-          microvmHost = "fda4:7b0e:05b2:0";
+          microvmPublic = "2001:470:6f:389";
         };
       };
     };

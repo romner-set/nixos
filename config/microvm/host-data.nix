@@ -43,7 +43,6 @@ in {
       then "0"
       else ""
     }${hexId}";
-    fullMAC = "02:00:00:00:01:${hexIdPadded}";
   in
     mkIf cfg.enable {
       networking.hostName = lib.mkForce misc.selfName or "";
@@ -65,7 +64,7 @@ in {
             type = "tap";
 
             id = "vmtap${toString self.id}";
-            mac = fullMAC;
+            mac = "02:00:00:00:01:${hexIdPadded}";
           }
         ];
 
