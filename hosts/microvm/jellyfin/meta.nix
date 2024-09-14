@@ -27,7 +27,7 @@ cfg: {
     {
       proto = "virtiofs";
       tag = "jellyfin-media";
-      source = "/sync/media";
+      source = "/data/media";
       mountPoint = "/media";
     }
   ];

@@ -88,11 +88,4 @@ with lib; {
     fsType = "vfat";
     #options = ["noexec" "nodev"];
   };
-
-  # TEMPORARY
-  fileSystems."/data" = {
-    device = "nvme/old-secrets";
-    fsType = "zfs";
-    #options = ["noexec" "nodev"];
-  };
 }

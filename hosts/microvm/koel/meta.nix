@@ -33,7 +33,7 @@ cfg: {
     {
       proto = "virtiofs";
       tag = "koel-music";
-      source = "/sync/music";
+      source = "/data/music";
       mountPoint = "/music";
     }
   ];
