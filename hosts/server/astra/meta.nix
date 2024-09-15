@@ -32,6 +32,7 @@ with lib; {
         koel.enable = true;
         caldav.enable = true;
         immich.enable = true;
+        qbittorrent.enable = true;
         git.enable = true;
         git-runner.enable = true;
 
