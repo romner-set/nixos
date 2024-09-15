@@ -5,13 +5,10 @@ jobs:
   lockfile:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - uses: https://github.com/DeterminateSystems/nix-installer-action@main
 
-      - name: Update inputs
-        run: nix flake update latest latest-unstable disko sops-nix
+      - run: nix flake update latest latest-unstable disko sops-nix
 
       - uses: https://github.com/stefanzweifel/git-auto-commit-action@v5
         with:
