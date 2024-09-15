@@ -39,7 +39,7 @@ in {
     };
     environment.etc."aliases".text = "root: alerts@${config.networking.domain}";
 
-    services.zfs.zed.settings = {
+    services.zfs.zed.settings = mkIf config.cfg.server.disks.zfs.enable {
       ZED_EMAIL_ADDR = ["root"];
       ZED_EMAIL_PROG = "${pkgs.msmtp}/bin/msmtp";
       ZED_EMAIL_OPTS = "@ADDRESS@";

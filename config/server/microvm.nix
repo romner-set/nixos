@@ -13,6 +13,10 @@ with lib; let
 in {
   options.cfg.server.microvm = {
     enable = mkEnableOption "";
+    autoUpdate = mkOption {
+      type = types.bool;
+      default = true;
+    };
 
     defaults = {
       # set depending on processing power of host
@@ -176,8 +180,11 @@ in {
     (builtins.attrNames (builtins.readDir (configLib.relativeToRoot "./hosts/microvm"))));
 
   # `config = mkIf cfg.enable` causes problems with above, so everything else defined separately
-  config.sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.secrets) vmsEnabled);
+  config.services.cron.systemCronJobs = builtins.concatLists (lists.optionals cfg.enable [
+    (lists.optional cfg.autoUpdate "0 3 * * *    root    /etc/nixos/utils/microvm-update-all")
+  ]);
 
+  config.sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.secrets) vmsEnabled);
   config.systemd.services."microvm-virtiofsd@".serviceConfig.TimeoutStopSec = 1;
 
   config.users.users.microvm = mkIf cfg.enable {

@@ -15,7 +15,8 @@ in {
   config = mkIf cfg.enable {
     services.cron = {
       enable = true;
-      mailto = "alerts@${config.networking.domain}";
+      #mailto = "alerts@${config.networking.domain}";
+      mailto = "root";
     };
   };
 }
