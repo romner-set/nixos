@@ -59,22 +59,24 @@ in {
         };
         local-zone = [
           "vm.${domain}. static"
-          "_acme-challenge.${domain}. transparent"
-          "ns1.${domain}. transparent"
-          "ns2.${domain}. transparent"
-          "${domain}. redirect"
+          "${domain}. typetransparent"
         ];
         local-data = concatLists [
-          (concatLists (attrsets.mapAttrsToList (vmName: vmData: [
+          [
+            "\"${domain}. A ${ipv4.address}\""
+            "\"${domain}. AAAA ${ipv6.address}\""
+          ]
+
+          (concatLists (attrsets.mapAttrsToList (vmName: vmData: let
+              sub = vmData.subdomain or vmName;
+            in [
+              "\"${sub}.${domain}. A ${ipv4.address}\""
+              "\"${sub}.${domain}. AAAA ${ipv6.address}\""
+
               "\"${vmName}.vm.${domain}. A ${ipv4.subnet.microvm}.${toString vmData.id}\""
               "\"${vmName}.vm.${domain}. AAAA ${ipv6.subnet.microvm}::${toString vmData.id}\""
             ])
             vmsEnabled))
-          [
-            # main redirect
-            "\"${domain}. A ${ipv4.address}\""
-            "\"${domain}. AAAA ${ipv6.address}\""
-          ]
         ];
       };
     };
