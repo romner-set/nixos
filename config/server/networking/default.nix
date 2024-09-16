@@ -158,7 +158,7 @@ in {
               LinkLocalAddressing = "no";
               DHCP = "no";
             };
-            addresses = [{addressConfig = {Address = "fe80::1/128";};}];
+            addresses = [{addressConfig = {Address = "fe80::/128";};}];
             linkConfig.MACAddress = "02:00:00:00:00:${
               if stringLength mac == 1
               then "0"

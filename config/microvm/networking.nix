@@ -38,11 +38,11 @@ in {
           ];
           routes = [
             {
-              # fe80::1 is only used to discover MAC addr, so it works for IPv4 as well (magic)
-              routeConfig.Gateway = "fe80::1";
+              # fe80:: is only used to discover MAC addr, so it works for IPv4 as well (magic)
+              routeConfig.Gateway = "fe80::";
               routeConfig.Source = "${ipv4.subnet.microvm}.${toString self.id}";
             }
-            {routeConfig.Gateway = "fe80::1";}
+            {routeConfig.Gateway = "fe80::";}
           ];
           linkConfig.RequiredForOnline = "routable";
         };
