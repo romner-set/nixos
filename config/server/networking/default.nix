@@ -165,11 +165,13 @@ in {
               else ""
             }${mac}";
             linkConfig.RequiredForOnline = "routable";
-            routes = [
+            /*
+            routes = [ # defined by FRR
               {routeConfig.Destination = "${ipv4.subnet.microvm}.${toString vmData.id}/32";}
               {routeConfig.Destination = "${ipv6.subnet.microvm}::${toString vmData.id}/128";}
               {routeConfig.Destination = "${ipv6.subnet.microvmPublic}::${toString vmData.id}/128";}
             ];
+            */
           }))
         (filterAttrs (_: vm: vm.enable) config.cfg.server.microvm.vms))
       ];

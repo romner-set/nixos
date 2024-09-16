@@ -41,6 +41,8 @@ with lib; {
     net.enable = mkDefault true;
     ##
 
+    net.frr.enable = mkDefault true;
+
     net.remoteUnlock = {
       enable = mkDefault true;
       sshPort = mkDefault 47;
