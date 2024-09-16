@@ -35,6 +35,7 @@ with lib; {
         qbittorrent.enable = true;
         git.enable = true;
         git-runner.enable = true;
+        samba.enable = true;
 
         # misc
         mail.enable = true;

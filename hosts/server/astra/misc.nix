@@ -17,6 +17,18 @@ with lib; {
     };
 
     power.ignoreKeys = true;
+
+    /*
+         services.avahi.reflector = {
+         enable = true;
+         interfaces = [
+           config.cfg.server.net.interface
+    "vlbr1010"
+           "vmtap${toString config.cfg.server.microvm.vms.samba.id}"
+         ];
+       };
+    */
+
     /*
       disks.standbyOnBoot = {
       enable = true;
