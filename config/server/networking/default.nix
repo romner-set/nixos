@@ -29,6 +29,23 @@ in {
               default = name;
             };
             id = mkOption {type = types.int;};
+            createBridge = mkEnableOption "";
+          };
+        }));
+      default = {};
+    };
+
+    bridges = mkOption {
+      type = with types;
+        attrsOf (submodule ({name, ...}: {
+          options = {
+            enable = mkEnableOption "";
+            name = mkOption {
+              type = types.str;
+              default = name;
+            };
+            ipv4 = mkOption {type = types.str;};
+            ipv6 = mkOption {type = types.str;};
           };
         }));
       default = {};
@@ -69,7 +86,9 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = let
+    bridgedVlans = attrsets.filterAttrs (n: v: v.createBridge) cfg.vlans;
+  in (mkIf cfg.enable {
     networking.useDHCP = false;
 
     systemd.network = {
@@ -95,7 +114,7 @@ in {
           })
         cfg.vlans)
 
-        # Define VM bridges
+        # Define VLAN bridges
         (attrsets.mapAttrs' (name: vlan:
           nameValuePair "25-vlbr${toString vlan.id}-${name}" {
             netdevConfig = {
@@ -103,7 +122,17 @@ in {
               Kind = "bridge";
             };
           })
-        cfg.vlans)
+        bridgedVlans)
+
+        # Define virtual bridges
+        (attrsets.mapAttrs' (name: value:
+          nameValuePair "25-${name}" {
+            netdevConfig = {
+              Name = name;
+              Kind = "bridge";
+            };
+          })
+        cfg.bridges)
       ];
 
       networks = attrsets.mergeAttrsList [
@@ -135,9 +164,9 @@ in {
             networkConfig.Bridge = "vlbr${toString vlan.id}";
             linkConfig.RequiredForOnline = "enslaved";
           })
-        cfg.vlans)
+        bridgedVlans)
 
-        # Setup bridges
+        # Setup VLAN bridges
         (lib.attrsets.mapAttrs' (name: vlan:
           nameValuePair "35-vlbr${toString vlan.id}-${name}" {
             matchConfig.Name = "vlbr${toString vlan.id}";
@@ -145,7 +174,38 @@ in {
             networkConfig.LinkLocalAddressing = "no";
             linkConfig.RequiredForOnline = "carrier";
           })
-        cfg.vlans)
+        bridgedVlans)
+
+        # Setup virtual bridges
+        (lib.attrsets.mapAttrs' (name: value:
+          nameValuePair "36-${name}" {
+            matchConfig.Name = name;
+            bridgeConfig = {};
+            networkConfig = {
+              DHCP = "no";
+              IPv6AcceptRA = "no";
+              DHCPServer = "yes";
+              IPv6SendRA = "yes";
+            };
+            dhcpServerConfig = {
+              EmitRouter = "yes";
+              EmitTimezone = "yes";
+              EmitDNS = "yes";
+              DNS = ipv4.address;
+            };
+            ipv6SendRAConfig = {
+              EmitDNS = "yes";
+              DNS = ipv6.address;
+            };
+            ipv6Prefixes = [
+              {
+                ipv6PrefixConfig.Prefix = value.ipv6;
+              }
+            ];
+            address = [value.ipv4 value.ipv6];
+            linkConfig.RequiredForOnline = "routable";
+          })
+        cfg.bridges)
 
         # Setup MicroVM P2P interfaces
         (attrsets.mapAttrs' (_: vmData: (let
@@ -176,5 +236,5 @@ in {
         (filterAttrs (_: vm: vm.enable) config.cfg.server.microvm.vms))
       ];
     };
-  };
+  });
 }

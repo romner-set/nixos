@@ -18,8 +18,6 @@ with lib; {
 
     power.ignoreKeys = true;
 
-    net.frr.ospf.enable = true;
-
     /*
          services.avahi.reflector = {
          enable = true;

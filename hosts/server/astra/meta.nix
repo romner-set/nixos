@@ -51,14 +51,26 @@ with lib; {
     net = {
       interface = "eno1";
 
+      frr.ospf.enable = true;
+
       vlans = {
-        "trusted" = {
+        "infra-nomullvad" = {
           enable = true;
-          id = 1010;
+          id = 1002;
         };
-        "untrusted" = {
+      };
+
+      bridges = {
+        # libvirt bridges
+        vbr-trusted = {
           enable = true;
-          id = 1020;
+          ipv4 = "172.20.0.1/24";
+          ipv6 = "2001:470:59b6:a39d::/64";
+        };
+        vbr-untrusted = {
+          enable = true;
+          ipv4 = "172.20.1.1/24";
+          ipv6 = "2001:470:59b6:d857::/64";
         };
       };
 

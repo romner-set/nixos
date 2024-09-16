@@ -38,6 +38,7 @@ in {
         router ospf
         	ospf router-id ${ipv4.address}
         	redistribute static
+        	redistribute connected
       '';
     };
 
@@ -50,6 +51,7 @@ in {
         router ospf6
         	ospf6 router-id ${ipv4.address}
         	redistribute static
+        	redistribute connected
       '';
     };
   };
