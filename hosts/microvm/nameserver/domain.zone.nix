@@ -4,10 +4,12 @@
   addrs,
   host,
   vms,
+  net,
 }:
 with lib.attrsets;
 with lib.strings; let
   TLSA = "BF1C238F30DC82DA79F01B85CB0B30C3FBB4A091E01ECC7EFD6AF958B1C04AC7";
+  spfAddrs = "ip4:${host.ipv4} ip6:${net.ipv6.subnet.microvmPublic}::${toString vms.mail.id}";
 in
   concatStrings [
     ''
@@ -109,9 +111,9 @@ in
       ; Mail stuff
       @                     IN  HTTPS         1 . alpn=h2,h3
       @                     IN  MX            10 mail
-      @                     IN  TXT           "v=spf1 mx ~all"
+      @                     IN  TXT           "v=spf1 ${spfAddrs} ~all"
       *                     IN  HTTPS         1 . alpn=h2,h3
-      *                     IN  TXT           "v=spf1 +mx:${domain} -all"
+      *                     IN  TXT           "v=spf1 ${spfAddrs} -all"
       _dmarc                IN  TXT           "v=DMARC1;p=reject;rua=mailto:dmarc-reports@${domain}!10m"
       2024a._domainkey      IN  TXT           "v=DKIM1;h=sha256;k=ed25519;p=M0Gvhf9JeT9QqnlSY492QWKqwOv9MXEfCbXL1n9owoI="
       2024b._domainkey      IN  TXT           "v=DKIM1;h=sha256;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1AYaoSc3XRiUNZgNvZeAZT43KbT0NMuKWtVQI/EC83d144OxcEvtOXreGM/s4IHkOpNEv1HFPvr1WioWUTDN6/hNQTNABeOKOcSfeYyaCaAsoPLz9jVaiwfjqAO5OgiQ+JpmyrQiKpQCws27ww//pshMGpzZlncLaUBZuedtsDQwRPmg1RRBOeCS2+9M08+fLeakzkhAJXQW8XXLhGDTvQC7rzTZuZoaX/JvaXBDidaU4QrMajyuMRnmWb5j4DvZKSirHURKH+dw2B9A+7Kr3LgKpU50591q8C8bBhTrSihu5JyJ/k8kwM457W/xT2QDaSxtt/YO5XkL9qcY3gyltwIDAQAB"
@@ -126,7 +128,7 @@ in
       _submission._tcp      IN  SRV           0 1 587 .
       _submissions._tcp     IN  SRV           0 1 465 mail
       _smtp._tls            IN  TXT           "v=TLSRPTv1; rua=mailto:tls-reports@${domain}"
-      mail                  IN  TXT           "v=spf1 a -all"
+      mail                  IN  TXT           "v=spf1 ${spfAddrs} -all"
       _smtp._tls.mail       IN  TXT           "v=TLSRPTv1; rua=mailto:tls-reports@mail.${domain}"
     ''
   ]

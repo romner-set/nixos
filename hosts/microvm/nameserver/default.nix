@@ -10,7 +10,7 @@ with lib; let
   inherit (config.networking) domain;
 
   cfg = {
-    inherit lib domain vms;
+    inherit lib domain vms net;
     host = {
       ipv4 = ipv4.publicAddress;
       ipv6 = ipv6.publicAddress;
