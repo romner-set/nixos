@@ -12,7 +12,7 @@ jobs:
 
       - uses: https://github.com/stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Auto-updated flake.lock inputs
+          commit_message: Auto-update flake.lock inputs
           commit_user_name: update-bot
           commit_user_email: noreply@cynosure.red
           commit_author: update-bot <noreply@cynosure.red>
