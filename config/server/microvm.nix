@@ -181,7 +181,7 @@ in {
 
   # `config = mkIf cfg.enable` causes problems with above, so everything else defined separately
   config.services.cron.systemCronJobs = builtins.concatLists (lists.optionals cfg.enable [
-    (lists.optional cfg.autoUpdate "0 3 * * *    root    /etc/nixos/utils/microvm-update-all")
+    (lists.optional cfg.autoUpdate "0 3 * * *    root    /run/current-system/sw/bin/git -C /etc/nixos pull && /etc/nixos/utils/microvm-update-all")
   ]);
 
   config.sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.secrets) vmsEnabled);
