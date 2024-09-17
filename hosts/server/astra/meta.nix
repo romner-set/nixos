@@ -54,9 +54,11 @@ with lib; {
       frr.ospf.enable = true;
 
       vlans = {
-        "infra-nomullvad" = {
+        # samba-wsdd
+        "trusted" = {
           enable = true;
-          id = 1002;
+          id = 1010;
+          addresses = ["10.47.10.2/24"];
         };
       };
 
@@ -79,7 +81,7 @@ with lib; {
       ipv4 = {
         publicAddress = "93.185.10.73";
         address = "10.47.0.2";
-        gateway = "10.47.0.1";
+        gateway = "10.47.0.1"; # used for remote unlock only
         subnetSize = 24;
 
         subnet.microvm = "172.30.1";

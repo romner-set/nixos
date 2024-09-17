@@ -5,8 +5,14 @@ cfg: {
     {
       proto = "virtiofs";
       tag = "samba-data";
+      source = "/vm/samba";
+      mountPoint = "/var/lib/samba";
+    }
+    {
+      proto = "virtiofs";
+      tag = "samba-share-data";
       source = "/data";
-      mountPoint = "/data";
+      mountPoint = "/shared/data";
     }
   ];
 }

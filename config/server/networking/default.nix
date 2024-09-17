@@ -30,6 +30,10 @@ in {
             };
             id = mkOption {type = types.int;};
             createBridge = mkEnableOption "";
+            addresses = mkOption {
+              type = listOf types.str;
+              default = [];
+            };
           };
         }));
       default = {};
@@ -165,6 +169,17 @@ in {
             vlan = attrsets.mapAttrsToList (name: vlan: "vl${toString vlan.id}") cfg.vlans;
           };
         }
+
+        # Setup VLAN addresses
+        (lib.attrsets.mapAttrs' (name: vlan:
+          nameValuePair "34-vl${toString vlan.id}-${name}" {
+            matchConfig.Name = "vl${toString vlan.id}";
+            networkConfig.DHCP = "no";
+            networkConfig.IPv6AcceptRA = "no";
+            address = vlan.addresses;
+            linkConfig.RequiredForOnline = "routable";
+          })
+        (attrsets.filterAttrs (n: v: v.addresses != []) cfg.vlans))
 
         # Connect VLANs to bridges
         (lib.attrsets.mapAttrs' (name: vlan:

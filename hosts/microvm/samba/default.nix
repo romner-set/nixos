@@ -5,9 +5,11 @@
 }:
 with lib; {
   users.users.main = {
-    uid = 1000;
+    uid = 10000;
     isNormalUser = true;
+    group = "main";
   };
+  users.groups.main.gid = 10000;
 
   services.samba = {
     #package = pkgs.samba4Full;
@@ -19,7 +21,7 @@ with lib; {
     openFirewall = true;
 
     shares.data = {
-      path = "/data";
+      path = "/shared/data";
       writable = "true";
     };
 
@@ -28,6 +30,12 @@ with lib; {
       # ^^ Note: Breaks `smbclient -L <ip/host> -U%` by default, might require the client to set `client min protocol`?
       server min protocol = SMB3_00
     '';
+
+    enableWinbindd = false;
+    enableNmbd = false;
+    nsswins = false;
+
+    #invalidUsers = mkForce [];
   };
 
   /*

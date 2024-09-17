@@ -10,6 +10,12 @@ with lib; {
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEXOe3PWMsjyWrXBG1hv1YSmNUNGBBLLWOJeqDGXoyhS main@Hyperion"
   ];
 
+  services.samba-wsdd = {
+    enable = true;
+    openFirewall = false;
+    hostname = config.networking.domain;
+  };
+
   cfg.server = {
     libvirt.hugepages = {
       enable = true;
