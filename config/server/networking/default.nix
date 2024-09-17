@@ -56,11 +56,17 @@ in {
       default = "eth0";
     };
 
+    # for use with OSPF
+    dontSetGateways = mkEnableOption "";
+
     ipv4 = {
       publicAddress = mkOption {type = types.str;}; # external addr
       address = mkOption {type = types.str;};
       subnetSize = mkOption {type = types.ints.u8;};
-      gateway = mkOption {type = types.str;};
+      gateway = mkOption {
+        type = types.str;
+        default = "";
+      };
 
       subnet = {
         microvm = mkOption {
@@ -74,7 +80,10 @@ in {
       publicAddress = mkOption {type = types.str;}; # GUA, only used for internet access
       address = mkOption {type = types.str;}; # ULA, used for LAN communication
       # subnet size always /64
-      gateway = mkOption {type = types.str;};
+      gateway = mkOption {
+        type = types.str;
+        default = "";
+      };
 
       subnet = {
         microvm = mkOption {
@@ -147,7 +156,7 @@ in {
               "${ipv6.address}/64"
               "${ipv6.publicAddress}/64"
             ];
-            routes = [
+            routes = lists.optionals (!cfg.dontSetGateways) [
               {routeConfig.Gateway = ipv4.gateway;}
               {routeConfig.Gateway = ipv6.gateway;}
             ];
@@ -225,13 +234,11 @@ in {
               else ""
             }${mac}";
             linkConfig.RequiredForOnline = "routable";
-            /*
-            routes = [ # defined by FRR
+            routes = [
               {routeConfig.Destination = "${ipv4.subnet.microvm}.${toString vmData.id}/32";}
               {routeConfig.Destination = "${ipv6.subnet.microvm}::${toString vmData.id}/128";}
               {routeConfig.Destination = "${ipv6.subnet.microvmPublic}::${toString vmData.id}/128";}
             ];
-            */
           }))
         (filterAttrs (_: vm: vm.enable) config.cfg.server.microvm.vms))
       ];

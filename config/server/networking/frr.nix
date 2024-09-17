@@ -17,7 +17,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.frr.static = mkIf config.cfg.server.microvm.enable {
+    /*
+   services.frr.static = mkIf config.cfg.server.microvm.enable {
       enable = true;
       config = strings.concatStrings (attrsets.mapAttrsToList (name: vm: let
           id = toString vm.id;
@@ -28,6 +29,7 @@ in {
         '')
         config.cfg.server.microvm.vms);
     };
+    */
 
     services.frr.ospf = mkIf cfg.ospf.enable {
       enable = true;
@@ -38,6 +40,7 @@ in {
         router ospf
         	ospf router-id ${ipv4.address}
         	redistribute static
+        	redistribute kernel
         	redistribute connected
       '';
     };
@@ -51,6 +54,7 @@ in {
         router ospf6
         	ospf6 router-id ${ipv4.address}
         	redistribute static
+        	redistribute kernel
         	redistribute connected
       '';
     };

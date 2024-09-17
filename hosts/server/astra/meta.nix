@@ -74,6 +74,8 @@ with lib; {
         };
       };
 
+      dontSetGateways = true; # discovered w/ OSPF
+
       ipv4 = {
         publicAddress = "93.185.10.73";
         address = "10.47.0.2";
@@ -86,7 +88,7 @@ with lib; {
       ipv6 = {
         publicAddress = "2001:470:59b6::2";
         address = "fd95:3a23:dd1f::2";
-        gateway = "fd95:3a23:dd1f::1";
+        #gateway = "fd95:3a23:dd1f::1";
 
         subnet = {
           microvm = "fda4:7b0e:05b2:1";
