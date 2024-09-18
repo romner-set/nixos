@@ -242,18 +242,37 @@ in {
               LinkLocalAddressing = "no";
               DHCP = "no";
             };
-            addresses = [{addressConfig = {Address = "fe80::/128";};}];
+            addresses = []; # see config/microvm/networking.nix
             linkConfig.MACAddress = "02:00:00:00:00:${
               if stringLength mac == 1
               then "0"
               else ""
             }${mac}";
-            linkConfig.RequiredForOnline = "routable";
+            linkConfig.RequiredForOnline = "carrier";
             routes = [
               {routeConfig.Destination = "${ipv4.subnet.microvm}.${toString vmData.id}/32";}
               {routeConfig.Destination = "${ipv6.subnet.microvm}::${toString vmData.id}/128";}
               {routeConfig.Destination = "${ipv6.subnet.microvmPublic}::${toString vmData.id}/128";}
             ];
+            extraConfig = let
+              fullMAC = "02:00:00:00:01:${
+                if stringLength mac == 1
+                then "0"
+                else ""
+              }${mac}";
+            in ''
+              [Neighbor]
+              Address=${ipv4.subnet.microvm}.${toString vmData.id}
+              LinkLayerAddress=${fullMAC}
+
+              [Neighbor]
+              Address=${ipv6.subnet.microvm}::${toString vmData.id}
+              LinkLayerAddress=${fullMAC}
+
+              [Neighbor]
+              Address=${ipv6.subnet.microvmPublic}::${toString vmData.id}
+              LinkLayerAddress=${fullMAC}
+            '';
           }))
         (filterAttrs (_: vm: vm.enable) config.cfg.server.microvm.vms))
       ];
