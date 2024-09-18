@@ -28,11 +28,14 @@ with lib; {
         nameserver.enable = true;
         unbound.enable = true;
 
-        # media, storage
+        # media
         koel.enable = true;
-        caldav.enable = true;
         immich.enable = true;
+        jellyfin.enable = true;
         qbittorrent.enable = true;
+
+	# other storage
+        caldav.enable = true;
         git.enable = true;
         git-runner.enable = true;
         samba.enable = true;
@@ -52,15 +55,6 @@ with lib; {
       interface = "eno1";
 
       frr.ospf.enable = true;
-
-      vlans = {
-        # samba-wsdd
-        "trusted" = {
-          enable = true;
-          id = 1010;
-          addresses = ["10.47.10.2/24"];
-        };
-      };
 
       bridges = {
         # libvirt bridges

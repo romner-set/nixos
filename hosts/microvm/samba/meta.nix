@@ -14,5 +14,17 @@ cfg: {
       source = "/data";
       mountPoint = "/shared/data";
     }
+    {
+      proto = "virtiofs";
+      tag = "samba-share-misc";
+      source = "/misc";
+      mountPoint = "/shared/misc";
+    }
+    {
+      proto = "virtiofs";
+      tag = "samba-share-srv";
+      source = "/vm/nginx/srv";
+      mountPoint = "/shared/srv";
+    }
   ];
 }

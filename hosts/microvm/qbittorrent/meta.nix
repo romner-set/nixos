@@ -17,9 +17,21 @@ cfg: {
     }
     {
       proto = "virtiofs";
-      tag = "qbittorrent-data";
-      source = "/data/qbittorrent";
-      mountPoint = "/data";
+      tag = "qbittorrent-games";
+      source = "/data/games";
+      mountPoint = "/data/games";
+    }
+    {
+      proto = "virtiofs";
+      tag = "qbittorrent-media";
+      source = "/data/media";
+      mountPoint = "/data/media";
+    }
+    {
+      proto = "virtiofs";
+      tag = "qbittorrent-misc";
+      source = "/misc/qbittorrent";
+      mountPoint = "/misc";
     }
     {
       proto = "virtiofs";

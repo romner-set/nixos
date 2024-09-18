@@ -14,6 +14,7 @@ with lib; {
     enable = true;
     openFirewall = false;
     hostname = config.networking.domain;
+    interface = "vbr-trusted";
   };
 
   cfg.server = {

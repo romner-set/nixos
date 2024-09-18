@@ -24,11 +24,25 @@ with lib; {
       path = "/shared/data";
       writable = "true";
     };
+    shares.misc = {
+      path = "/shared/misc";
+      writable = "true";
+    };
+    shares.srv = {
+      path = "/shared/srv";
+      writable = "true";
+    };
 
     extraConfig = ''
       server smb encrypt = required
       # ^^ Note: Breaks `smbclient -L <ip/host> -U%` by default, might require the client to set `client min protocol`?
       server min protocol = SMB3_00
+
+      acl allow execute always = True
+
+      mangled names = no
+      dos charset = CP850
+      unix charset = UTF-8
     '';
 
     enableWinbindd = false;
