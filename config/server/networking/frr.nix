@@ -18,17 +18,17 @@ in {
 
   config = mkIf cfg.enable {
     /*
-   services.frr.static = mkIf config.cfg.server.microvm.enable {
-      enable = true;
-      config = strings.concatStrings (attrsets.mapAttrsToList (name: vm: let
-          id = toString vm.id;
-        in ''
-          ip route ${ipv4.subnet.microvm}.${id}/32 vmtap${id}
-          ipv6 route ${ipv6.subnet.microvm}::${id}/128 vmtap${id}
-          ipv6 route ${ipv6.subnet.microvmPublic}::${id}/128 vmtap${id}
-        '')
-        config.cfg.server.microvm.vms);
-    };
+    services.frr.static = mkIf config.cfg.server.microvm.enable {
+       enable = true;
+       config = strings.concatStrings (attrsets.mapAttrsToList (name: vm: let
+           id = toString vm.id;
+         in ''
+           ip route ${ipv4.subnet.microvm}.${id}/32 vmtap${id}
+           ipv6 route ${ipv6.subnet.microvm}::${id}/128 vmtap${id}
+           ipv6 route ${ipv6.subnet.microvmPublic}::${id}/128 vmtap${id}
+         '')
+         config.cfg.server.microvm.vms);
+     };
     */
 
     services.frr.ospf = mkIf cfg.ospf.enable {

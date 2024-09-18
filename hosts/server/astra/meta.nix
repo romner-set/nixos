@@ -34,7 +34,7 @@ with lib; {
         jellyfin.enable = true;
         qbittorrent.enable = true;
 
-	# other storage
+        # other storage
         caldav.enable = true;
         git.enable = true;
         git-runner.enable = true;
