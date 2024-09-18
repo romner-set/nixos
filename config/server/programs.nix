@@ -30,6 +30,7 @@ in {
         # misc
         lm_sensors
         cryptsetup # TODO
+        virtiofsd
       ];
   };
 }
