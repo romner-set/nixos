@@ -25,6 +25,7 @@ in {
         wan_encryption_mode = 2; #forced
         lan_encryption_mode = 2;
         output_name = cfg.monitor;
+        address_family = "both";
       };
       capSysAdmin = true;
     };

@@ -16,7 +16,7 @@
   cfg.desktop.services.sunshine = {
     enable = true;
     openFirewall = true;
-    monitor = 2;
+    monitor = 1;
   };
 
   cfg.core.services.ssh = {
