@@ -133,12 +133,19 @@ in {
               }
             ]
             ++
+            # vms w/ bypassAuthForLAN
+            (attrsets.mapAttrsToList (vmName: vmData: {
+                domain = "${vmData.subdomain or vmName}.${domain}";
+		networks = ipv4.trustedNetworks ++ ipv6.trustedNetworks;
+                policy = "bypass";
+              })
+              (attrsets.filterAttrs (n: v: v.bypassAuthForLAN) vmsEnabled))
+            ++
             # vms
             (attrsets.mapAttrsToList (vmName: vmData: let
-                authPolicy = attrsets.attrByPath ["authPolicy"] "two_factor" vmData;
-                sub = attrsets.attrByPath ["subdomain"] vmName vmData;
+                inherit (vmData) authPolicy;
               in {
-                domain = "${sub}.${domain}";
+                domain = "${vmData.subdomain or vmName}.${domain}";
                 subject =
                   if authPolicy != "bypass"
                   then "group:admin"

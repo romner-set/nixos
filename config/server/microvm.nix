@@ -133,6 +133,10 @@ in {
               type = types.str;
               default = "two_factor";
             };
+	    bypassAuthForLAN = mkOption {
+	      type = types.bool;
+	      default = false;
+	    };
             csp = mkOption {
               type = types.str;
               default = "lax";

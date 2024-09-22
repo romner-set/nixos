@@ -78,6 +78,11 @@ in {
           default = "172.30.1";
         };
       };
+
+      trustedNetworks = mkOption { # used for microvm bypassAuthForLAN option
+        type = types.listOf types.str;
+	default = [];
+      };
     };
 
     ipv6 = {
@@ -95,6 +100,11 @@ in {
           default = "fda4:7b0e:05b2:1";
         };
         microvmPublic = mkOption {type = types.str;};
+      };
+
+      trustedNetworks = mkOption { # used for microvm bypassAuthForLAN option
+        type = types.listOf types.str;
+	default = [];
       };
     };
   };

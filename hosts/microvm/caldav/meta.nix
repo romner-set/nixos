@@ -7,7 +7,8 @@ cfg: {
     proto = "http";
     port = 80;
   };
-  authPolicy = "bypass";
+  #authPolicy = "bypass";
+  bypassAuthForLAN = true;
 
   shares = [
     {
