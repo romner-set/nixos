@@ -46,6 +46,9 @@ with lib; {
         llm.enable = true;
         tor-relay.enable = true;
 
+	# network
+	#librenms.enable = true;
+
         # gaming
         #foundryvtt.enable = true;
       };
