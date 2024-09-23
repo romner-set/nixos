@@ -9,6 +9,8 @@ cfg: {
   #authPolicy = "bypass";
   bypassAuthForLAN = true;
 
+  maxUploadSize = "50000M";
+
   shares = [
     {
       proto = "virtiofs";

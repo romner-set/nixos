@@ -142,6 +142,11 @@ in {
               default = "lax";
             };
 
+            maxUploadSize = mkOption {
+              type = types.str;
+	      default = "10m";
+            };
+
             subdomain = mkOption {
               type = types.str;
               default = name;
