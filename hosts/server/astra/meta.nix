@@ -42,6 +42,7 @@ with lib; {
 
         # misc
         mail.enable = true;
+        vikunja.enable = true;
         searxng.enable = true;
         llm.enable = true;
         tor-relay.enable = true;
