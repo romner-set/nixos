@@ -3,6 +3,7 @@
   inputs,
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib; {
@@ -12,6 +13,8 @@ with lib; {
   };
   config = mkIf config.cfg.core.nix.enable {
     nix = {
+      package = pkgs.nixVersions.latest;
+
       # This will add each flake input as a registry
       # To make nix3 commands consistent with your flake
       registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
