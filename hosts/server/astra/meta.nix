@@ -22,11 +22,13 @@ with lib; {
         high = 12288;
       };
       vms = {
-        # core
+        # core/critical
         nginx.enable = true;
         authelia.enable = true;
         nameserver.enable = true;
         unbound.enable = true;
+        mail.enable = true;
+        searxng.enable = true;
 
         # media
         koel.enable = true;
@@ -40,10 +42,11 @@ with lib; {
         git-runner.enable = true;
         samba.enable = true;
 
-        # misc
-        mail.enable = true;
+	# task mgmt
         vikunja.enable = true;
-        searxng.enable = true;
+        kitchenowl.enable = true;
+
+        # misc
         llm.enable = true;
         tor-relay.enable = true;
 
