@@ -42,7 +42,7 @@ with lib; {
         git-runner.enable = true;
         samba.enable = true;
 
-	# task mgmt
+        # task mgmt
         vikunja.enable = true;
         kitchenowl.enable = true;
 
@@ -50,8 +50,8 @@ with lib; {
         llm.enable = true;
         tor-relay.enable = true;
 
-	# network
-	#librenms.enable = true;
+        # network
+        #librenms.enable = true;
 
         # gaming
         #foundryvtt.enable = true;
@@ -87,12 +87,12 @@ with lib; {
 
         subnet.microvm = "172.30.1";
 
-	trustedNetworks = [
-	  "10.47.0.0/24"
-	  "10.47.10.0/24"
-	  "100.74.0.0/16"
-	  "172.20.0.0/24"
-	];
+        trustedNetworks = [
+          "10.47.0.0/24"
+          "10.47.10.0/24"
+          "100.74.0.0/16"
+          "172.20.0.0/24"
+        ];
       };
 
       ipv6 = {
@@ -105,14 +105,14 @@ with lib; {
           microvmPublic = "2001:470:6f:389";
         };
 
-	trustedNetworks = [
-	  "fd95:3a23:dd1f::/64"
-	  "fd95:3a23:dd1f:10::/64"
-	  "2001:470:59b6::/64"
-	  "2001:470:59b6:10::/64"
-	  "2001:470:59b6:407a::/64"
-	  "2001:470:59b6:a39d::/64"
-	];
+        trustedNetworks = [
+          "fd95:3a23:dd1f::/64"
+          "fd95:3a23:dd1f:10::/64"
+          "2001:470:59b6::/64"
+          "2001:470:59b6:10::/64"
+          "2001:470:59b6:407a::/64"
+          "2001:470:59b6:a39d::/64"
+        ];
       };
     };
   };

@@ -37,6 +37,7 @@ in {
       dedicatedServer.openFirewall = cfg.steam.openFirewall;
       gamescopeSession.enable = true;
     };
+    programs.virt-manager.enable = true;
     services.zerotierone.enable = cfg.zerotier.enable;
 
     services.tor.enable = true;
@@ -62,7 +63,6 @@ in {
             rustc
             yarn-berry
             nodejs
-            androidStudioPackages.canary
             arduino-ide
             arduino-cli
             screen
@@ -101,7 +101,7 @@ in {
           speedcrunch
           libreoffice-qt
           moonlight-qt
-          virt-manager
+          obsidian
         ]
       );
   };

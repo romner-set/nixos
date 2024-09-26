@@ -10,6 +10,17 @@ with lib; let
 in {
   options.cfg.server.libvirt = {
     enable = mkEnableOption "";
+
+    vfio = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    customLogo = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
     hugepages = {
       enable = mkEnableOption "";
       count = mkOption {
@@ -20,23 +31,21 @@ in {
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = ["vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"];
+    boot.kernelModules = lists.optionals cfg.vfio ["vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"];
     boot.kernelParams =
-      [
+      (lists.optionals cfg.vfio [
         "iommu=pt"
-      ]
+      ])
       ++ (
-        if cfg.hugepages.enable
-        then [
+        lists.optionals cfg.hugepages.enable [
           "default_hugepagesz=1G"
           "hugepagesz=1G"
           "hugepages=${toString cfg.hugepages.count}"
         ]
-        else []
       );
 
     # custom UEFI boot logo
-    nixpkgs.overlays = [
+    nixpkgs.overlays = lists.optionals cfg.customLogo [
       (final: prev: {
         OVMF = prev.OVMF.overrideAttrs (old: {
           postPatch =

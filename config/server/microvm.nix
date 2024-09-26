@@ -133,10 +133,10 @@ in {
               type = types.str;
               default = "two_factor";
             };
-	    bypassAuthForLAN = mkOption {
-	      type = types.bool;
-	      default = false;
-	    };
+            bypassAuthForLAN = mkOption {
+              type = types.bool;
+              default = false;
+            };
             csp = mkOption {
               type = types.str;
               default = "lax";
@@ -144,7 +144,7 @@ in {
 
             maxUploadSize = mkOption {
               type = types.str;
-	      default = "10m";
+              default = "10m";
             };
 
             subdomain = mkOption {

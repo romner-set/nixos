@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: with lib; let
+}:
+with lib; let
   inherit (config.cfg.microvm.host) net vms vmsEnabled;
   inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
@@ -39,17 +40,17 @@ in {
 
       mailer = {
         enabled = true;
-	host = "mail.${domain}";
-	port = 465;
-	username = "vikunja";
-	# password set in VIKUNJA_MAILER_PASSWORD env
-	fromemail = "vikunja@${domain}";
-	forcessl = true;
+        host = "mail.${domain}";
+        port = 465;
+        username = "vikunja";
+        # password set in VIKUNJA_MAILER_PASSWORD env
+        fromemail = "vikunja@${domain}";
+        forcessl = true;
       };
 
       files = {
         basepath = mkForce "/data/files";
-	maxsize = "100MB";
+        maxsize = "100MB";
       };
     };
   };

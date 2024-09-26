@@ -10,6 +10,10 @@
   cfg.desktop.graphics.nvidia.enable = true;
   cfg.desktop.graphics.amdgpu.enable = true;
 
+  cfg.server.libvirt.enable = true;
+  cfg.server.libvirt.vfio = false;
+  users.users.main.extraGroups = ["libvirtd"];
+
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-amd"];

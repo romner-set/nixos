@@ -27,6 +27,10 @@
 
   cfg.desktop.boot.plymouth.enable = true;
 
+  environment.systemPackages = [
+    androidStudioPackages.canary
+  ];
+
   boot.initrd.availableKernelModules = ["ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "usbhid" "virtio_blk"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-amd"];

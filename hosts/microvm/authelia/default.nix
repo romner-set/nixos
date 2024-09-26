@@ -136,7 +136,7 @@ in {
             # vms w/ bypassAuthForLAN
             (attrsets.mapAttrsToList (vmName: vmData: {
                 domain = "${vmData.subdomain or vmName}.${domain}";
-		networks = ipv4.trustedNetworks ++ ipv6.trustedNetworks;
+                networks = ipv4.trustedNetworks ++ ipv6.trustedNetworks;
                 policy = "bypass";
               })
               (attrsets.filterAttrs (n: v: v.bypassAuthForLAN) vmsEnabled))

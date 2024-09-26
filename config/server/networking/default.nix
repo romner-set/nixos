@@ -79,9 +79,10 @@ in {
         };
       };
 
-      trustedNetworks = mkOption { # used for microvm bypassAuthForLAN option
+      trustedNetworks = mkOption {
+        # used for microvm bypassAuthForLAN option
         type = types.listOf types.str;
-	default = [];
+        default = [];
       };
     };
 
@@ -102,9 +103,10 @@ in {
         microvmPublic = mkOption {type = types.str;};
       };
 
-      trustedNetworks = mkOption { # used for microvm bypassAuthForLAN option
+      trustedNetworks = mkOption {
+        # used for microvm bypassAuthForLAN option
         type = types.listOf types.str;
-	default = [];
+        default = [];
       };
     };
   };

@@ -275,9 +275,9 @@ in {
             extraConfig = concatStrings [
               virtualHostsCommonConfig.extraConfig
               ''
-                add_header Content-Security-Policy "${csp.${attrsets.attrByPath ["csp"] "strict" vmData}}" always;
-	        client_max_body_size ${vmData.maxUploadSize};
-	      ''
+                       add_header Content-Security-Policy "${csp.${attrsets.attrByPath ["csp"] "strict" vmData}}" always;
+                client_max_body_size ${vmData.maxUploadSize};
+              ''
             ];
           })
         (attrsets.filterAttrs (n: v: attrsets.hasAttrByPath ["locations"] v) vmsEnabled))
