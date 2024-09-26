@@ -9,11 +9,7 @@ with lib; let
   self = vms.${config.networking.hostName};
 
   mac = configLib.decToHex self.id "";
-  fullMAC = "02:00:00:00:01:${
-    if stringLength mac == 1
-    then "0"
-    else ""
-  }${mac}";
+  fullMAC = "02:00:00:00:01:${configLib.strings.zeroPad 2 mac}";
 
   inherit (config.cfg.microvm.host) vms net;
   inherit (net) ipv4 ipv6;
@@ -48,11 +44,7 @@ in {
           ];
           linkConfig.RequiredForOnline = "routable";
           extraConfig = let
-            fullHostMAC = "02:00:00:00:00:${
-              if stringLength mac == 1
-              then "0"
-              else ""
-            }${mac}";
+            fullHostMAC = "02:00:00:00:00:${configLib.strings.zeroPad 2 mac}";
           in ''
             [Neighbor]
             Address=fe80::

@@ -255,11 +255,7 @@ in {
               DHCP = "no";
             };
             addresses = []; # see config/microvm/networking.nix
-            linkConfig.MACAddress = "02:00:00:00:00:${
-              if stringLength mac == 1
-              then "0"
-              else ""
-            }${mac}";
+            linkConfig.MACAddress = "02:00:00:00:00:${configLib.strings.zeroPad 2 mac}";
             linkConfig.RequiredForOnline = "carrier";
             routes = [
               {routeConfig.Destination = "${ipv4.subnet.microvm}.${toString vmData.id}/32";}
@@ -267,11 +263,7 @@ in {
               {routeConfig.Destination = "${ipv6.subnet.microvmPublic}::${toString vmData.id}/128";}
             ];
             extraConfig = let
-              fullMAC = "02:00:00:00:01:${
-                if stringLength mac == 1
-                then "0"
-                else ""
-              }${mac}";
+              fullMAC = "02:00:00:00:01:${configLib.strings.zeroPad 2 mac}";
             in ''
               [Neighbor]
               Address=${ipv4.subnet.microvm}.${toString vmData.id}

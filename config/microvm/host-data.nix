@@ -37,16 +37,11 @@ in {
 
   config = let
     self = cfg.vms."${config.networking.hostName}";
-    hexId = configLib.decToHex self.id "";
-    hexIdPadded = "${
-      if stringLength hexId == 1
-      then "0"
-      else ""
-    }${hexId}";
+    hexId = configLib.strings.zeroPad 2 (configLib.decToHex self.id "");
   in
     mkIf cfg.enable {
       networking.hostName = lib.mkForce misc.selfName or "";
-      networking.hostId = lib.mkForce "f0aef1${hexIdPadded}";
+      networking.hostId = lib.mkForce "f0aef1${hexId}";
       system.stateVersion = lib.mkForce config.system.nixos.release; # VMs are ephemeral, so stateVersion should always be latest
 
       cfg.server.microvm.enable = lib.mkForce false;
@@ -64,7 +59,7 @@ in {
             type = "tap";
 
             id = "vmtap${toString self.id}";
-            mac = "02:00:00:00:01:${hexIdPadded}";
+            mac = "02:00:00:00:01:${hexId}";
           }
         ];
 

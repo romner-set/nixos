@@ -1,21 +1,30 @@
-# https://github.com/EmergentMind/nix-config/blob/dev/lib/default.nix
 {lib, ...}:
 with lib; rec {
   # PATHS
+  ## https://github.com/EmergentMind/nix-config/blob/e68e8554dc82226e8158728222ca33a81d22d4b7/lib/default.nix
   relativeToRoot = lib.path.append ../.;
   scanPath = path:
-    builtins.map (f: (path + "/${f}")) (builtins.attrNames
-      (lib.attrsets.filterAttrs (path: _type:
-        (_type == "directory") # include directories
-        || (
-          # FIXME this barfs when child directories don't contain a default.nix
-          # example:
-          # error: getting status of '/nix/store/mx31x8530b758ap48vbg20qzcakrbc8 (see hosts/common/core/services/default.nix)a-source/hosts/common/core/services/default.nix': No such file or directory
-          # I created a blank default.nix in hosts/common/core/services to work around
-          (path != "default.nix") # ignore default.nix
-          && (lib.strings.hasSuffix ".nix" path) # include .nix files
-        )) (builtins.readDir path)));
+    builtins.map (f: (path + "/${f}")) (
+      builtins.attrNames (
+        lib.attrsets.filterAttrs (
+          path: _type:
+            (_type == "directory") # include directories
+            || (
+              (path != "default.nix") # ignore default.nix
+              && (lib.strings.hasSuffix ".nix" path) # include .nix files
+            )
+        ) (builtins.readDir path)
+      )
+    );
   scanPaths = paths: lib.lists.concatMap (dir: map (n: "${dir}/${n}") (builtins.attrNames (builtins.readDir dir))) paths;
+
+  # MISC
+  strings = rec {
+    zeroPad = len: n: 
+      if builtins.stringLength n < len
+      then zeroPad (len - 1) "0${n}"
+      else n;
+  };
 
   # MATH
   mod = n: d: n - (n / d) * d;
@@ -58,12 +67,7 @@ with lib; rec {
 
     lengthToMaskList = len:
       with lib.strings;
-        map (n:
-          toString (
-            if n == "00000000" # toInt doesn't like leading zeroes
-            then 0
-            else binToDec (toInt n)
-          )) (lengthToBits len);
+        map (n: toString (binToDec (toIntBase10 n))) (lengthToBits len);
 
     lengthToMask = len:
       with lib.strings;
