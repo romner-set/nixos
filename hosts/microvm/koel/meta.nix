@@ -10,6 +10,7 @@ cfg: {
     port = 8080;
   };
   authPolicy = "bypass";
+  expectedMaxResponseTime = 300; # avg 256-267
 
   shares = [
     {

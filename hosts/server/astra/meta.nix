@@ -43,6 +43,7 @@ with lib; {
         samba.enable = true;
 
         # task mgmt
+        uptime.enable = true;
         vikunja.enable = true;
         kitchenowl.enable = true;
 

@@ -129,6 +129,14 @@ in {
             };
 
             ## vm-dependent
+
+            ### uptime
+            expectedMaxResponseTime = mkOption {
+              type = types.ints.positive;
+              default = 10;
+            };
+
+            ### authelia
             authPolicy = mkOption {
               type = types.str;
               default = "two_factor";
@@ -137,6 +145,8 @@ in {
               type = types.bool;
               default = false;
             };
+
+            ### nginx
             csp = mkOption {
               type = types.str;
               default = "lax";

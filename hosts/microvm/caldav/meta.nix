@@ -9,6 +9,7 @@ cfg: {
   };
   #authPolicy = "bypass";
   bypassAuthForLAN = true;
+  expectedMaxResponseTime = 60; # avg 49-53
 
   shares = [
     {
