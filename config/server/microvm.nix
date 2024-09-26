@@ -133,7 +133,7 @@ in {
             ### uptime
             expectedMaxResponseTime = mkOption {
               type = types.ints.positive;
-              default = 10;
+              default = 15;
             };
 
             ### authelia

@@ -48,7 +48,7 @@ in {
               conditions = [
                 "[CONNECTED] == true"
                 "[STATUS] == 200"
-                "[RESPONSE_TIME] < ${toString vmData.expectedMaxResponseTime}" # default 10; koel takes like 250ms, but most services are ~1ms
+                "[RESPONSE_TIME] < ${toString vmData.expectedMaxResponseTime}" # default 15; koel takes like 250ms, but most services are ~1ms
               ];
             })
             vmData.locations)
