@@ -10,7 +10,17 @@ with lib; let
   inherit (config.networking) domain;
 in {
   config = {
-    systemd.services.authelia-main.serviceConfig.BindPaths = ["/data" "/secrets"];
+    services.redis.servers.authelia = {
+      enable = true;
+      unixSocket = "/run/redis-authelia/redis.sock";
+      user = "root";
+      settings = {
+	dir = mkForce "/data/redis";
+      };
+    };
+
+    systemd.services.redis-authelia.serviceConfig.BindPaths = ["/data/redis"];
+    systemd.services.authelia-main.serviceConfig.BindPaths = ["/data/auth" "/secrets" "/run/redis-authelia/redis.sock"];
 
     /*
       users.users.authelia = {
@@ -31,6 +41,7 @@ in {
       group = "root";
       secrets.storageEncryptionKeyFile = "/secrets/db_pass";
       secrets.jwtSecretFile = "/secrets/jwt_secret";
+      secrets.sessionSecretFile = "/secrets/session_secret";
       environmentVariables = {
         "AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE" = "/secrets/mail_pass";
       };
@@ -56,7 +67,7 @@ in {
         authentication_backend = {
           password_reset = {disable = true;};
           file = {
-            path = "/data/users.yml";
+            path = "/data/auth/users.yml";
             watch = false;
             password = {
               algorithm = "argon2";
@@ -76,7 +87,8 @@ in {
           domain = "${domain}";
           expiration = "1h";
           inactivity = "5m";
-          remember_me_duration = "1M";
+          remember_me_duration = "1w";
+	  redis.host = "/run/redis-authelia/redis.sock";
         };
 
         regulation = {
@@ -91,7 +103,7 @@ in {
           };
         };
 
-        storage = {local = {path = "/data/db.sqlite3";};};
+        storage = {local = {path = "/data/auth/db.sqlite3";};};
         notifier = {
           disable_startup_check = true;
           smtp = {

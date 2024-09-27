@@ -29,5 +29,6 @@ cfg: {
     "vm/authelia/db_pass" = {};
     "vm/authelia/mail_pass" = {};
     "vm/authelia/jwt_secret" = {};
+    "vm/authelia/session_secret" = {};
   };
 }
