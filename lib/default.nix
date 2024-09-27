@@ -20,7 +20,7 @@ with lib; rec {
 
   # MISC
   strings = rec {
-    zeroPad = len: n: 
+    zeroPad = len: n:
       if builtins.stringLength n < len
       then zeroPad (len - 1) "0${n}"
       else n;

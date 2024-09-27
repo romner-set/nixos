@@ -15,7 +15,7 @@ in {
       unixSocket = "/run/redis-authelia/redis.sock";
       user = "root";
       settings = {
-	dir = mkForce "/data/redis";
+        dir = mkForce "/data/redis";
       };
     };
 
@@ -88,7 +88,7 @@ in {
           expiration = "1h";
           inactivity = "5m";
           remember_me_duration = "1w";
-	  redis.host = "/run/redis-authelia/redis.sock";
+          redis.host = "/run/redis-authelia/redis.sock";
         };
 
         regulation = {
