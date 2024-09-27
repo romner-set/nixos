@@ -1,4 +1,6 @@
-cfg: {
+{config, ...}: let
+  cfg = config.cfg.server.microvm;
+in {
   id = 14;
   webPorts = [80];
   vcpu = cfg.defaults.vcpu.max;

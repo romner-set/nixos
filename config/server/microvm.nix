@@ -6,7 +6,7 @@
   inputs,
   outputs,
   ...
-}:
+} @ args:
 with lib; let
   cfg = config.cfg.server.microvm;
   vmsEnabled = filterAttrs (_: vm: vm.enable) cfg.vms;
@@ -96,14 +96,19 @@ in {
               default = [];
             };
 
+            ## sops-nix
             secrets = mkOption {
-              # sops-nix secret defs
               type = types.attrs;
               default = {};
             };
 
+            templates = mkOption {
+              type = types.attrs;
+              default = {};
+            };
+
+            ## vm-specific config, e.g. syncthing devices
             config = mkOption {
-              # vm-specific config, e.g. syncthing devices
               type = types.attrs;
               default = {};
             };
@@ -194,7 +199,7 @@ in {
   # VM metadata - always defined
   config.cfg.server.microvm.vms = listToAttrs (map (name: {
       inherit name;
-      value = import (configLib.relativeToRoot "./hosts/microvm/${name}/meta.nix") cfg;
+      value = import (configLib.relativeToRoot "./hosts/microvm/${name}/meta.nix") args;
     })
     (builtins.attrNames (builtins.readDir (configLib.relativeToRoot "./hosts/microvm"))));
 
@@ -204,6 +209,7 @@ in {
   ]);
 
   config.sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.secrets) vmsEnabled);
+  config.sops.templates = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.templates) vmsEnabled);
   config.systemd.services."microvm-virtiofsd@".serviceConfig.TimeoutStopSec = 1;
 
   config.users.users.microvm = mkIf cfg.enable {

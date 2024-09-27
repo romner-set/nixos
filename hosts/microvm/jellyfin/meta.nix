@@ -1,4 +1,6 @@
-cfg: {
+{config, ...}: let
+  cfg = config.cfg.server.microvm;
+in {
   id = 7;
   # NOTE: jellyfin doesn't have IPv6 enabled out of the box,
   # manually connect to the instance and enable it on setup

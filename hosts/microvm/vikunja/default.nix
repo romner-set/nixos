@@ -9,49 +9,26 @@ with lib; let
   inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
 in {
-  users.users.vikunja = {
+  /*users.users.vikunja = {
     isSystemUser = true;
     shell = pkgs.fish;
     group = "vikunja";
   };
-  users.groups.vikunja = {};
+  users.groups.vikunja = {};*/
 
   systemd.services.vikunja.serviceConfig = {
-    User = "vikunja";
+    User = "root";
     DynamicUser = mkForce false;
     BindPaths = ["/data"];
   };
 
+  environment.etc."vikunja/config.yaml".source = mkForce "/secrets/rendered/config.yaml"; # sops template defined in meta.nix
+
   services.vikunja = {
     enable = true;
+    environmentFiles = ["/secrets/env"];
 
     frontendScheme = "http";
     frontendHostname = "vikunja.${domain}";
-
-    database.path = "/data/vikunja.db";
-
-    environmentFiles = ["/secrets/env"];
-
-    settings = {
-      timezone = config.time.timeZone;
-      enaleuserdeletion = false;
-
-      service.enableregistration = false;
-
-      mailer = {
-        enabled = true;
-        host = "mail.${domain}";
-        port = 465;
-        username = "vikunja";
-        # password set in VIKUNJA_MAILER_PASSWORD env
-        fromemail = "vikunja@${domain}";
-        forcessl = true;
-      };
-
-      files = {
-        basepath = mkForce "/data/files";
-        maxsize = "100MB";
-      };
-    };
   };
 }

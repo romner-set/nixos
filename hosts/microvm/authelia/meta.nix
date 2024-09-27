@@ -1,4 +1,4 @@
-cfg: {
+{...}: {
   id = 2;
 
   webPorts = [9091];
@@ -12,6 +12,12 @@ cfg: {
   shares = [
     {
       proto = "virtiofs";
+      tag = "authelia-secrets-oidc";
+      source = "/run/secrets/oidc";
+      mountPoint = "/secrets/oidc";
+    }
+    {
+      proto = "virtiofs";
       tag = "authelia-secrets";
       #securityModel = "mapped-file";
       source = "/run/secrets/vm/authelia";
@@ -19,7 +25,7 @@ cfg: {
     }
     {
       proto = "virtiofs";
-      tag = "authelia";
+      tag = "authelia-data";
       source = "/vm/authelia";
       mountPoint = "/data";
     }
@@ -30,5 +36,8 @@ cfg: {
     "vm/authelia/mail_pass" = {};
     "vm/authelia/jwt_secret" = {};
     "vm/authelia/session_secret" = {};
+
+    "vm/authelia/oidc_hmac" = {};
+    "vm/authelia/oidc_jwk" = {};
   };
 }

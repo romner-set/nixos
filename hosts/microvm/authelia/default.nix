@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  unstable,
   config,
   ...
 }:
@@ -9,6 +10,10 @@ with lib; let
   inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
 in {
+  # use unstable service
+  disabledModules = ["services/security/authelia.nix"];
+  imports = ["${unstable.path}/nixos/modules/services/security/authelia.nix"];
+
   config = {
     services.redis.servers.authelia = {
       enable = true;
@@ -39,21 +44,31 @@ in {
       enable = true;
       user = "root";
       group = "root";
-      secrets.storageEncryptionKeyFile = "/secrets/db_pass";
-      secrets.jwtSecretFile = "/secrets/jwt_secret";
-      secrets.sessionSecretFile = "/secrets/session_secret";
+
+      package = unstable.authelia;
+
+      secrets = {
+        storageEncryptionKeyFile = "/secrets/db_pass";
+        jwtSecretFile = "/secrets/jwt_secret";
+        sessionSecretFile = "/secrets/session_secret";
+
+        oidcHmacSecretFile = "/secrets/oidc_hmac";
+        oidcIssuerPrivateKeyFile = "/secrets/oidc_jwk";
+      };
+
       environmentVariables = {
         "AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE" = "/secrets/mail_pass";
+        "X_AUTHELIA_CONFIG_FILTERS" = "template"; # used for OIDC clients
       };
       settings = {
         theme = "dark";
-        default_redirection_url = "https://${domain}";
         default_2fa_method = "totp";
 
         server = {
-          host = "0.0.0.0";
-          port = 9091;
-          path = "";
+          #host = "0.0.0.0";
+          #port = 9091;
+          #path = "";
+          address = "tcp://:9091/";
         };
 
         totp = {
@@ -83,12 +98,37 @@ in {
           };
         };
 
+        identity_providers.oidc = {
+          #TODO: authorization_policies = {};
+          clients = [
+            {
+              client_name = "vikunja";
+              client_id = "{{ secret \"/secrets/oidc/vikunja/id\" }}";
+              client_secret = "{{ secret \"/secrets/oidc/vikunja/secret_hash\" }}";
+              public = false;
+              authorization_policy = "two_factor";
+              redirect_uris = ["https://vikunja.${domain}/auth/openid/authelia"];
+              scopes = ["openid" "profile" "email"];
+              userinfo_signed_response_alg = "none";
+              token_endpoint_auth_method = "client_secret_basic";
+            }
+          ];
+        };
+
         session = {
-          domain = "${domain}";
           expiration = "1h";
           inactivity = "5m";
-          remember_me_duration = "1w";
+          remember_me = "1M";
+
           redis.host = "/run/redis-authelia/redis.sock";
+
+          cookies = [
+            {
+              inherit domain;
+              authelia_url = "https://auth.${domain}";
+              default_redirection_url = "https://${domain}";
+            }
+          ];
         };
 
         regulation = {
@@ -107,9 +147,7 @@ in {
         notifier = {
           disable_startup_check = true;
           smtp = {
-            # TODO: host = "${ipv6.subnet.microvm}${vms.mail.ipv6}";
-            host = "mail.${domain}";
-            port = 465;
+            address = "smtp://mail.${domain}:465";
             username = "auth@${domain}";
             sender = "Authelia <auth@${domain}>";
             identifier = "auth@${domain}";

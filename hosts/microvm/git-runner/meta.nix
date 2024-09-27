@@ -1,4 +1,6 @@
-cfg: {
+{config, ...}: let
+  cfg = config.cfg.server.microvm;
+in {
   id = 15;
   vcpu = cfg.defaults.vcpu.max;
   mem = cfg.defaults.mem.high;

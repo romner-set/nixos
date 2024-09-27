@@ -55,7 +55,7 @@ with lib; let
                add_header Permissions-Policy 'accelerometer=(), ambient-light-sensor=(), autoplay=(self), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(self), gamepad=(), speaker-selection=(), conversion-measurement=(), focus-without-user-activation=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), sync-script=(), trust-token-redemption=(), unload=(), window-placement=(), vertical-scroll=()' always;
 
                # Authelia location
-               set $upstream_authelia http://[${ipv6.subnet.microvm}::${toString vms.authelia.id}]:9091/api/verify;
+               set $upstream_authelia http://[${ipv6.subnet.microvm}::${toString vms.authelia.id}]:9091/api/authz/auth-request;
 
                location @authelia-redirect {
                	return 302 https://auth.${domain}/?rd=$scheme://$host$request_uri;
@@ -269,7 +269,7 @@ in {
                 extraConfig =
                   if vmName != "authelia"
                   then autheliaProxyConfig
-                  else "";
+                  else (builtins.readFile ./authelia/proxy.conf);
               })
               (attrsets.attrByPath ["locations"] {} vmData);
             extraConfig = concatStrings [

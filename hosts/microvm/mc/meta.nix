@@ -1,4 +1,6 @@
-cfg: {
+{config, ...}: let
+  cfg = config.cfg.server.microvm;
+in {
   id = 100;
   tcpPorts = [25565 25555];
   mem = 18432;

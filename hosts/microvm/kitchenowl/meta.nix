@@ -1,4 +1,4 @@
-cfg: {
+{...}: {
   id = 21;
 
   subdomain = "kiowl";

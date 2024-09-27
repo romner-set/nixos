@@ -1,4 +1,6 @@
-cfg: {
+{config, ...}: let
+  cfg = config.cfg.server.microvm;
+in {
   id = 5;
 
   webPorts = [8080];
@@ -10,7 +12,7 @@ cfg: {
     port = 8080;
   };
   authPolicy = "bypass";
-  expectedMaxResponseTime = 300; # avg 256-267
+  expectedMaxResponseTime = 500; # avg 256-267
 
   shares = [
     {
