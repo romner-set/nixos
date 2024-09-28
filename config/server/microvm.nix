@@ -151,6 +151,19 @@ in {
               default = false;
             };
 
+	    oidc = {
+	      enable = mkEnableOption "";
+	      redirectUris = mkOption {type = types.listOf types.str;};
+	      scopes = mkOption {
+	        type = types.listOf types.str;
+		default = ["openid" "profile" "email"];
+	      };
+	      authMethod = mkOption {
+	        type = types.str;
+		default = "client_secret_basic";
+	      };
+	    };
+
             ### nginx
             csp = mkOption {
               type = types.str;

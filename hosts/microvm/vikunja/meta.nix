@@ -37,6 +37,9 @@ in {
     }
   ];
 
+  oidc.enable = true;
+  oidc.redirectUris = ["https://vikunja.${domain}/auth/openid/authelia"];
+
   secrets = {
     "vm/vikunja/env" = {};
     "oidc/vikunja/id" = {};

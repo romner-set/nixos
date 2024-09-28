@@ -1,7 +1,8 @@
-{...}: {
+{config, ...}: let
+  inherit (config.networking) domain;
+in {
   id = 21;
 
-  subdomain = "kiowl";
   webPorts = [80];
 
   locations."/" = {
@@ -14,7 +15,7 @@
     {
       proto = "virtiofs";
       tag = "kitchenowl-data";
-      source = "/vm/kitchenowl";
+      source = "/vm/kitchenowl/data";
       mountPoint = "/data";
     }
     {
@@ -23,10 +24,25 @@
       source = "/run/secrets/vm/kitchenowl";
       mountPoint = "/secrets";
     }
+    {
+      proto = "virtiofs";
+      tag = "kitchenowl-docker";
+      source = "/vm/kitchenowl/docker";
+      mountPoint = "/var/lib/docker";
+    }
   ];
+
+  oidc.enable = true;
+  oidc.redirectUris = [
+    "kitchenowl:///signin/redirect"
+    "https://kitchenowl.${domain}/signin/redirect"
+  ];
+  oidc.authMethod = "client_secret_post";
 
   secrets = {
     "vm/kitchenowl/env" = {};
-    #"vm/netbox/mail_pass" = {}; #TODO
+    "oidc/kitchenowl/id" = {};
+    "oidc/kitchenowl/secret" = {};
+    "oidc/kitchenowl/secret_hash" = {};
   };
 }

@@ -9,12 +9,14 @@ with lib; let
   inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
 in {
-  /*users.users.vikunja = {
+  /*
+    users.users.vikunja = {
     isSystemUser = true;
     shell = pkgs.fish;
     group = "vikunja";
   };
-  users.groups.vikunja = {};*/
+  users.groups.vikunja = {};
+  */
 
   systemd.services.vikunja.serviceConfig = {
     User = "root";

@@ -100,19 +100,18 @@ in {
 
         identity_providers.oidc = {
           #TODO: authorization_policies = {};
-          clients = [
-            {
-              client_name = "vikunja";
-              client_id = "{{ secret \"/secrets/oidc/vikunja/id\" }}";
-              client_secret = "{{ secret \"/secrets/oidc/vikunja/secret_hash\" }}";
-              public = false;
-              authorization_policy = "two_factor";
-              redirect_uris = ["https://vikunja.${domain}/auth/openid/authelia"];
-              scopes = ["openid" "profile" "email"];
-              userinfo_signed_response_alg = "none";
-              token_endpoint_auth_method = "client_secret_basic";
-            }
-          ];
+          clients = attrsets.mapAttrsToList (vmName: vmData: {
+            client_name = vmName;
+            client_id = "{{ secret \"/secrets/oidc/${vmName}/id\" }}";
+            client_secret = "{{ secret \"/secrets/oidc/${vmName}/secret_hash\" }}";
+            public = false;
+            authorization_policy = "two_factor";
+            redirect_uris = vmData.oidc.redirectUris;
+            scopes = vmData.oidc.scopes;
+            userinfo_signed_response_alg = "none";
+            token_endpoint_auth_method = vmData.oidc.authMethod;
+            pre_configured_consent_duration = "1w";
+          }) (attrsets.filterAttrs (n: v: v.oidc.enable) vmsEnabled);
         };
 
         session = {

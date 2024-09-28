@@ -5,8 +5,10 @@ microvm -u $hostname:authelia
 microvm -u $hostname:nginx
 microvm -u $hostname:unbound
 microvm -u $hostname:nameserver
+microvm -u $hostname:uptime
 
 systemctl restart microvm@$hostname:authelia &
 systemctl restart microvm@$hostname:nginx &
 systemctl restart microvm@$hostname:unbound &
-systemctl restart microvm@$hostname:nameserver
+systemctl restart microvm@$hostname:nameserver &
+systemctl restart microvm@$hostname:uptime

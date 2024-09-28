@@ -1,4 +1,7 @@
-{...}: {
+{config, ...}: let
+  inherit (config.networking) domain;
+in {
+  # MANUAL SETUP NECESSARY: https://www.authelia.com/integration/openid-connect/immich/#application
   id = 16;
 
   webPorts = [2283];
@@ -32,7 +35,17 @@
     }
   ];
 
+  oidc.enable = true;
+  oidc.redirectUris = [
+    "app.immich:/" # mobile app
+    "https://immich.${domain}/auth/login"
+    "https://immich.${domain}/user-settings"
+  ];
+
   secrets = {
     "vm/immich/env" = {};
+    "oidc/immich/id" = {};
+    "oidc/immich/secret" = {};
+    "oidc/immich/secret_hash" = {};
   };
 }
