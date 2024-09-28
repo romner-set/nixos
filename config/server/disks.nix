@@ -49,7 +49,7 @@ in {
     systemd.services."set-disks-standby" = mkIf cfg.standbyOnBoot.enable {
       script = ''
         for disk in ${strings.concatStrings (strings.intersperse " " cfg.standbyOnBoot.disks)}; do
-          ${pkgs.hdparm}/bin/hdparm -y $disk
+          ${pkgs.hdparm}/bin/hdparm -S 6 $disk
         done
       '';
       serviceConfig = {
