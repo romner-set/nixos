@@ -102,6 +102,7 @@ in {
           libreoffice-qt
           moonlight-qt
           obsidian
+          tenacity
         ]
       );
   };

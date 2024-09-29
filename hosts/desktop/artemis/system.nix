@@ -1,4 +1,4 @@
-{modulesPath, ...}: {
+{modulesPath, pkgs, ...}: {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
@@ -27,7 +27,7 @@
 
   cfg.desktop.boot.plymouth.enable = true;
 
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
     androidStudioPackages.canary
   ];
 
