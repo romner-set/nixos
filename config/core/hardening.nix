@@ -12,6 +12,7 @@ in {
       default = true;
     };
     allowForwarding = mkEnableOption "IP forwarding";
+    allowPing = mkEnableOption "IP forwarding";
   };
 
   config = mkIf cfg.enable {
@@ -44,7 +45,7 @@ in {
     };
 
     networking.firewall = {
-      allowPing = mkDefault false;
+      allowPing = mkDefault cfg.allowPing;
     };
   };
 }

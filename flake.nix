@@ -135,20 +135,6 @@
           }) (builtins.attrNames (builtins.readDir ./hosts/server)))
           ++
           #
-          # ARM VPSs
-          #
-          (map (name: {
-            inherit name;
-            value = {
-              system = "aarch64-linux";
-              preset = "vps";
-
-              channels.nixpkgs.ref = latest;
-              channels.unstable.ref = latest-unstable;
-            };
-          }) (builtins.attrNames (builtins.readDir ./hosts/vps)))
-          ++
-          #
           # MicroVMs
           #
           (latest.lib.lists.concatMap (hypervisorName: (
@@ -177,6 +163,34 @@
               };
             }) (builtins.attrNames (builtins.readDir ./hosts/microvm))
           )) (builtins.attrNames (builtins.readDir ./hosts/server)))
+          ++
+          #
+          # ARM VPSs
+          #
+          (map (name: {
+            inherit name;
+            value = {
+              system = "aarch64-linux";
+              preset = "vps";
+
+              channels.nixpkgs.ref = latest;
+              channels.unstable.ref = latest-unstable;
+            };
+          }) (builtins.attrNames (builtins.readDir ./hosts/vps)))
+          ++
+          #
+          # Testbeds
+          #
+          (map (name: {
+            inherit name;
+            value = {
+              system = "x86_64-linux";
+              preset = "testbed";
+
+              channels.nixpkgs.ref = latest;
+              channels.unstable.ref = latest-unstable;
+            };
+          }) (builtins.attrNames (builtins.readDir ./hosts/testbed)))
         )
       );
   };
