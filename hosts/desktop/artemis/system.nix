@@ -10,6 +10,8 @@
   cfg.core.firmware.enable = false;
   cfg.core.boot.loader.systemd-boot.enable = true;
 
+  cfg.core.programs.config.btop.cudaSupport = true;
+
   cfg.desktop.environment.kde.enable = true;
   cfg.desktop.graphics.nvidia.enable = true;
 

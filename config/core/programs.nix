@@ -16,6 +16,11 @@ in {
       type = types.listOf types.package;
       default = [];
     };
+
+    config = {
+      btop.cudaSupport = mkEnableOption "";
+      btop.rocmSupport = mkEnableOption "";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -50,7 +55,7 @@ in {
         # essential
         fastfetch
         neofetch
-        btop
+        (btop.override {inherit (cfg.config.btop) cudaSupport rocmSupport;})
         wget
         kitty.terminfo
         git
