@@ -103,6 +103,7 @@ in {
           moonlight-qt
           obsidian
           tenacity
+          prismlauncher
         ]
       );
   };
