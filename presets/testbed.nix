@@ -17,6 +17,6 @@ with lib; {
       dns.enable = mkDefault true;
     };
   };
-  
+
   networking.firewall.enable = false;
 }

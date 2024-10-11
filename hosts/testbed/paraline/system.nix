@@ -16,8 +16,8 @@
 
   system.stateVersion = config.system.nixos.release; # root is on tmpfs, this should be fine
 
-  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "ixgbe" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = ["ehci_pci" "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "ixgbe"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = ["kvm-intel"];
+  boot.extraModulePackages = [];
 }

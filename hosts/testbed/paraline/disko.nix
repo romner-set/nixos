@@ -65,17 +65,17 @@ in {
       datasets = {
         "nix" = {
           type = "zfs_fs";
-	  options.mountpoint = "legacy";
+          options.mountpoint = "legacy";
           mountpoint = "/nix";
         };
         "nix/nixos" = {
           type = "zfs_fs";
-	  options.mountpoint = "legacy";
+          options.mountpoint = "legacy";
           mountpoint = "/etc/nixos";
         };
         "nix/logs" = {
           type = "zfs_fs";
-	  options.mountpoint = "legacy";
+          options.mountpoint = "legacy";
           mountpoint = "/var/log";
         };
       };
