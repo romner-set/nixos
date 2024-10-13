@@ -18,8 +18,14 @@ in {
     };
 
     config = {
-      btop.cudaSupport = mkEnableOption "";
-      btop.rocmSupport = mkEnableOption "";
+      btop.cudaSupport = mkOption {
+        type = types.bool;
+        default = config.cfg.desktop.graphics.nvidia.enable;
+      };
+      btop.rocmSupport = mkOption {
+        type = types.bool;
+        default = config.cfg.desktop.graphics.amdgpu.enable;
+      };
     };
   };
 
