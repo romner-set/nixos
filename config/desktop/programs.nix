@@ -53,9 +53,8 @@ in {
     in
       lists.subtractLists cfg.excludedPackages (
         (
-          if cfg.dev.enable
-          then [
-            # dev
+          lib.optionals cfg.dev.enable
+          [
             git
             gh
             #git-credential-manager
@@ -77,7 +76,6 @@ in {
             cutterPlugins.sigdb
             cutterPlugins.jsdec
           ]
-          else []
         )
         ++ [
           # misc

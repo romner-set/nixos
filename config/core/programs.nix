@@ -106,6 +106,7 @@ in {
         hdparm
         wireguard-tools
         gnupg
+        nixpkgs-review
       ];
   };
 }
