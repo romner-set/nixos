@@ -32,6 +32,7 @@ with lib; {
 
         # media
         koel.enable = true;
+        meelo.enable = true;
         immich.enable = true;
         jellyfin.enable = true;
         qbittorrent.enable = true;
