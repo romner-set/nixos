@@ -203,6 +203,38 @@ in {
               }));
               default = {};
             };
+            vHosts = mkOption {
+              type = attrsOf (submodule ({name, ...}: {
+                options = {
+                  name = mkOption {
+                    type = types.str;
+                    default = name;
+                  };
+
+                  locations = mkOption {
+                    type = attrsOf (submodule ({name, ...}: {
+                      options = {
+                        name = mkOption {
+                          type = types.str;
+                          default = name;
+                        };
+
+                        proto = mkOption {
+                          type = types.str;
+                          default = "http";
+                        };
+                        port = mkOption {
+                          type = types.port;
+                          default = 80;
+                        };
+                      };
+                    }));
+                    default = {};
+                  };
+                };
+              }));
+              default = {};
+            };
           };
         }));
       default = {};

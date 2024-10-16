@@ -6,10 +6,12 @@
   #aliases = ["mta-sts" "autoconfig"]; #TODO: currently defined manually in ../nginx/default.nix
 
   locations."/" = {
-    proto = "http";
     port = 82;
   };
   csp = "lax";
+
+  vHosts."autoconfig".locations."/".port = 80;
+  vHosts."mta-sts".locations."/".port = 81;
 
   shares = [
     {

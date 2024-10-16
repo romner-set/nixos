@@ -166,7 +166,7 @@ in {
             [
               # global conf
               {
-                domain = ["autoconfig.${domain}" "mta-sts.${domain}"]; #TODO: move this to mail's meta.nix
+                domain = ["autoconfig.${domain}" "mta-sts.${domain}" "matrix-client.${domain}" "matrix-federation.${domain}"]; #TODO: move this to mail's meta.nix
                 policy = "bypass";
               }
               {

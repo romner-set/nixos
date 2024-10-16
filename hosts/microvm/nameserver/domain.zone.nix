@@ -91,7 +91,7 @@ in
         ${sub}                IN  AAAA          ${host.ipv6}
         _443._tcp.${sub}      IN  TLSA          3 1 1 ${TLSA}
       '')
-      ["srv" "mta-sts" "autoconfig"])
+      ["srv" "mta-sts" "autoconfig" "matrix-federation" "matrix-client"])
     ''
 
       ; DAV

@@ -27,12 +27,16 @@ with lib; {
         authelia.enable = true;
         nameserver.enable = true;
         unbound.enable = true;
-        mail.enable = true;
         searxng.enable = true;
+
+        # federated
+        mail.enable = true;
+        matrix.enable = true;
+        element.enable = true;
 
         # media
         koel.enable = true;
-        meelo.enable = true;
+        #meelo.enable = true;
         immich.enable = true;
         jellyfin.enable = true;
         qbittorrent.enable = true;
@@ -51,6 +55,7 @@ with lib; {
         # misc
         llm.enable = true;
         tor-relay.enable = true;
+        turn.enable = true;
 
         # network
         #librenms.enable = true;

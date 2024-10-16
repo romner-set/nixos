@@ -13,59 +13,81 @@ with lib; let
   #snippetsDir = ./../../../common/nginx/global;
   #universalSnippets = concatStrings (map (n: builtins.readFile "${snippetsDir}/${n}") (builtins.attrNames (builtins.readDir snippetsDir)));
 
+  extraSnippets = {
+    necessary = ''
+      # Custom headers
+      add_header Cat '~(=^.^=)' always;
+      add_header Contact admin@${domain} always;
+      add_header X-Powered-By NixOS always;
+
+      # Manual SSL
+      http2 on;
+      ssl_certificate /ssl/${domain}/fullchain.pem;
+      ssl_certificate_key /ssl/${domain}/key.pem;
+      ssl_trusted_certificate /ssl/${domain}/chain.pem;
+      ssl_conf_command Options KTLS;
+      #ssl_session_cache shared:SSLCACHE:50m;
+      #ssl_session_timeout 5m;
+      ssl_session_tickets on;
+      add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
+
+      # Quic
+      http3 on;
+      http3_hq on;
+      quic_retry on;
+      add_header Alt-Svc 'h3=":443"; ma=86400' always;
+      add_header Quic-Status $http3 always;
+      add_header X-Quic 'h3' always;
+      listen 443 quic;
+      listen [::]:443 quic;
+    '';
+
+    cors = ''
+      #add_header Access-Control-Allow-Origin 'https://auth.${domain}' always;
+      add_header 'Access-Control-Allow-Origin' '*' always;
+
+      # TODO: https://enable-cors.org/server_nginx.html
+    '';
+
+    secHeaders = ''
+      # Security headers
+      #add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header Referrer-Policy 'same-origin' always;
+      add_header Permissions-Policy 'accelerometer=(), ambient-light-sensor=(), autoplay=(self), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(self), gamepad=(), speaker-selection=(), conversion-measurement=(), focus-without-user-activation=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), sync-script=(), trust-token-redemption=(), unload=(), window-placement=(), vertical-scroll=()' always;
+    '';
+
+    authelia = ''
+      # Authelia location
+      set $upstream_authelia http://[${ipv6.subnet.microvm}::${toString vms.authelia.id}]:9091/api/authz/auth-request;
+
+      location @authelia-redirect {
+      	return 302 https://auth.${domain}/?rd=$scheme://$host$request_uri;
+      }
+    '';
+
+    robotsTxt =
+      ''
+        add_header X-Robots-Tag 'none' always;
+        location = /robots.txt { return 200 "User-agent: *\nDisallow: /\n"; }
+      ''
+      + (builtins.readFile ./authelia/location.conf);
+  };
+
   virtualHostsCommonConfig = {
     http3_hq = true;
     #quic = true;
-    extraConfig = concatStrings [
-      ''
-               # Custom headers
-               add_header Cat '~(=^.^=)' always;
-               add_header Contact admin@${domain} always;
-               add_header X-Powered-By NixOS always;
 
-               # Manual SSL
-               http2 on;
-               ssl_certificate /ssl/${domain}/fullchain.pem;
-               ssl_certificate_key /ssl/${domain}/key.pem;
-               ssl_trusted_certificate /ssl/${domain}/chain.pem;
-               ssl_conf_command Options KTLS;
-               #ssl_session_cache shared:SSLCACHE:50m;
-               #ssl_session_timeout 5m;
-               ssl_session_tickets on;
+    extraConfig = with extraSnippets;
+      concatStrings [
+        necessary
+        secHeaders
+        cors
+        authelia
+        robotsTxt
+      ];
 
-               # Quic
-               http3 on;
-               http3_hq on;
-               quic_retry on;
-               add_header Alt-Svc 'h3=":443"; ma=86400' always;
-               add_header Quic-Status $http3 always;
-               add_header X-Quic 'h3' always;
-               listen 443 quic;
-               listen [::]:443 quic;
-
-               # Security headers
-               add_header X-Robots-Tag 'none' always;
-               #add_header Access-Control-Allow-Origin '*' always;
-               add_header Access-Control-Allow-Origin 'https://auth.${domain}';
-               #add_header X-Content-Type-Options "nosniff" always;
-               add_header X-XSS-Protection "1; mode=block" always;
-               add_header X-Frame-Options "SAMEORIGIN" always;
-               add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
-               add_header Referrer-Policy 'same-origin' always;
-               add_header Permissions-Policy 'accelerometer=(), ambient-light-sensor=(), autoplay=(self), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(self), gamepad=(), speaker-selection=(), conversion-measurement=(), focus-without-user-activation=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), sync-script=(), trust-token-redemption=(), unload=(), window-placement=(), vertical-scroll=()' always;
-
-               # Authelia location
-               set $upstream_authelia http://[${ipv6.subnet.microvm}::${toString vms.authelia.id}]:9091/api/authz/auth-request;
-
-               location @authelia-redirect {
-               	return 302 https://auth.${domain}/?rd=$scheme://$host$request_uri;
-               }
-
-        # Global /robots.txt location
-        location = /robots.txt { return 200 "User-agent: *\nDisallow: /\n"; }
-      ''
-      (builtins.readFile ./authelia/location.conf)
-    ];
     kTLS = true;
     sslCertificate = "/ssl/${domain}/fullchain.pem";
     sslCertificateKey = "/ssl/${domain}/key.pem";
@@ -91,7 +113,7 @@ with lib; let
   };
 
   limitedLocation = ''
-    limit_except GET HEAD {
+    limit_except GET HEAD OPTIONS {
       deny all;
     }
   '';
@@ -99,6 +121,10 @@ with lib; let
   autheliaProxyConfig = concatStrings [
     (builtins.readFile ./authelia/authrequest.conf)
     (builtins.readFile ./authelia/proxy.conf)
+    ''
+      proxy_hide_header Access-Control-Allow-Origin;
+      proxy_hide_header Access-Control-Allow-Credentials;
+    ''
   ];
 in {
   imports = [./rathole.nix];
@@ -182,7 +208,6 @@ in {
           };
 
           "${domain}" = {
-            #locations."/" = {
             locations."@redirect" = {
               return = "302 $scheme://$host";
               extraConfig = limitedLocation;
@@ -199,18 +224,28 @@ in {
                 limitedLocation
               ];
             };
-            extraConfig = concatStrings [
-              virtualHostsCommonConfig.extraConfig
-              ''
-                add_header Content-Security-Policy "${csp.lax}" always;
-              ''
-              /*
+
+            ## matrix
+            locations."= /.well-known/matrix/server" = {
+              return = "200 '{\"m.server\": \"matrix-federation.${domain}:443\"}'";
+              extraConfig = limitedLocation;
+            };
+            locations."= /.well-known/matrix/client" = {
+              return = "200 '${builtins.toJSON {
+                "m.homeserver".base_url = "https://matrix-client.${domain}";
+                #"m.identity_server".base_url = "https://vector.im";
+                "org.matrix.msc3575.proxy".url = "https://matrix-slidingsync.${domain}";
+              }}'";
+              extraConfig = limitedLocation;
+            };
+
+            extraConfig = with extraSnippets;
+              concatStrings [
+                virtualHostsCommonConfig.extraConfig
                 ''
-                default_type text/html;
-                add_header Content-Security-Policy "upgrade-insecure-requests; default-src 'none'; manifest-src 'self'; script-src 'sha256-myLBrtGAB0MQkvSw2QYI0NgM9WHkLTQd3VOOiJVGWZU=' 'self' 'unsafe-inline'; style-src 'unsafe-hashes' 'sha256-GbYf/xcRTw9bkkRG6q28SK9NZqK50RxbRvWnWISK30A=' 'sha256-vkHhAK/4alcpThoL766qtu7LQAf39a/PISeJz7kkapk='; form-action 'self'; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; connect-src 'self'; img-src 'self' data: blob:; frame-src 'none'; media-src 'self'; require-trusted-types-for 'script';" always;
-              ''
-              */
-            ];
+                  add_header Content-Security-Policy "${csp.lax}" always;
+                ''
+              ];
           };
 
           "srv.${domain}" = {
@@ -219,7 +254,7 @@ in {
               extraConfig = concatStrings [
                 autheliaProxyConfig
                 ''
-                         autoindex on;
+                  autoindex on;
                   autoindex_exact_size off;
                   autoindex_localtime on;
                 ''
@@ -229,32 +264,6 @@ in {
               virtualHostsCommonConfig.extraConfig
               ''
                 add_header Content-Security-Policy "${csp.strict}" always;
-              ''
-            ];
-          };
-
-          "autoconfig.${domain}" = {
-            locations."/" = {
-              proxyPass = "http://[${ipv6.subnet.microvm}::${toString vms.mail.id}]:80";
-              extraConfig = autheliaProxyConfig;
-            };
-            extraConfig = concatStrings [
-              virtualHostsCommonConfig.extraConfig
-              ''
-                add_header Content-Security-Policy "${csp.lax}" always;
-              ''
-            ];
-          };
-
-          "mta-sts.${domain}" = {
-            locations."/" = {
-              proxyPass = "http://[${ipv6.subnet.microvm}::${toString vms.mail.id}]:81";
-              extraConfig = autheliaProxyConfig;
-            };
-            extraConfig = concatStrings [
-              virtualHostsCommonConfig.extraConfig
-              ''
-                add_header Content-Security-Policy "${csp.lax}" always;
               ''
             ];
           };
@@ -275,18 +284,38 @@ in {
             extraConfig = concatStrings [
               virtualHostsCommonConfig.extraConfig
               ''
-                       add_header Content-Security-Policy "${csp.${attrsets.attrByPath ["csp"] "strict" vmData}}" always;
+                add_header Content-Security-Policy "${csp.${attrsets.attrByPath ["csp"] "strict" vmData}}" always;
                 client_max_body_size ${vmData.maxUploadSize};
               ''
             ];
           })
         (attrsets.filterAttrs (n: v: attrsets.hasAttrByPath ["locations"] v) vmsEnabled))
 
-        /*
-          config.env.vHosts.pub
-        config.env.vHosts.sec
-        config.env.vHosts.manual
-        */
+        (attrsets.concatMapAttrs (
+          vmName: vmData: (
+            mapAttrs' (vHostName: vHost:
+              nameValuePair "${vHostName}.${domain}" {
+                serverAliases = map (name: "${name}.${domain}") (vHost.aliases or []);
+                locations =
+                  mapAttrs (_: lData: {
+                    proxyPass = "${lData.proto}://[${ipv6.subnet.microvm}::${toString vmData.id}]:${toString lData.port}";
+                    extraConfig =
+                      if vmName != "authelia"
+                      then autheliaProxyConfig
+                      else (builtins.readFile ./authelia/proxy.conf);
+                  })
+                  (vHost.locations or {});
+                extraConfig = concatStrings [
+                  virtualHostsCommonConfig.extraConfig
+                  ''
+                    add_header Content-Security-Policy "${csp.${vmData.csp or "strict"}}" always;
+                    client_max_body_size ${vmData.maxUploadSize};
+                  ''
+                ];
+              })
+            vmData.vHosts
+          )
+        ) (attrsets.filterAttrs (n: v: attrsets.hasAttrByPath ["vHosts"] v) vmsEnabled))
       ]);
     };
   };
