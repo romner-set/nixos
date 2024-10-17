@@ -10,20 +10,21 @@ in {
 
   webPorts = [8008 8009 8448];
 
-  /*
-    locations."/" = {
-    proto = "http";
-    port = 8008;
+  vHosts."matrix-client" = {
+    locations."/".port = 8008;
+    authPolicy = "bypass";
+    maxUploadSize = "5000M";
   };
-  authPolicy = "bypass";
-  */
-  #TODO: expectedMaxResponseTime = x; # avg y-z
-
-  vHosts."matrix-client".locations."/".port = 8008;
-  vHosts."matrix-slidingsync".locations."/".port = 8009;
-  vHosts."matrix-federation".locations."/".port = 8448;
-
-  maxUploadSize = "5000M";
+  vHosts."matrix-slidingsync" = {
+    locations."/".port = 8009;
+    authPolicy = "bypass";
+    maxUploadSize = "5000M";
+  };
+  vHosts."matrix-federation" = {
+    locations."/".port = 8448;
+    authPolicy = "bypass";
+    maxUploadSize = "100M";
+  };
 
   shares = [
     {

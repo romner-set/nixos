@@ -9,12 +9,13 @@ in {
 
   webPorts = [80];
 
-  locations."/" = {
-    proto = "http";
-    port = 80;
-  };
-  authPolicy = "bypass";
-  #TODO: expectedMaxResponseTime = x; # avg y-z
+  vHosts.element = {
+    locations."/" = {
+      proto = "http";
+      port = 80;
+    };
+    authPolicy = "bypass";
 
-  maxUploadSize = "5000M";
+    maxUploadSize = "5000M";
+  };
 }

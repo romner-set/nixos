@@ -2,13 +2,16 @@
   cfg = config.cfg.server.microvm;
 in {
   id = 4;
-  tcpPorts = [8080];
   vcpu = cfg.defaults.vcpu.max;
   mem = cfg.defaults.mem.high;
 
-  locations."/" = {
-    proto = "http";
-    port = 8080;
+  tcpPorts = [8080];
+
+  vHosts.syncthing = {
+    locations."/" = {
+      proto = "http";
+      port = 8080;
+    };
   };
 
   shares = [

@@ -7,11 +7,13 @@ in {
   webPorts = [8096];
   vcpu = cfg.defaults.vcpu.max;
 
-  locations."/" = {
-    proto = "http";
-    port = 8096;
+  vHosts.jellyfin = {
+    locations."/" = {
+      proto = "http";
+      port = 8096;
+    };
+    authPolicy = "bypass";
   };
-  authPolicy = "bypass";
 
   shares = [
     {

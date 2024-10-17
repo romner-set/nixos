@@ -6,12 +6,14 @@ in {
   vcpu = cfg.defaults.vcpu.max;
   mem = cfg.defaults.mem.high;
 
-  locations."/" = {
-    proto = "http";
-    port = 30000;
+  vHosts.foundryvtt = {
+    locations."/" = {
+      proto = "http";
+      port = 30000;
+    };
+    csp = "none";
+    authPolicy = "bypass";
   };
-  csp = "none";
-  authPolicy = "bypass";
 
   shares = [
     /*

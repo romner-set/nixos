@@ -3,15 +3,19 @@
 
   tcpPorts = [25 465 993];
   webPorts = [80 81 82];
-  #aliases = ["mta-sts" "autoconfig"]; #TODO: currently defined manually in ../nginx/default.nix
 
-  locations."/" = {
-    port = 82;
+  vHosts.mail = {
+    locations."/".port = 82;
+    csp = "lax";
   };
-  csp = "lax";
-
-  vHosts."autoconfig".locations."/".port = 80;
-  vHosts."mta-sts".locations."/".port = 81;
+  vHosts."autoconfig" = {
+    locations."/".port = 80;
+    authPolicy = "bypass";
+  };
+  vHosts."mta-sts" = {
+    locations."/".port = 81;
+    authPolicy = "bypass";
+  };
 
   shares = [
     {

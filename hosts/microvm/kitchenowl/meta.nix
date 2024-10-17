@@ -5,11 +5,13 @@ in {
 
   webPorts = [80];
 
-  locations."/" = {
-    proto = "http";
-    port = 80;
+  vHosts.kitcheowl = {
+    locations."/" = {
+      proto = "http";
+      port = 80;
+    };
+    bypassAuthForLAN = true;
   };
-  bypassAuthForLAN = true;
 
   shares = [
     {

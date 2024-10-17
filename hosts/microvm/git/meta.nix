@@ -5,11 +5,13 @@ in {
   webPorts = [80];
   vcpu = cfg.defaults.vcpu.max;
 
-  locations."/" = {
-    proto = "http";
-    port = 3000;
+  vHosts.git = {
+    locations."/" = {
+      proto = "http";
+      port = 3000;
+    };
+    authPolicy = "bypass";
   };
-  authPolicy = "bypass";
 
   shares = [
     {

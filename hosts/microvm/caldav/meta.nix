@@ -2,14 +2,15 @@
   id = 11;
   webPorts = [80];
 
-  subdomain = "dav";
-  locations."/" = {
-    proto = "http";
-    port = 80;
+  vHosts.dav = {
+    locations."/" = {
+      proto = "http";
+      port = 80;
+    };
+    #authPolicy = "bypass";
+    bypassAuthForLAN = true;
+    expectedMaxResponseTime = 60; # avg 49-53
   };
-  #authPolicy = "bypass";
-  bypassAuthForLAN = true;
-  expectedMaxResponseTime = 60; # avg 49-53
 
   shares = [
     {

@@ -22,40 +22,42 @@ in {
     web.port = 80;
 
     endpoints =
-      (lists.concatLists (attrsets.mapAttrsToList (vmName: vmData:
-        lists.concatLists [
-          # VM ping
-          [
-            {
-              name = "${vmName}-icmp";
-              group = "${zeroPad 2 (toString vmData.id)} ${vmName}";
-              url = "icmp://${ipv6.subnet.microvm}::${toString vmData.id}";
-              ui.hide-hostname = true;
+        (lists.flatten (attrsets.mapAttrsToList (
+            vmName: vmData: [
+              # VM ping
+              {
+                name = "${vmName}-icmp";
+                group = "${zeroPad 2 (toString vmData.id)} ${vmName}";
+                url = "icmp://${ipv6.subnet.microvm}::${toString vmData.id}";
+                ui.hide-hostname = true;
 
-              conditions = [
-                "[CONNECTED] == true"
-                "[RESPONSE_TIME] < 1" # internal comms between VMs
-              ];
-            }
-          ]
+                conditions = [
+                  "[CONNECTED] == true"
+                  "[RESPONSE_TIME] < 1" # internal comms between VMs
+                ];
+              }
 
-          # web locations
-          (attrsets.mapAttrsToList (path: lData: {
-              name = "${vmName}-web-${path}";
-              group = "${zeroPad 2 (toString vmData.id)} ${vmName}";
-              url = "${lData.proto}://[${ipv6.subnet.microvm}::${toString vmData.id}]:${toString lData.port}";
+              # web locations
+              (attrsets.mapAttrsToList (
+                  vHostName: vHost: (attrsets.mapAttrsToList (path: lData: {
+                      name = "${vmName}-web-${vHostName}-${path}";
+                      group = "${zeroPad 2 (toString vmData.id)} ${vmName}";
+                      url = "${lData.proto}://[${ipv6.subnet.microvm}::${toString vmData.id}]:${toString lData.port}";
 
-              conditions = [
-                "[CONNECTED] == true"
-                "[STATUS] == 200"
-                "[RESPONSE_TIME] < ${toString vmData.expectedMaxResponseTime}" # default 15; koel takes like 250ms, but most services are ~1ms
-              ];
-            })
-            vmData.locations)
-        ])
-      (attrsets.filterAttrs (name: _: name != config.networking.hostName) vmsEnabled)))
+                      conditions = [
+                        "[CONNECTED] == true"
+                        "[STATUS] == any(200, 404)"
+                        "[RESPONSE_TIME] < ${toString vHost.expectedMaxResponseTime}" # default 50
+                      ];
+                    })
+                    vHost.locations)
+                )
+                vmData.vHosts)
+            ]
+          )
+          (attrsets.filterAttrs (name: _: name != config.networking.hostName) vmsEnabled)))
       ++ [
-        #TODO: move to microvm configs, track stuff like DNS & SMB
+        #TODO: move to nginx config, track stuff like DNS & SMB
         {
           name = "${domain}";
           url = "https://${domain}";
@@ -64,7 +66,7 @@ in {
           conditions = [
             "[CONNECTED] == true"
             "[STATUS] == 200"
-            "[RESPONSE_TIME] < ${toString vms.nginx.expectedMaxResponseTime}"
+            "[RESPONSE_TIME] < 15"
           ];
         }
       ];

@@ -135,22 +135,7 @@ in {
 
             ## vm-dependent
 
-            ### uptime
-            expectedMaxResponseTime = mkOption {
-              type = types.ints.positive;
-              default = 15;
-            };
-
             ### authelia
-            authPolicy = mkOption {
-              type = types.str;
-              default = "two_factor";
-            };
-            bypassAuthForLAN = mkOption {
-              type = types.bool;
-              default = false;
-            };
-
             oidc = {
               enable = mkEnableOption "";
               redirectUris = mkOption {type = types.listOf types.str;};
@@ -164,51 +149,45 @@ in {
               };
             };
 
-            ### nginx
-            csp = mkOption {
-              type = types.str;
-              default = "lax";
-            };
-
-            maxUploadSize = mkOption {
-              type = types.str;
-              default = "10m";
-            };
-
-            subdomain = mkOption {
-              type = types.str;
-              default = name;
-            };
-            aliases = mkOption {
-              type = types.listOf types.str;
-              default = [];
-            };
-            locations = mkOption {
-              type = attrsOf (submodule ({name, ...}: {
-                options = {
-                  name = mkOption {
-                    type = types.str;
-                    default = name;
-                  };
-
-                  proto = mkOption {
-                    type = types.str;
-                    default = "http";
-                  };
-                  port = mkOption {
-                    type = types.port;
-                    default = 80;
-                  };
-                };
-              }));
-              default = {};
-            };
+            ### general web location
             vHosts = mkOption {
               type = attrsOf (submodule ({name, ...}: {
                 options = {
                   name = mkOption {
                     type = types.str;
                     default = name;
+                  };
+
+                  ### uptime
+                  expectedMaxResponseTime = mkOption {
+                    type = types.ints.positive;
+                    default = 50;
+                  };
+
+                  ### authelia
+                  authPolicy = mkOption {
+                    type = types.str;
+                    default = "two_factor";
+                  };
+                  bypassAuthForLAN = mkOption {
+                    type = types.bool;
+                    default = false;
+                  };
+
+                  ### nginx
+                  csp = mkOption {
+                    type = types.str;
+                    default = "lax";
+                  };
+
+                  maxUploadSize = mkOption {
+                    type = types.str;
+                    default = "10m";
+                  };
+
+                  aliases = mkOption {
+                    type = types.listOf types.str;
+                    default = [];
                   };
 
                   locations = mkOption {

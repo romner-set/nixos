@@ -7,11 +7,13 @@ in {
   vcpu = cfg.defaults.vcpu.max;
   mem = 32768;
 
-  locations."/" = {
-    proto = "http";
-    port = 8080;
+  vHosts.llm = {
+    locations."/" = {
+      proto = "http";
+      port = 8080;
+    };
+    csp = "lax";
   };
-  csp = "lax";
 
   shares = [
     {

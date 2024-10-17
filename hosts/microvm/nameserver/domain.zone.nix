@@ -7,7 +7,8 @@
   net,
 }:
 with lib.attrsets;
-with lib.strings; let
+with lib.strings;
+with lib.lists; let
   TLSA = "BF1C238F30DC82DA79F01B85CB0B30C3FBB4A091E01ECC7EFD6AF958B1C04AC7";
   spfAddrs = "ip4:${host.ipv4} ip6:${net.ipv6.subnet.microvmPublic}::${toString vms.mail.id}";
 in
@@ -40,10 +41,10 @@ in
     ''
 
       ; SSH
-      ;@                     IN  SSHFP         1 1 BA6B9A49143417A3AEF2F1757C1DAC0029271105
-      ;@                     IN  SSHFP         1 2 C5B2FFBD7B5FFB44A97E541B72E2324EBAD474E828C0441445427B02A71663CD
-      ;@                     IN  SSHFP         4 1 10F4803601771CE8E21A220B4A83553C1170DAF2
-      ;@                     IN  SSHFP         4 2 DCDB72D050EC403BF7136BBCCF0AB5F55EACB01755D9ABE1E7689405E35F799E
+      ;@                    IN  SSHFP         1 1 BA6B9A49143417A3AEF2F1757C1DAC0029271105
+      ;@                    IN  SSHFP         1 2 C5B2FFBD7B5FFB44A97E541B72E2324EBAD474E828C0441445427B02A71663CD
+      ;@                    IN  SSHFP         4 1 10F4803601771CE8E21A220B4A83553C1170DAF2
+      ;@                    IN  SSHFP         4 2 DCDB72D050EC403BF7136BBCCF0AB5F55EACB01755D9ABE1E7689405E35F799E
 
       ; CAA
       @                     IN  CAA           0 iodef "mailto:admin@${domain}"
@@ -51,49 +52,23 @@ in
       @                     IN  CAA           0 issue "sectigo.com"
 
       ; A/AAAA/CNAME
-    ''
-    /*
-    (concatMapStrings (addr: ''
-      @                 IN  A             ${addr.ipv4}
-      @                 IN  AAAA          ${addr.ipv6}
-      *                 IN  A             ${addr.ipv4}
-      *                 IN  AAAA          ${addr.ipv6}
-    '')
-    addrs)
-    */
-    ''
-      @                 IN  A             ${host.ipv4}
-      @                 IN  AAAA          ${host.ipv6}
-      ;*                 IN  A             ${host.ipv4}
-      ;*                 IN  AAAA          ${host.ipv6}
-      ;mail              IN  A             ${host.ipv4}
-      ;mail              IN  AAAA          ${host.ipv6}
-    ''
-    ''
+      @                     IN  A             ${host.ipv4}
+      @                     IN  AAAA          ${host.ipv6}
+      ;*                    IN  A             ${host.ipv4}
+      ;*                    IN  AAAA          ${host.ipv6}
 
       ; VMs
     ''
-    (concatStrings (mapAttrsToList (
-        vmName: vmData: let
-          sub = attrByPath ["subdomain"] vmName vmData;
-        in ''
-          ${sub}                IN  A             ${host.ipv4}
-          ${sub}                IN  AAAA          ${host.ipv6}
-          _443._tcp.${sub}      IN  TLSA          3 1 1 ${TLSA}
-        ''
+    (concatStrings (concatLists (mapAttrsToList (
+        vmName: vmData: (mapAttrsToList (vHostName: vHost: ''
+            ${vHostName}            IN  A             ${host.ipv4}
+            ${vHostName}            IN  AAAA          ${host.ipv6}
+            _443._tcp.${vHostName}  IN  TLSA          3 1 1 ${TLSA}
+          '')
+          vmData.vHosts)
       )
-      vms))
+      vms)))
     ''
-      ; Additional
-    ''
-    (concatMapStrings (sub: ''
-        ${sub}                IN  A             ${host.ipv4}
-        ${sub}                IN  AAAA          ${host.ipv6}
-        _443._tcp.${sub}      IN  TLSA          3 1 1 ${TLSA}
-      '')
-      ["srv" "mta-sts" "autoconfig" "matrix-federation" "matrix-client"])
-    ''
-
       ; DAV
       _caldav._tcp          IN  SRV           0 0 0 .
       _caldavs._tcp         IN  TXT           "path=/dav"

@@ -247,55 +247,13 @@ in {
                 ''
               ];
           };
-
-          "srv.${domain}" = {
-            locations."/" = {
-              root = "/srv";
-              extraConfig = concatStrings [
-                autheliaProxyConfig
-                ''
-                  autoindex on;
-                  autoindex_exact_size off;
-                  autoindex_localtime on;
-                ''
-              ];
-            };
-            extraConfig = concatStrings [
-              virtualHostsCommonConfig.extraConfig
-              ''
-                add_header Content-Security-Policy "${csp.strict}" always;
-              ''
-            ];
-          };
         }
 
-        (mapAttrs' (vmName: vmData:
-          nameValuePair "${vmData.subdomain}.${domain}" {
-            serverAliases = map (name: "${name}.${domain}") (attrsets.attrByPath ["aliases"] [] vmData);
-            locations =
-              mapAttrs (_: lData: {
-                proxyPass = "${lData.proto}://[${ipv6.subnet.microvm}::${toString vmData.id}]:${toString lData.port}";
-                extraConfig =
-                  if vmName != "authelia"
-                  then autheliaProxyConfig
-                  else (builtins.readFile ./authelia/proxy.conf);
-              })
-              (attrsets.attrByPath ["locations"] {} vmData);
-            extraConfig = concatStrings [
-              virtualHostsCommonConfig.extraConfig
-              ''
-                add_header Content-Security-Policy "${csp.${attrsets.attrByPath ["csp"] "strict" vmData}}" always;
-                client_max_body_size ${vmData.maxUploadSize};
-              ''
-            ];
-          })
-        (attrsets.filterAttrs (n: v: attrsets.hasAttrByPath ["locations"] v) vmsEnabled))
-
+        # vhosts
         (attrsets.concatMapAttrs (
           vmName: vmData: (
             mapAttrs' (vHostName: vHost:
               nameValuePair "${vHostName}.${domain}" {
-                serverAliases = map (name: "${name}.${domain}") (vHost.aliases or []);
                 locations =
                   mapAttrs (_: lData: {
                     proxyPass = "${lData.proto}://[${ipv6.subnet.microvm}::${toString vmData.id}]:${toString lData.port}";
@@ -308,8 +266,8 @@ in {
                 extraConfig = concatStrings [
                   virtualHostsCommonConfig.extraConfig
                   ''
-                    add_header Content-Security-Policy "${csp.${vmData.csp or "strict"}}" always;
-                    client_max_body_size ${vmData.maxUploadSize};
+                    add_header Content-Security-Policy "${csp.${vHost.csp or "strict"}}" always;
+                    client_max_body_size ${vHost.maxUploadSize};
                   ''
                 ];
               })

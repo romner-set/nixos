@@ -5,14 +5,17 @@ in {
   id = 16;
 
   webPorts = [2283];
-  locations."/" = {
-    proto = "http";
-    port = 2283;
-  };
-  #authPolicy = "bypass";
-  bypassAuthForLAN = true;
 
-  maxUploadSize = "50000M";
+  vHosts.immich = {
+    locations."/" = {
+      proto = "http";
+      port = 2283;
+    };
+    #authPolicy = "bypass";
+    bypassAuthForLAN = true;
+
+    maxUploadSize = "50000M";
+  };
 
   shares = [
     {

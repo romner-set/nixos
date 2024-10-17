@@ -20,16 +20,12 @@ in {
       source = "/vm/nginx/ssl";
       mountPoint = "/ssl";
     }
-    {
-      proto = "virtiofs";
-      tag = "srv";
-      source = "/vm/nginx/srv";
-      mountPoint = "/srv";
-    }
   ];
 
-  secrets = {
+  /*
+    secrets = {
     "vm/nginx/rathole-1.toml" = {};
     "vm/nginx/rathole-2.toml" = {};
   };
+  */
 }

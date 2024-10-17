@@ -11,12 +11,14 @@ in {
   vcpu = cfg.defaults.vcpu.max;
   mem = cfg.defaults.mem.high;
 
-  locations."/" = {
-    proto = "http";
-    port = 80;
+  vHosts.meelo = {
+    locations."/" = {
+      proto = "http";
+      port = 80;
+    };
+    #authPolicy = "bypass";
+    expectedMaxResponseTime = 50; # avg 13-19
   };
-  #authPolicy = "bypass";
-  expectedMaxResponseTime = 50; # avg 13-19
 
   shares = [
     {

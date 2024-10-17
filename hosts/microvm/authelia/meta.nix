@@ -3,8 +3,7 @@
 
   webPorts = [9091];
 
-  subdomain = "auth";
-  locations."/" = {
+  vHosts.auth.locations."/" = {
     proto = "http";
     port = 9091;
   };

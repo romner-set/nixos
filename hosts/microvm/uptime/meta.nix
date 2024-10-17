@@ -3,12 +3,14 @@
 
   webPorts = [80];
 
-  locations."/" = {
-    proto = "http";
-    port = 80;
+  vHosts.status = {
+    locations."/" = {
+      proto = "http";
+      port = 80;
+    };
+    authPolicy = "bypass";
+    #bypassAuthForLAN = true;
   };
-  authPolicy = "bypass";
-  #bypassAuthForLAN = true;
 
   shares = [
     {

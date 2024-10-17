@@ -10,11 +10,13 @@ in {
 
   webPorts = [3456];
 
-  locations."/" = {
-    proto = "http";
-    port = 3456;
+  vHosts.vikunja = {
+    locations."/" = {
+      proto = "http";
+      port = 3456;
+    };
+    bypassAuthForLAN = true;
   };
-  bypassAuthForLAN = true;
 
   shares = [
     {

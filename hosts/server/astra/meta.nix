@@ -42,6 +42,7 @@ with lib; {
         qbittorrent.enable = true;
 
         # other storage
+        srv.enable = true;
         caldav.enable = true;
         git.enable = true;
         git-runner.enable = true;

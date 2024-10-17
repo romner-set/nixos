@@ -23,7 +23,7 @@
     {
       proto = "virtiofs";
       tag = "samba-share-srv";
-      source = "/vm/nginx/srv";
+      source = "/srv";
       mountPoint = "/shared/srv";
     }
   ];

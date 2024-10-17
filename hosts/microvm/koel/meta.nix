@@ -7,12 +7,14 @@ in {
   vcpu = cfg.defaults.vcpu.max;
   mem = cfg.defaults.mem.high;
 
-  locations."/" = {
-    proto = "http";
-    port = 8080;
+  vHosts.koel = {
+    locations."/" = {
+      proto = "http";
+      port = 8080;
+    };
+    authPolicy = "bypass";
+    expectedMaxResponseTime = 500; # avg 256-267
   };
-  authPolicy = "bypass";
-  expectedMaxResponseTime = 500; # avg 256-267
 
   shares = [
     {

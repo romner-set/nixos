@@ -2,11 +2,13 @@
   id = 17;
 
   webPorts = [8080];
-  locations."/" = {
-    proto = "http";
-    port = 8080;
+
+  vHosts.qb = {
+    locations."/" = {
+      proto = "http";
+      port = 8080;
+    };
   };
-  subdomain = "qb";
 
   shares = [
     {

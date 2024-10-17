@@ -24,9 +24,14 @@ in {
 
         #default_server_name = domain;
         default_server_config = {
+          "m.homeserver" = {
+            server_name = domain;
+            base_url = "https://matrix-client.${domain}";
+          };
+          "org.matrix.msc3575.proxy".url = "https://matrix-slidingsync.${domain}";
         };
 
-        #disable_guests = true;
+        disable_guests = true;
         disable_custom_urls = true;
 
         /*

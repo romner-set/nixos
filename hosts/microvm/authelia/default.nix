@@ -163,65 +163,42 @@ in {
         access_control = {
           default_policy = "deny";
           rules =
-            [
+            builtins.filter (v: attrsets.hasAttrByPath ["domain"] v)
+            (lists.flatten [
               # global conf
               {
-                domain = ["autoconfig.${domain}" "mta-sts.${domain}" "matrix-client.${domain}" "matrix-federation.${domain}"]; #TODO: move this to mail's meta.nix
-                policy = "bypass";
-              }
-              {
-                domain = "srv.${domain}";
-                resources = "^/private(/.*)?$";
-                subject = "group:admin";
-                policy = "two_factor";
-              }
-              {
-                domain = ["${domain}" "srv.${domain}"];
+                inherit domain;
                 methods = ["GET" "HEAD"];
                 policy = "bypass";
               }
-            ]
-            ++
-            # vms w/ bypassAuthForLAN
-            (attrsets.mapAttrsToList (vmName: vmData: {
-                domain = "${vmData.subdomain or vmName}.${domain}";
-                networks = ipv4.trustedNetworks ++ ipv6.trustedNetworks;
-                policy = "bypass";
-              })
-              (attrsets.filterAttrs (n: v: v.bypassAuthForLAN) vmsEnabled))
-            ++
-            # vms
-            (attrsets.mapAttrsToList (vmName: vmData: let
-                inherit (vmData) authPolicy;
-              in {
-                domain = "${vmData.subdomain or vmName}.${domain}";
-                subject =
-                  if authPolicy != "bypass"
-                  then "group:admin"
-                  else null;
-                policy = authPolicy;
-              })
-              vmsEnabled);
-          /*
-             ++
-          # vhosts
-          (attrsets.mapAttrsToList (name: data: {
-              domain =
-                ["${attrsets.attrByPath ["serverName"] name data}.${domain}"]
-                ++ (attrsets.attrByPath ["serverAliases"] [] data);
-              subject = "group:admin";
-              policy = "two_factor";
-            })
-            vHosts.sec)
-          ++ (attrsets.mapAttrsToList (name: data: {
-              domain =
-                ["${attrsets.attrByPath ["serverName"] name data}.${domain}"]
-                ++ (attrsets.attrByPath 8192 ["serverAliases"] [] data);
-              policy = "bypass";
-            })
-            vHosts.pub)
-          ++ config.env.additionalAutheliaRules;
-          */
+
+              # vHosts w/ bypassAuthForLAN
+              (attrsets.mapAttrsToList (
+                  vmName: vmData: (attrsets.concatMapAttrs (vHostName: vHost: {
+                      domain = "${vHostName}.${domain}";
+                      networks = ipv4.trustedNetworks ++ ipv6.trustedNetworks;
+                      policy = "bypass";
+                    })
+                    (attrsets.filterAttrs (n: v: v.bypassAuthForLAN) vmData.vHosts))
+                )
+                vmsEnabled)
+
+              # vHosts
+              (attrsets.mapAttrsToList (
+                  vmName: vmData: (attrsets.mapAttrsToList (vHostName: vHost: let
+                      inherit (vHost) authPolicy;
+                    in {
+                      domain = "${vHostName}.${domain}";
+                      subject =
+                        if authPolicy != "bypass"
+                        then "group:admin"
+                        else null;
+                      policy = authPolicy;
+                    })
+                    vmData.vHosts)
+                )
+                vmsEnabled)
+            ]);
         };
       };
     };

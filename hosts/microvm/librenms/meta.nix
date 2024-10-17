@@ -3,9 +3,11 @@
 
   webPorts = [80];
 
-  locations."/" = {
-    proto = "http";
-    port = 80;
+  vHosts.librenms = {
+    locations."/" = {
+      proto = "http";
+      port = 80;
+    };
   };
 
   shares = [
