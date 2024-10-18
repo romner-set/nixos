@@ -55,5 +55,8 @@ in {
         users;
 
       security.sudo.wheelNeedsPassword = false;
+
+      # For some reason coredumps aren't disabled by default
+      systemd.user.extraConfig = "DefaultLimitCORE=0";
     };
 }
