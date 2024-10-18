@@ -10,6 +10,8 @@ in {
   tcpPorts = [3478 5350];
   udpPorts = [3478 5350 8888];
 
+  vHosts.turn = {}; # should be added to DNS but ignored otherwise
+
   shares = [
     {
       proto = "virtiofs";

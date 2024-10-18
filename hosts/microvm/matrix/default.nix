@@ -41,7 +41,12 @@ in {
       allow_public_rooms_without_auth = false;
       allow_public_rooms_over_federation = false;
 
-      turn_uris = ["turn:turn.${domain}:3478?transport=udp" "turn:turn.${domain}:3478?transport=tcp"];
+      turn_uris = [
+        "turns:turn.${domain}?transport=udp"
+	"turns:turn.${domain}?transport=tcp"
+        "turn:turn.${domain}?transport=udp"
+	"turn:turn.${domain}?transport=tcp"
+      ];
       turn_shared_secret_file = "/secrets/turn/shared";
       turn_user_lifetime = "1h";
 

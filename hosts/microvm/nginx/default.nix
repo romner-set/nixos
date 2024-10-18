@@ -262,7 +262,7 @@ in {
                       then autheliaProxyConfig
                       else (builtins.readFile ./authelia/proxy.conf);
                   })
-                  (vHost.locations or {});
+                  vHost.locations;
                 extraConfig = concatStrings [
                   virtualHostsCommonConfig.extraConfig
                   ''
@@ -271,9 +271,9 @@ in {
                   ''
                 ];
               })
-            vmData.vHosts
+            (attrsets.filterAttrs (n: v: v.locations != {}) vmData.vHosts)
           )
-        ) (attrsets.filterAttrs (n: v: attrsets.hasAttrByPath ["vHosts"] v) vmsEnabled))
+        ) (attrsets.filterAttrs (n: v: v.vHosts != {}) vmsEnabled))
       ]);
     };
   };

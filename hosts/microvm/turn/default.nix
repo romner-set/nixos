@@ -7,6 +7,8 @@
 }:
 with lib; let
   inherit (config.networking) domain hostName;
+  inherit (config.cfg.microvm.host) vms net;
+  inherit (net) ipv4 ipv6;
 in {
   systemd.services.coturn.serviceConfig = {
     # allow reading secrets
@@ -24,6 +26,8 @@ in {
     realm = "turn.${domain}";
     cert = "/ssl/${domain}/full.pem";
     pkey = "/ssl/${domain}/key.pem";
-    secure-stun = true;
+    extraConfig = ''
+      external-ip=${ipv4.publicAddress}
+    '';
   };
 }
