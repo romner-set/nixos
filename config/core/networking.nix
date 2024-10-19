@@ -13,6 +13,8 @@ in {
       default = true;
     };
 
+    systemdDefault = mkEnableOption "";
+
     dns = {
       enable = mkEnableOption "";
       nameservers = mkOption {
@@ -33,6 +35,19 @@ in {
       "127.0.0.2" = lib.mkForce [];
       "127.0.0.1" = lib.mkForce ["localhost"];
       "::1" = lib.mkForce ["localhost"];
+    };
+
+    networking.useDHCP = !cfg.systemdDefault;
+    systemd.network = mkIf cfg.systemdDefault {
+      enable = true;
+      networks."10-wan" = {
+        matchConfig.Type = "ether";
+        networkConfig = {
+          DHCP = "yes";
+          IPv6AcceptRA = true;
+        };
+        linkConfig.RequiredForOnline = "routable";
+      };
     };
   };
 }

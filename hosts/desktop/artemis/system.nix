@@ -13,6 +13,7 @@
 
   cfg.core.firmware.enable = false;
   cfg.core.boot.loader.systemd-boot.enable = true;
+  cfg.core.net.systemdDefault = true;
 
   cfg.desktop.environment.kde.enable = true;
   cfg.desktop.graphics.nvidia.enable = true;

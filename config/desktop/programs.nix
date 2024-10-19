@@ -71,10 +71,7 @@ in {
             gcc
             bintools
             zig
-            (cutter.withPlugins (ps: with ps; [jsdec rz-ghidra sigdb]))
-            cutterPlugins.rz-ghidra
-            cutterPlugins.sigdb
-            cutterPlugins.jsdec
+            # (cutter.withPlugins (ps: with ps; [jsdec rz-ghidra sigdb]))
           ]
         )
         ++ [
@@ -92,7 +89,7 @@ in {
           mullvad-browser
           tor-browser-bundle-bin
           obs-studio
-          qbittorrent-qt5
+          qbittorrent
           floorp
           vlc
           #qalculate-qt
@@ -102,6 +99,7 @@ in {
           obsidian
           tenacity
           prismlauncher
+          element-desktop-wayland
         ]
       );
   };
