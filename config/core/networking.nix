@@ -37,7 +37,7 @@ in {
       "::1" = lib.mkForce ["localhost"];
     };
 
-    networking.useDHCP = !cfg.systemdDefault;
+    networking.useDHCP = mkDefault (!cfg.systemdDefault);
     systemd.network = mkIf cfg.systemdDefault {
       enable = true;
       networks."10-wan" = {
