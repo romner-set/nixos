@@ -16,6 +16,11 @@ in {
     };
     authPolicy = "bypass";
     maxUploadSize = "5000M";
+
     csp = "none";
+    permissionsPolicy = {
+      camera = ["self"];
+      microphone = ["self"];
+    };
   };
 }

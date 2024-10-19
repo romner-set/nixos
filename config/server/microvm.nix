@@ -180,6 +180,11 @@ in {
                     default = "lax";
                   };
 
+                  permissionsPolicy = mkOption {
+                    type = types.attrsOf (types.listOf types.str);
+                    default = {};
+                  };
+
                   maxUploadSize = mkOption {
                     type = types.str;
                     default = "10m";

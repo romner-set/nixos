@@ -41,6 +41,12 @@ in {
       source = "/data/music";
       mountPoint = "/music";
     }
+    {
+      proto = "virtiofs";
+      tag = "koel-music-TEMP";
+      source = "/var/empty";
+      mountPoint = "/music/tidal-new";
+    }
   ];
 
   secrets = {

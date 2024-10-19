@@ -55,7 +55,6 @@ with lib; let
       add_header X-XSS-Protection "1; mode=block" always;
       add_header X-Frame-Options "SAMEORIGIN" always;
       add_header Referrer-Policy 'same-origin' always;
-      add_header Permissions-Policy 'accelerometer=(), ambient-light-sensor=(), autoplay=(self), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(self), gamepad=(), speaker-selection=(), conversion-measurement=(), focus-without-user-activation=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), sync-script=(), trust-token-redemption=(), unload=(), window-placement=(), vertical-scroll=()' always;
     '';
 
     authelia = ''
@@ -111,6 +110,53 @@ with lib; let
     strict = "upgrade-insecure-requests; default-src 'none'; manifest-src 'self' https://auth.${domain}; script-src 'self'; style-src 'self'; form-action 'self'; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; connect-src 'self'; img-src 'self' data: blob:; frame-src 'none'; media-src 'self'; require-trusted-types-for 'script';";
     none = "";
   };
+
+  permissionsPolicy = policies:
+    strings.concatStringsSep ", " (attrsets.mapAttrsToList (policyName: policy: "${policyName}=(${strings.concatStringsSep " " policy})") ({
+        accelerometer = [];
+        ambient-light-sensor = [];
+        autoplay = ["self"];
+        battery = [];
+        camera = [];
+        cross-origin-isolated = [];
+        display-capture = [];
+        document-domain = [];
+        encrypted-media = [];
+        execution-while-not-rendered = [];
+        execution-while-out-of-viewport = [];
+        fullscreen = ["self"];
+        geolocation = [];
+        gyroscope = [];
+        keyboard-map = [];
+        magnetometer = [];
+        microphone = [];
+        midi = [];
+        navigation-override = [];
+        payment = [];
+        picture-in-picture = [];
+        publickey-credentials-get = [];
+        screen-wake-lock = [];
+        sync-xhr = [];
+        usb = [];
+        web-share = [];
+        xr-spatial-tracking = [];
+        clipboard-read = [];
+        clipboard-write = ["self"];
+        gamepad = [];
+        speaker-selection = [];
+        conversion-measurement = [];
+        focus-without-user-activation = [];
+        hid = [];
+        idle-detection = [];
+        interest-cohort = [];
+        serial = [];
+        sync-script = [];
+        trust-token-redemption = [];
+        unload = [];
+        window-placement = [];
+        vertical-scroll = [];
+      }
+      // policies));
 
   limitedLocation = ''
     limit_except GET HEAD OPTIONS {
@@ -243,7 +289,8 @@ in {
               concatStrings [
                 virtualHostsCommonConfig.extraConfig
                 ''
-                  add_header Content-Security-Policy "${csp.lax}" always;
+                                add_header Content-Security-Policy "${csp.lax}" always;
+                  add_header Permissions-Policy '${permissionsPolicy {}}' always;
                 ''
               ];
           };
@@ -266,8 +313,9 @@ in {
                 extraConfig = concatStrings [
                   virtualHostsCommonConfig.extraConfig
                   ''
-                    add_header Content-Security-Policy "${csp.${vHost.csp or "strict"}}" always;
-                    client_max_body_size ${vHost.maxUploadSize};
+                                  add_header Content-Security-Policy "${csp.${vHost.csp}}" always;
+                    add_header Permissions-Policy '${permissionsPolicy vHost.permissionsPolicy}' always;
+                                  client_max_body_size ${vHost.maxUploadSize};
                   ''
                 ];
               })
