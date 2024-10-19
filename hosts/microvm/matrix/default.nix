@@ -42,12 +42,11 @@ in {
       allow_public_rooms_over_federation = false;
 
       turn_uris = [
-        "turns:turn.${domain}?transport=udp"
-	"turns:turn.${domain}?transport=tcp"
-        "turn:turn.${domain}?transport=udp"
-	"turn:turn.${domain}?transport=tcp"
+        "turns:turn.${domain}:5349?transport=udp"
+        "turns:turn.${domain}:5349?transport=tcp"
+        "turn:turn.${domain}:3478?transport=udp"
+        "turn:turn.${domain}:3478?transport=tcp"
       ];
-      turn_shared_secret_file = "/secrets/turn/shared";
       turn_user_lifetime = "1h";
 
       listeners = [

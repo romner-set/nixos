@@ -39,12 +39,6 @@ in {
       source = "/run/secrets-rendered/vm/matrix";
       mountPoint = "/secrets/rendered";
     }
-    {
-      proto = "virtiofs";
-      tag = "matrix-secrets-turn";
-      source = "/run/secrets/vm/turn";
-      mountPoint = "/secrets/turn";
-    }
   ];
 
   oidc.enable = true;
@@ -62,6 +56,7 @@ in {
   templates."vm/matrix/synapse.yaml" = {
     mode = "0440";
     file = (pkgs.formats.yaml {}).generate "synapse.yaml" {
+      turn_shared_secret = config.sops.placeholder."vm/turn/shared";
       database = {
         name = "psycopg2";
         args.password = config.sops.placeholder."vm/matrix/synapse/db_pass";

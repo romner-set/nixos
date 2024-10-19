@@ -1,4 +1,5 @@
 {
+  lib,
   config,
   pkgs,
   ...
@@ -7,8 +8,8 @@
 in {
   id = 26;
 
-  tcpPorts = [3478 5350];
-  udpPorts = [3478 5350 8888];
+  tcpPorts = [3478 5349];
+  udpPorts = [3478 5349] ++ (lib.lists.range 49152 65535);
 
   vHosts.turn = {}; # should be added to DNS but ignored otherwise
 

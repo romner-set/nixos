@@ -19,8 +19,8 @@ in {
     enable = true;
     no-cli = true;
     no-tcp-relay = true;
-    min-port = 8888;
-    max-port = 8888;
+    min-port = 49152;
+    max-port = 65535;
     use-auth-secret = true;
     static-auth-secret-file = "/secrets/shared";
     realm = "turn.${domain}";
