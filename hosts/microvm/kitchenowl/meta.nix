@@ -5,7 +5,7 @@ in {
 
   webPorts = [80];
 
-  vHosts.kitcheowl = {
+  vHosts.kitchenowl = {
     locations."/" = {
       proto = "http";
       port = 80;
