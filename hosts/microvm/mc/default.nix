@@ -8,7 +8,7 @@ with lib; let
   compose = ./docker-compose.yml;
 in {
   services.zerotierone.enable = true;
-  services.zerotierone.joinNetworks = ["9e1948db63d19080"];
+  services.zerotierone.joinNetworks = [];
 
   virtualisation.docker.enable = true;
   environment.systemPackages = with pkgs; [docker-compose];

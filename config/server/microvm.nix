@@ -225,38 +225,47 @@ in {
     };
   };
 
-  # VM metadata - always defined
-  config.cfg.server.microvm.vms = listToAttrs (map (name: {
-      inherit name;
-      value = import (configLib.relativeToRoot "./hosts/microvm/${name}/meta.nix") args;
-    })
-    (builtins.attrNames (builtins.readDir (configLib.relativeToRoot "./hosts/microvm"))));
-
-  # `config = mkIf cfg.enable` causes problems with above, so everything else defined separately
-  config.services.cron.systemCronJobs = builtins.concatLists (lists.optionals cfg.enable [
-    (lists.optional cfg.autoUpdate "0 3 * * *    root    /run/current-system/sw/bin/git -C /etc/nixos pull && /etc/nixos/utils/microvm-update-all")
-  ]);
-
-  config.sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.secrets) vmsEnabled);
-  config.sops.templates = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.templates) vmsEnabled);
-  config.systemd.services."microvm-virtiofsd@".serviceConfig.TimeoutStopSec = 1;
-
-  config.users.users.microvm = mkIf cfg.enable {
-    extraGroups = lib.mkForce ["keys"]; # allow access to sops keys
-  };
-  config.microvm = mkIf cfg.enable {
-    host.enable = lib.mkForce true;
-
-    vms =
-      mapAttrs' (name: vm: {
-        name = "${config.networking.hostName}:${name}";
-        value = rec {
-          flake = inputs.self;
-          updateFlake = "git+file:///etc/nixos";
-          #restartIfChanged = true;
-        };
+  config = {
+    # VM metadata - always defined
+    cfg.server.microvm.vms = listToAttrs (map (name: {
+        inherit name;
+        value = import (configLib.relativeToRoot "./hosts/microvm/${name}/meta.nix") args;
       })
-      vmsEnabled;
+      (builtins.attrNames (builtins.readDir (configLib.relativeToRoot "./hosts/microvm"))));
+
+    # if cfg.enable
+    ## cron
+    services.cron.systemCronJobs = builtins.concatLists (lists.optionals cfg.enable [
+      (lists.optional cfg.autoUpdate "0 3 * * *    root    /run/current-system/sw/bin/git -C /etc/nixos pull && /etc/nixos/utils/microvm-update-all")
+    ]);
+
+    ## sops-nix
+    sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (vmName: vm: (
+        builtins.mapAttrs (_: secret: {
+	  sopsFile = "/secrets/${config.networking.hostName}/vm/${vmName}.yaml";
+	} // secret) vm.secrets
+      )) vmsEnabled); #TODO: change /secrets/ path
+    sops.templates = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.templates) vmsEnabled);
+    systemd.services."microvm-virtiofsd@".serviceConfig.TimeoutStopSec = 1;
+
+    ## actual microvm defs
+    users.users.microvm = mkIf cfg.enable {
+      extraGroups = lib.mkForce ["keys"]; # allow access to sops keys
+    };
+    microvm = mkIf cfg.enable {
+      host.enable = lib.mkForce true;
+
+      vms =
+        mapAttrs' (name: vm: {
+          name = "${config.networking.hostName}:${name}";
+          value = rec {
+            flake = inputs.self;
+            updateFlake = "git+file:///etc/nixos";
+            #restartIfChanged = true;
+          };
+        })
+        vmsEnabled;
+    };
   };
 
   /*

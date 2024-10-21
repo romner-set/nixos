@@ -1,4 +1,4 @@
-{...}: {
+{config, ...}: {
   id = 19;
 
   webPorts = [80];
@@ -20,12 +20,16 @@
     {
       proto = "virtiofs";
       tag = "librenms-secrets";
-      source = "/run/secrets/vm/librenms";
-      mountPoint = "/secrets";
+      source = "/run/secrets-rendered/vm/librenms";
+      mountPoint = "/secrets/rendered";
     }
   ];
 
   secrets = {
     "vm/librenms/dbpassword" = {};
   };
+
+  templates."vm/librenms/env".content = ''
+    DB_PASSWORD=${config.sops.placeholder."vm/librenms/dbpassword"}
+  '';
 }

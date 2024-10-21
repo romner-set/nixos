@@ -21,7 +21,7 @@ with lib; {
     #package = patchedSearxng;
     enable = true;
     redisCreateLocally = true;
-    environmentFile = "/secrets/env";
+    environmentFile = "/secrets/rendered/env";
     settings = {
       use_default_settings = true;
       server = {

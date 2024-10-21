@@ -21,8 +21,8 @@ in {
     {
       proto = "virtiofs";
       tag = "immich-secrets";
-      source = "/run/secrets/vm/immich";
-      mountPoint = "/secrets";
+      source = "/run/secrets-rendered/vm/immich";
+      mountPoint = "/secrets/rendered";
     }
     {
       proto = "virtiofs";
@@ -46,9 +46,27 @@ in {
   ];
 
   secrets = {
-    "vm/immich/env" = {};
+    "vm/immich/db_pass" = {};
     "oidc/immich/id" = {};
     "oidc/immich/secret" = {};
     "oidc/immich/secret_hash" = {};
   };
+
+  templates."vm/immich/env".content = ''
+    # You can find documentation for all the supported env variables at https://immich.app/docs/install/environment-variables
+
+    # The location where your uploaded files are stored
+    UPLOAD_LOCATION=/data/library
+    # The location where your database files are stored
+    DB_DATA_LOCATION=/data/postgres
+
+    TZ=Europe/Prague
+    IMMICH_VERSION=release
+    DB_PASSWORD=${config.sops.placeholder."vm/immich/db_pass"}
+
+    # The values below this line do not need to be changed
+    ###################################################################################
+    DB_USERNAME=postgres
+    DB_DATABASE_NAME=immich
+  '';
 }

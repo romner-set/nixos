@@ -14,7 +14,7 @@ in {
       enable = true;
       name = "default"; #TODO
       url = "https://git.${domain}";
-      tokenFile = "/secrets/env";
+      tokenFile = "/secrets/rendered/env";
       labels = [
         "ubuntu-latest:docker://node:16-bullseye"
         "ubuntu-22.04:docker://node:16-bullseye"

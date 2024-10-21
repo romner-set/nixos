@@ -27,12 +27,6 @@ in {
     }
     {
       proto = "virtiofs";
-      tag = "vikunja-secrets";
-      source = "/run/secrets/vm/vikunja";
-      mountPoint = "/secrets";
-    }
-    {
-      proto = "virtiofs";
       tag = "vikunja-secrets-rendered";
       source = "/run/secrets-rendered/vm/vikunja";
       mountPoint = "/secrets/rendered";
@@ -43,11 +37,15 @@ in {
   oidc.redirectUris = ["https://vikunja.${domain}/auth/openid/authelia"];
 
   secrets = {
-    "vm/vikunja/env" = {};
+    "vm/vikunja/mail_pass" = {};
     "oidc/vikunja/id" = {};
     "oidc/vikunja/secret" = {};
     "oidc/vikunja/secret_hash" = {};
   };
+
+  templates."vm/vikunja/env".content = ''
+    VIKUNJA_MAILER_PASSWORD=${config.sops.placeholder."vm/vikunja/mail_pass"}
+  '';
 
   templates."vm/vikunja/config.yaml".file = (pkgs.formats.yaml {}).generate "config.yaml" {
     database.path = "/data/vikunja.db";

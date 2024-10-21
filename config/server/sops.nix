@@ -30,7 +30,7 @@ in {
     };
 
     sops.validateSopsFiles = false; # secrets outside config
-    sops.defaultSopsFile = "/secrets/${config.networking.hostName}.yaml";
+    sops.defaultSopsFile = "/secrets/${config.networking.hostName}/misc.yaml";
     sops.age.keyFile = "/keys/age.key";
     sops.keepGenerations = 0; # don't delete old gens on `nixos-rebuild switch`, see https://github.com/astro/microvm.nix/issues/239
 

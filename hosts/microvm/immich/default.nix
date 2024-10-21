@@ -12,7 +12,7 @@ in {
   environment.systemPackages = with pkgs; [docker-compose];
   systemd.services.immich = {
     script = ''
-      docker-compose --env-file /secrets/env -f ${compose} up
+      docker-compose --env-file /secrets/rendered/env -f ${compose} up
     '';
     wantedBy = ["multi-user.target"];
     after = ["docker.service" "docker.socket"];

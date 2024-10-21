@@ -1,4 +1,4 @@
-{...}: {
+{config, ...}: {
   id = 3;
   webPorts = [8080];
 
@@ -15,12 +15,16 @@
     {
       proto = "virtiofs";
       tag = "searxng-secrets";
-      source = "/run/secrets/vm/searxng";
-      mountPoint = "/secrets";
+      source = "/run/secrets-rendered/vm/searxng";
+      mountPoint = "/secrets/rendered";
     }
   ];
 
   secrets = {
-    "vm/searxng/env" = {};
+    "vm/searxng/key" = {};
   };
+
+  templates."vm/searxng/env".content = ''
+    SEARX_SECRET_KEY=${config.sops.placeholder."vm/searxng/key"}
+  '';
 }

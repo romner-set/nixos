@@ -28,7 +28,7 @@ in {
 
   services.vikunja = {
     enable = true;
-    environmentFiles = ["/secrets/env"];
+    environmentFiles = ["/secrets/rendered/env"];
 
     frontendScheme = "http";
     frontendHostname = "vikunja.${domain}";

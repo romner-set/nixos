@@ -23,13 +23,13 @@ in {
       source = "/vm/foundryvtt/docker";
       mountPoint = "/var/lib/docker";
     }
+    */
     {
       proto = "virtiofs";
       tag = "foundryvtt-secrets";
       source = "/run/secrets/vm/foundryvtt";
       mountPoint = "/secrets";
     }
-    */
     {
       proto = "virtiofs";
       tag = "foundryvtt-data";
@@ -39,6 +39,14 @@ in {
   ];
 
   secrets = {
-    "vm/foundryvtt/env" = {};
+    "vm/foundryvtt/user" = {};
+    "vm/foundryvtt/pass" = {};
+    "vm/foundryvtt/admin_key" = {};
   };
+
+  templates."vm/foundryvtt/env".content = ''
+    FOUNDRY_USERNAME=${config.sops.placeholder."vm/foundryvtt/user"}
+    FOUNDRY_PASSWORD=${config.sops.placeholder."vm/foundryvtt/pass"}
+    FOUNDRY_ADMIN_KEY=${config.sops.placeholder."vm/foundryvtt/admin_key"}
+  '';
 }

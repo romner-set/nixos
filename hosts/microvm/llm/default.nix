@@ -12,9 +12,7 @@ in {
   virtualisation.docker.enable = true;
   environment.systemPackages = with pkgs; [
     docker-compose
-    /*
-    unstable.oterm
-    */
+    #unstable.oterm
     oterm
   ];
   systemd.services.open-webui = {

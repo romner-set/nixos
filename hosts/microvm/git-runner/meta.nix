@@ -9,8 +9,8 @@ in {
     {
       proto = "virtiofs";
       tag = "git-runner-secrets";
-      source = "/run/secrets/vm/git-runner";
-      mountPoint = "/secrets";
+      source = "/run/secrets-rendered/vm/git-runner";
+      mountPoint = "/secrets/rendered";
     }
     {
       proto = "virtiofs";
@@ -21,6 +21,10 @@ in {
   ];
 
   secrets = {
-    "vm/git-runner/env" = {};
+    "vm/git-runner/token" = {};
   };
+
+  templates."vm/git-runner/token".content = ''
+    TOKEN=${config.sops.placeholder."vm/git-runner/token"}
+  '';
 }

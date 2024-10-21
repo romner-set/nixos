@@ -8,7 +8,7 @@ services:
     ports:
       - '8080:80'
     env_file:
-      - /secrets/env
+      - /secrets/rendered/env
     environment:
       - APP_KEY=${APP_KEY}
       - DB_CONNECTION=pgsql
@@ -46,7 +46,7 @@ services:
     image: getmeili/meilisearch:v1.5
     restart: always
     env_file:
-      - /secrets/env
+      - /secrets/rendered/env
     environment:
       - MEILI_MASTER_KEY=${MEILISEARCH_KEY}
       - MEILI_ENV=production
@@ -61,7 +61,7 @@ services:
     image: postgres:13
     restart: always
     env_file:
-      - /secrets/env
+      - /secrets/rendered/env
     volumes:
       - /data/db:/var/lib/postgresql/data
     environment:

@@ -29,6 +29,6 @@ in {
   ];
 
   secrets = {
-    "vm/turn/shared".mode = "0440";
+    "vm/turn/shared_secret".mode = "0440";
   };
 }

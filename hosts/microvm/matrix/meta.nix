@@ -56,7 +56,7 @@ in {
   templates."vm/matrix/synapse.yaml" = {
     mode = "0440";
     file = (pkgs.formats.yaml {}).generate "synapse.yaml" {
-      turn_shared_secret = config.sops.placeholder."vm/turn/shared";
+      turn_shared_secret = config.sops.placeholder."vm/turn/shared_secret";
       database = {
         name = "psycopg2";
         args.password = config.sops.placeholder."vm/matrix/synapse/db_pass";
