@@ -5,10 +5,16 @@
 
   cfg.core.firmware.enable = true;
   cfg.core.boot.loader.grub.enable = true;
+  cfg.core.net.systemdDefault = true;
 
-  cfg.desktop.environment.kde.enable = true;
   cfg.desktop.graphics.nvidia.enable = true;
   cfg.desktop.graphics.amdgpu.enable = true;
+
+  cfg.desktop.environment.kde = {
+    enable = true;
+    session = "plasmax11";
+    autoLogin.user = "main";
+  };
 
   cfg.server.libvirt.enable = true;
   cfg.server.libvirt.vfio = false;

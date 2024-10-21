@@ -23,6 +23,11 @@
     fsType = "zfs";
   };
 
+  fileSystems."/var/lib/libvirt" = {
+    device = "nvme/libvirt";
+    fsType = "zfs";
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/EFI";
     fsType = "vfat";

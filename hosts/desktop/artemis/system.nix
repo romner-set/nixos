@@ -15,8 +15,12 @@
   cfg.core.boot.loader.systemd-boot.enable = true;
   cfg.core.net.systemdDefault = true;
 
-  cfg.desktop.environment.kde.enable = true;
   cfg.desktop.graphics.nvidia.enable = true;
+
+  cfg.desktop.environment.kde = {
+    enable = true;
+    autoLogin.user = "main";
+  };
 
   cfg.desktop.services.sunshine = {
     enable = true;
