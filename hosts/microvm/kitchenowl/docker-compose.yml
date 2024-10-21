@@ -10,13 +10,11 @@ services:
     depends_on:
       - backend
     env_file:
-      - /etc/kitchenowl/env
-      - /secrets/env
+      - /secrets/rendered/env
   backend:
     image: tombursch/kitchenowl-backend:latest
     restart: unless-stopped
     volumes:
       - /data:/data
     env_file:
-      - /etc/kitchenowl/env
-      - /secrets/env
+      - /secrets/rendered/env

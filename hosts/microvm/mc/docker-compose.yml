@@ -7,7 +7,7 @@ services:
     #- "25565:25565"
     network_mode: host
     env_file:
-      - /secrets/env
+      - /secrets/rendered/env
     environment:
       EULA: "true"
       MOD_PLATFORM: AUTO_CURSEFORGE

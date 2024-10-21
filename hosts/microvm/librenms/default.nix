@@ -10,7 +10,7 @@ with lib; {
     dataDir = "/data/data";
     logDir = "/data/log";
 
-    environmentFile = "/secrets/env";
+    environmentFile = "/secrets/rendered/env";
 
     database.createLocally = true;
     database.passwordFile = "/secrets/dbpassword";

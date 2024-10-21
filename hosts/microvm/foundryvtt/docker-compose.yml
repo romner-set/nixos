@@ -6,7 +6,7 @@ services:
     volumes:
       - /data:/data
     env_file:
-      - /secrets/env
+      - /secrets/rendered/env
     environment:
       - FOUNDRY_PASSWORD=${FOUNDRY_PASSWORD}
       - FOUNDRY_USERNAME=${FOUNDRY_USERNAME}

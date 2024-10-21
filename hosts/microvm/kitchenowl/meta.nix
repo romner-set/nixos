@@ -23,8 +23,8 @@ in {
     {
       proto = "virtiofs";
       tag = "kitchenowl-secrets";
-      source = "/run/secrets/vm/kitchenowl";
-      mountPoint = "/secrets";
+      source = "/run/secrets-rendered/vm/kitchenowl";
+      mountPoint = "/secrets/rendered";
     }
     {
       proto = "virtiofs";
@@ -42,9 +42,19 @@ in {
   oidc.authMethod = "client_secret_post";
 
   secrets = {
-    "vm/kitchenowl/env" = {};
+    "vm/kitchenowl/jwt_secret" = {};
     "oidc/kitchenowl/id" = {};
     "oidc/kitchenowl/secret" = {};
     "oidc/kitchenowl/secret_hash" = {};
   };
+
+  templates."vm/kitchenowl/env".content = ''
+    OIDC_CLIENT_ID=${config.sops.placeholder."oidc/kitchenowl/id"}
+    OIDC_CLIENT_SECRET=${config.sops.placeholder."oidc/kitchenowl/secret"}
+    OIDC_ISSUER=https://auth.${config.networking.domain}
+    DISABLE_USERNAME_PASSWORD_LOGIN=true
+
+    JWT_SECRET_KEY=${config.sops.placeholder."vm/kitchenowl/jwt_secret"}
+    FRONT_URL=https://kitchenowl.${config.networking.domain}
+  '';
 }

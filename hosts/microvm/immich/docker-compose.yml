@@ -20,7 +20,7 @@ services:
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
     env_file:
-      - /secrets/env
+      - /secrets/rendered/env
     ports:
       - 2283:3001
     depends_on:
@@ -45,7 +45,7 @@ services:
     volumes:
       - /data/cache:/cache
     env_file:
-      - /secrets/env
+      - /secrets/rendered/env
     restart: always
     healthcheck:
       disable: false

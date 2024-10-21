@@ -55,7 +55,7 @@ in {
 
   secrets = {
     "vm/meelo/db_pass" = {};
-    "vm/meelo/jwt" = {};
+    "vm/meelo/jwt_secret" = {};
     "vm/meelo/meili" = {};
     "vm/meelo/discogs_apikey" = {};
     "vm/meelo/genius_apikey" = {};
@@ -87,7 +87,7 @@ in {
     PUBLIC_SERVER_URL=https://meelo.${config.networking.domain}/api
     #################### Security
     # Random String used to sign JWT Tokens
-    JWT_SIGNATURE=${config.sops.placeholder."vm/meelo/jwt"}
+    JWT_SIGNATURE=${config.sops.placeholder."vm/meelo/jwt_secret"}
     # Key used to authenticate the Meilisearch Instance
     # Should be a random string, must be at least 16 bytes
     MEILI_MASTER_KEY=${config.sops.placeholder."vm/meelo/meili"}

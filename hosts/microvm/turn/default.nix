@@ -22,7 +22,7 @@ in {
     min-port = 49152;
     max-port = 65535;
     use-auth-secret = true;
-    static-auth-secret-file = "/secrets/shared";
+    static-auth-secret-file = "/secrets/shared_secret";
     realm = "turn.${domain}";
     cert = "/ssl/${domain}/full.pem";
     pkey = "/ssl/${domain}/key.pem";

@@ -55,10 +55,10 @@ in {
         extraLegoRenewFlags = ["--reuse-key"]; # for static TLSA records
 
         dnsProvider = "rfc2136";
-        environmentFile = "/secrets/acme.env";
+        environmentFile = "/secrets/rendered/acme.env";
 
         /*
-          postRun = ''
+        postRun = ''
           chown -R 60:60 /var/lib/acme/${domain}
         '';
         */
@@ -67,12 +67,10 @@ in {
     };
 
     # KnotDNS
-    systemd.services.knot.serviceConfig.User = lib.mkForce "root"; # access to /secrets/acme.conf
-    #systemd.services.knot.serviceConfig.Group = lib.mkForce "root";
-    #systemd.services.knot.serviceConfig.BindPaths = ["/secrets"];
+    systemd.services.knot.serviceConfig.Group = lib.mkForce "root"; # access /secrets/rendered/acme.conf
     services.knot = {
       enable = true;
-      keyFiles = ["/secrets/acme.conf"];
+      keyFiles = ["/secrets/rendered/acme.conf"];
       settings = {
         server = rec {
           listen = ["0.0.0.0@53" "::@53"];
