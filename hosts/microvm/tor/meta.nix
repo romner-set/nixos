@@ -6,4 +6,13 @@ in {
   mem = cfg.defaults.mem.low;
 
   tcpPorts = [9001];
+
+  shares = [
+    {
+      proto = "virtiofs";
+      tag = "tor-keys";
+      source = "/vm/tor";
+      mountPoint = "/var/lib/tor";
+    }
+  ];
 }

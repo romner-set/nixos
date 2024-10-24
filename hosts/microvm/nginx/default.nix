@@ -57,21 +57,21 @@ with lib; let
       add_header Referrer-Policy 'same-origin' always;
     '';
 
-    authelia = ''
-      # Authelia location
-      set $upstream_authelia http://[${ipv6.subnet.microvm}::${toString vms.authelia.id}]:9091/api/authz/auth-request;
-
-      location @authelia-redirect {
-      	return 302 https://auth.${domain}/?rd=$scheme://$host$request_uri;
-      }
-    '';
-
-    robotsTxt =
+    authelia =
       ''
-        add_header X-Robots-Tag 'none' always;
-        location = /robots.txt { return 200 "User-agent: *\nDisallow: /\n"; }
+        # Authelia location
+        set $upstream_authelia http://[${ipv6.subnet.microvm}::${toString vms.authelia.id}]:9091/api/authz/auth-request;
+
+        location @authelia-redirect {
+        	return 302 https://auth.${domain}/?rd=$scheme://$host$request_uri;
+        }
       ''
       + (builtins.readFile ./authelia/location.conf);
+
+    robotsTxt = ''
+      add_header X-Robots-Tag 'none' always;
+      location = /robots.txt { return 200 "User-agent: *\nDisallow: /\n"; }
+    '';
   };
 
   virtualHostsCommonConfig = {

@@ -241,10 +241,14 @@ in {
 
     ## sops-nix
     sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (vmName: vm: (
-        builtins.mapAttrs (_: secret: {
-	  sopsFile = "/secrets/${config.networking.hostName}/vm/${vmName}.yaml";
-	} // secret) vm.secrets
-      )) vmsEnabled); #TODO: change /secrets/ path
+        builtins.mapAttrs (_: secret:
+          {
+            sopsFile = "/secrets/${config.networking.hostName}/vm/${vmName}.yaml";
+          }
+          // secret)
+        vm.secrets
+      ))
+      vmsEnabled); #TODO: change /secrets/ path
     sops.templates = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.templates) vmsEnabled);
     systemd.services."microvm-virtiofsd@".serviceConfig.TimeoutStopSec = 1;
 
@@ -254,6 +258,8 @@ in {
     };
     microvm = mkIf cfg.enable {
       host.enable = lib.mkForce true;
+
+      #virtiofsd.extraArgs = ["--cache=never"];
 
       vms =
         mapAttrs' (name: vm: {

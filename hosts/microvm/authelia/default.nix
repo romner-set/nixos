@@ -65,9 +65,6 @@ in {
         default_2fa_method = "totp";
 
         server = {
-          #host = "0.0.0.0";
-          #port = 9091;
-          #path = "";
           address = "tcp://:9091/";
         };
 

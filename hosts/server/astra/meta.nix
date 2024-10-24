@@ -54,8 +54,9 @@ with lib; {
         kitchenowl.enable = true;
 
         # misc
+        #owntracks.enable = true;
         llm.enable = true;
-        tor-relay.enable = true;
+        tor.enable = true;
         turn.enable = true;
 
         # network

@@ -1,4 +1,8 @@
-{config, pkgs, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   cfg = config.cfg.server.microvm;
 in {
   id = 9;
@@ -36,13 +40,13 @@ in {
 
   templates."vm/nameserver/acme.conf" = {
     mode = "0440";
-    file = (pkgs.formats.yaml {}).generate "acme.conf" {
-      key = {
-        id = "acme";
-        algorithm = "hmac-sha256";
-        secret = config.sops.placeholder."vm/nameserver/acme/tsig_secret";
-      };
-    };
+    # I'd use (pkgs.formats.yaml {}).generate but knot is whitespace-sensitive for some reason...
+    content = ''
+      key:
+        - id: acme
+          algorithm: hmac-sha256
+          secret: ${config.sops.placeholder."vm/nameserver/acme/tsig_secret"}
+    '';
   };
 
   templates."vm/nameserver/acme.env".content = ''
