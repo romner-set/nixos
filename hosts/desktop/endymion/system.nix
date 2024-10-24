@@ -1,6 +1,7 @@
 {modulesPath, ...}: {
   networking.hostName = "endymion";
   networking.hostId = "3acb8e4a";
+  networking.domain = "cynosure.red";
   system.stateVersion = "23.11";
 
   cfg.core.firmware.enable = true;

@@ -9,6 +9,7 @@
 
   networking.hostName = "artemis";
   networking.hostId = "9f3afe64";
+  networking.domain = "cynosure.red";
   system.stateVersion = "23.11";
 
   cfg.core.firmware.enable = false;

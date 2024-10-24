@@ -31,41 +31,6 @@ with lib; let
   domainZone = pkgs.writeText "domain.zone" (import ./domain.zone.nix cfg);
 in {
   config = {
-    # ACME
-    users.users.acme.uid = 60;
-    users.groups.acme.gid = 60;
-    security.acme = {
-      preliminarySelfsigned = false;
-      acceptTerms = true;
-
-      certs."${domain}" = {
-        extraDomainNames = [
-          "*.${domain}"
-          "*.vm.${domain}"
-        ];
-        #dnsResolver = "${(builtins.elemAt cfg.addrs 1).ipv4}:53";
-        dnsPropagationCheck = false;
-
-        #reloadServices = ["nginx"];
-        server = "https://acme.zerossl.com/v2/DV90";
-        email = "admin@${domain}";
-
-        #mox mail doesn't support this as of yet: ocspMustStaple = true;
-        keyType = "ec384";
-        extraLegoRenewFlags = ["--reuse-key"]; # for static TLSA records
-
-        dnsProvider = "rfc2136";
-        environmentFile = "/secrets/rendered/acme.env";
-
-        /*
-        postRun = ''
-          chown -R 60:60 /var/lib/acme/${domain}
-        '';
-        */
-        # nginx
-      };
-    };
-
     # KnotDNS
     systemd.services.knot.serviceConfig.Group = lib.mkForce "root"; # access /secrets/rendered/acme.conf
     services.knot = {
@@ -155,52 +120,5 @@ in {
         ];
       };
     };
-
-    # BIND9
-    /*
-        services.bind = {
-        enable = true;
-        listenOn = ["any"];
-        listenOnIpv6 = ["any"];
-        forwarders = mkForce [];
-        cacheNetworks = [
-          "127.0.0.0/8"
-          "::1/128"
-        ];
-        extraOptions = ''
-                 dnssec-validation auto;
-                 version "not currently available";
-
-          rate-limit {
-    			window 15; // Seconds to bucket
-    			responses-per-second 100;// # of good responses per prefix-length/sec
-    			referrals-per-second 20; // referral responses
-    			nodata-per-second 20; // nodata responses
-    			nxdomains-per-second 20; // nxdomain responses
-    			errors-per-second 20; // error responses
-    			all-per-second 100; // When we drop all
-    			log-only no; // Debugging mode
-    			exempt-clients {};
-    			ipv4-prefix-length 24; // Define the IPv4 block size
-    			ipv6-prefix-length 56; // Define the IPv6 block size
-    			max-table-size 20000; // 40 bytes * this number = max memory
-    			min-table-size 500; // pre-allocate to speed startup
-    };
-        '';
-        #response-policy { zone "rpz"; };
-        zones = {
-          /*"rpz" = {
-            master = true;
-            file = rpzZone;
-          };
-    */
-    /*
-        "${domain}" = {
-          master = true;
-          file = domainZone;
-        };
-      };
-    };
-    */
   };
 }

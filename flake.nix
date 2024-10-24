@@ -52,12 +52,30 @@
           # MicroVM
           microvm.nixosModules.host
           microvm.nixosModules.microvm
-          {
+          ({config, ...}: {
             microvm = {
               guest.enable = false; # the microvm modules need to be imported,
               host.enable = false; # but should only be enabled when necessary
             };
-          }
+
+            # include internal CA for domain
+            security.pki.certificates = [
+              {
+                "cynosure.red" = ''
+                  -----BEGIN CERTIFICATE-----
+                  MIIBMTCB5KADAgECAhEAwREnIAtHV2XFWgVsFBVotzAFBgMrZXAwFzEVMBMGA1UE
+                  AxMMY3lub3N1cmUucmVkMB4XDTI0MTAyNDIxMzMwMVoXDTM0MTAyMjIxMzMwMVow
+                  FzEVMBMGA1UEAxMMY3lub3N1cmUucmVkMCowBQYDK2VwAyEA+DBeZT8ZxrCrye5o
+                  PLblghUEy+0vS/cxf7MWxXyYcWijRTBDMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB
+                  Af8ECDAGAQH/AgEBMB0GA1UdDgQWBBQ4fH+5Q+pxaEZjr5vXAAKErm6PFjAFBgMr
+                  ZXADQQAy5kSe6K0YoAvfCg8YaOPxOwaOEYJn00fCmk8pmczxbAbcWKP+BJvq1S16
+                  KoJodnKXx92x6LXdTdNU95XSqCcF
+                  -----END CERTIFICATE-----
+                '';
+              }
+              .${config.networking.domain}
+            ];
+          })
 
           # Misc. modules
           disko.nixosModules.disko

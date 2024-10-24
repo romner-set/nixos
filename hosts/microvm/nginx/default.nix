@@ -22,9 +22,9 @@ with lib; let
 
       # Manual SSL
       http2 on;
-      ssl_certificate /ssl/${domain}/fullchain.pem;
-      ssl_certificate_key /ssl/${domain}/key.pem;
-      ssl_trusted_certificate /ssl/${domain}/chain.pem;
+      #ssl_certificate /ssl/${domain}/fullchain.pem;
+      #ssl_certificate_key /ssl/${domain}/key.pem;
+      #ssl_trusted_certificate /ssl/${domain}/chain.pem;
       ssl_conf_command Options KTLS;
       #ssl_session_cache shared:SSLCACHE:50m;
       #ssl_session_timeout 5m;
@@ -74,36 +74,43 @@ with lib; let
     '';
   };
 
-  virtualHostsCommonConfig = {
-    http3_hq = true;
-    #quic = true;
-
-    extraConfig = with extraSnippets;
-      concatStrings [
-        necessary
-        secHeaders
-        cors
-        authelia
-        robotsTxt
-      ];
-
-    kTLS = true;
-    sslCertificate = "/ssl/${domain}/fullchain.pem";
-    sslCertificateKey = "/ssl/${domain}/key.pem";
-    sslTrustedCertificate = "/ssl/${domain}/chain.pem";
-    listen = [
-      {
-        addr = "0.0.0.0";
-        port = 443;
-        ssl = true;
-      }
-      {
-        addr = "[::]";
-        port = 443;
-        ssl = true;
-      }
-    ];
+  certConfig = conf: let
+    prefix = conf.prefix or "";
+  in {
+    sslCertificate = "/ssl/${prefix}${domain}/fullchain.pem";
+    sslCertificateKey = "/ssl/${prefix}${domain}/key.pem";
+    sslTrustedCertificate = "/ssl/${prefix}${domain}/chain.pem";
   };
+
+  virtualHostsCommonConfig =
+    {
+      http3_hq = true;
+      #quic = true;
+
+      extraConfig = with extraSnippets;
+        concatStrings [
+          necessary
+          secHeaders
+          cors
+          authelia
+          robotsTxt
+        ];
+
+      kTLS = true;
+      listen = [
+        {
+          addr = "0.0.0.0";
+          port = 443;
+          ssl = true;
+        }
+        {
+          addr = "[::]";
+          port = 443;
+          ssl = true;
+        }
+      ];
+    }
+    // (certConfig {});
 
   csp = {
     lax = "upgrade-insecure-requests; default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; frame-ancestors 'self';";
@@ -173,7 +180,7 @@ with lib; let
     ''
   ];
 in {
-  imports = [./rathole.nix];
+  imports = [./acme.nix];
   config = {
     users.users.nginx.uid = 60;
     users.groups.nginx.gid = 60;
@@ -205,7 +212,11 @@ in {
 
       #sslDhparam = "";
 
-      virtualHosts = mapAttrs (_: vHost: attrsets.mergeAttrsList [virtualHostsCommonConfig vHost]) (attrsets.mergeAttrsList [
+      virtualHosts = mapAttrs (_: vHost:
+        attrsets.mergeAttrsList [
+          virtualHostsCommonConfig
+          vHost
+        ]) (attrsets.mergeAttrsList [
         {
           "default" = {
             forceSSL = true;
@@ -289,7 +300,7 @@ in {
               concatStrings [
                 virtualHostsCommonConfig.extraConfig
                 ''
-                                add_header Content-Security-Policy "${csp.lax}" always;
+                  add_header Content-Security-Policy "${csp.lax}" always;
                   add_header Permissions-Policy '${permissionsPolicy {}}' always;
                 ''
               ];
@@ -300,25 +311,31 @@ in {
         (attrsets.concatMapAttrs (
           vmName: vmData: (
             mapAttrs' (vHostName: vHost:
-              nameValuePair "${vHostName}.${domain}" {
-                locations =
-                  mapAttrs (_: lData: {
-                    proxyPass = "${lData.proto}://[${ipv6.subnet.microvm}::${toString vmData.id}]:${toString lData.port}";
-                    extraConfig =
-                      if vmName != "authelia"
-                      then autheliaProxyConfig
-                      else (builtins.readFile ./authelia/proxy.conf);
-                  })
-                  vHost.locations;
-                extraConfig = concatStrings [
-                  virtualHostsCommonConfig.extraConfig
-                  ''
-                                  add_header Content-Security-Policy "${csp.${vHost.csp}}" always;
-                    add_header Permissions-Policy '${permissionsPolicy vHost.permissionsPolicy}' always;
-                                  client_max_body_size ${vHost.maxUploadSize};
-                  ''
-                ];
-              })
+              nameValuePair "${vHostName}.${domain}" ({
+                  locations =
+                    mapAttrs (_: lData: {
+                      proxyPass = "${lData.proto}://[${ipv6.subnet.microvm}::${toString vmData.id}]:${toString lData.port}";
+                      extraConfig =
+                        if vmName != "authelia"
+                        then autheliaProxyConfig
+                        else (builtins.readFile ./authelia/proxy.conf);
+                    })
+                    vHost.locations;
+                  extraConfig = concatStrings [
+                    virtualHostsCommonConfig.extraConfig
+                    ''
+                      add_header Content-Security-Policy "${csp.${vHost.csp}}" always;
+                      add_header Permissions-Policy '${permissionsPolicy vHost.permissionsPolicy}' always;
+                      client_max_body_size ${vHost.maxUploadSize};
+                    ''
+                  ];
+                }
+                // (certConfig {
+                  prefix =
+                    if vHost.useInternalCA
+                    then "internal-"
+                    else "";
+                })))
             (attrsets.filterAttrs (n: v: v.locations != {}) vmData.vHosts)
           )
         ) (attrsets.filterAttrs (n: v: v.vHosts != {}) vmsEnabled))

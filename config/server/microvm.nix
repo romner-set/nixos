@@ -175,6 +175,11 @@ in {
                   };
 
                   ### nginx
+                  useInternalCA = mkOption {
+                    type = types.bool;
+                    default = false;
+                  };
+
                   csp = mkOption {
                     type = types.str;
                     default = "lax";

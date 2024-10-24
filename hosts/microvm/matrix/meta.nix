@@ -64,7 +64,7 @@ in {
       oidc_providers = [
         {
           idp_id = "authelia";
-          idp_name = "authelia";
+          idp_name = "Authelia";
           issuer = "https://auth.${domain}";
 
           client_id = config.sops.placeholder."oidc/matrix/id";

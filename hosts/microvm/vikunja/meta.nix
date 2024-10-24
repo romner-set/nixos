@@ -80,7 +80,7 @@ in {
       redirecturl = "https://vikunja.${domain}/auth/openid/";
       providers = [
         {
-          name = "authelia";
+          name = "Authelia";
           authurl = "https://auth.${domain}";
           clientid = config.sops.placeholder."oidc/vikunja/id";
           clientsecret = config.sops.placeholder."oidc/vikunja/secret";

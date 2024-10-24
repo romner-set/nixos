@@ -10,6 +10,7 @@ with lib.attrsets;
 with lib.strings;
 with lib.lists; let
   TLSA = "BF1C238F30DC82DA79F01B85CB0B30C3FBB4A091E01ECC7EFD6AF958B1C04AC7";
+  internalTLSA = "BF1C238F30DC82DA79F01B85CB0B30C3FBB4A091E01ECC7EFD6AF958B1C04AC7";
   spfAddrs = "ip4:${host.ipv4} ip6:${net.ipv6.subnet.microvmPublic}::${toString vms.mail.id}";
 in
   concatStrings [

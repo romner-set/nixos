@@ -26,6 +26,7 @@ with lib; {
         nginx.enable = true;
         authelia.enable = true;
         nameserver.enable = true;
+        certs.enable = true;
         unbound.enable = true;
         searxng.enable = true;
 

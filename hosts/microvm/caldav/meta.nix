@@ -9,7 +9,7 @@
     };
     #authPolicy = "bypass";
     bypassAuthForLAN = true;
-    expectedMaxResponseTime = 60; # avg 49-53
+    expectedMaxResponseTime = 100; # avg 49-62
   };
 
   shares = [
