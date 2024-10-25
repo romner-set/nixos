@@ -60,9 +60,11 @@ in {
     };
   };
 
-  systemd.services."acme-internal-${domain}".wantedBy = lib.mkForce [];
-  systemd.targets."acme-finished-internal-${domain}".wantedBy = lib.mkForce [];
+  # don't block the boot sequence if a cert needs renewal - prevents microvm start timeout
+  systemd.services."acme-${domain}".serviceConfig.Type = lib.mkForce "simple";
+  systemd.services."acme-internal-${domain}".serviceConfig.Type = lib.mkForce "simple";
 
+  # internal renewal is hourly, so having a randomized delay of 24h doesn't make much sense
   systemd.timers."acme-internal-${domain}".timerConfig = {
     AccuracySec = lib.mkForce 60;
     RandomizedDelaySec = lib.mkForce "5m";
