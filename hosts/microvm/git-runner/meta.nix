@@ -24,7 +24,7 @@ in {
     "vm/git-runner/token" = {};
   };
 
-  templates."vm/git-runner/token".content = ''
+  templates."vm/git-runner/env".content = ''
     TOKEN=${config.sops.placeholder."vm/git-runner/token"}
   '';
 }
