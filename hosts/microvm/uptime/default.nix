@@ -49,6 +49,8 @@ in {
                       "[STATUS] == any(200, 404)"
                       "[RESPONSE_TIME] < ${toString vHost.expectedMaxResponseTime}" # default 50
                     ];
+
+		    client.insecure = vHost.useInternalCA;
                   })
                   vHost.locations)
               )
