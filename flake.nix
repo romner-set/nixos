@@ -63,13 +63,16 @@
               {
                 "cynosure.red" = ''
                   -----BEGIN CERTIFICATE-----
-                  MIIBMTCB5KADAgECAhEAwREnIAtHV2XFWgVsFBVotzAFBgMrZXAwFzEVMBMGA1UE
-                  AxMMY3lub3N1cmUucmVkMB4XDTI0MTAyNDIxMzMwMVoXDTM0MTAyMjIxMzMwMVow
-                  FzEVMBMGA1UEAxMMY3lub3N1cmUucmVkMCowBQYDK2VwAyEA+DBeZT8ZxrCrye5o
-                  PLblghUEy+0vS/cxf7MWxXyYcWijRTBDMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMB
-                  Af8ECDAGAQH/AgEBMB0GA1UdDgQWBBQ4fH+5Q+pxaEZjr5vXAAKErm6PFjAFBgMr
-                  ZXADQQAy5kSe6K0YoAvfCg8YaOPxOwaOEYJn00fCmk8pmczxbAbcWKP+BJvq1S16
-                  KoJodnKXx92x6LXdTdNU95XSqCcF
+                  MIIBrzCCATSgAwIBAgIQUEb2zgqDPLTnkBF6ab9soTAKBggqhkjOPQQDAzAXMRUw
+                  EwYDVQQDEwxjeW5vc3VyZS5yZWQwHhcNMjQxMDI1MTIxMTA5WhcNMzQxMDIzMTIx
+                  MTA5WjAXMRUwEwYDVQQDEwxjeW5vc3VyZS5yZWQwdjAQBgcqhkjOPQIBBgUrgQQA
+                  IgNiAAQF/GB6aMoNk4nW4Y74qtxxUPSEZUFBeJeIloongHM+jRXsmP3WJ5XHIJWb
+                  q/MOEsYJ8IDRGrlae4L4bCaDxIVbrQSJnJJ8YD6YxfskJKLjyzKh6jxbN5sA+9n0
+                  dkWYEp2jRTBDMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0G
+                  A1UdDgQWBBRO7WxcOL7bAbtxCgT7XwuDDHlc8DAKBggqhkjOPQQDAwNpADBmAjEA
+                  lPIxXN1FfSjc5sWnd+XJHvIwTwl/PRExMtE1nwQv9iwDt6Mf2d72+ROHqC5QOiuE
+                  AjEAw5/ncrp8nETasGJaSRWhAVgD8ktD+u0rCmIxrNYxy4w6uPPwGr5i+fcvxG1u
+                  Ydmm
                   -----END CERTIFICATE-----
                 '';
               }

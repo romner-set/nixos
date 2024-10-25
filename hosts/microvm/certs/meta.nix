@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: let
@@ -31,6 +32,18 @@ in rec {
   ];
 
   tcpPorts = [443];
+
+  vHosts.ca = {
+    # https://smallstep.com/docs/step-ca/certificate-authority-server-production/#run-a-reverse-proxy
+    locations = builtins.listToAttrs (builtins.map (path:
+      lib.attrsets.nameValuePair path {
+        proto = "https";
+        port = 443;
+      }) ["/root/" "= /renew" "= /1.0/sign" "= /providers"]);
+
+    bypassAuthForLAN = true;
+    useInternalCA = true;
+  };
 
   oidc.enable = true;
   oidc.redirectUris = ["http://localhost" "http://127.0.0.1"];

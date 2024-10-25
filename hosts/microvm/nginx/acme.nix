@@ -63,7 +63,7 @@ in {
   systemd.services."acme-internal-${domain}".wantedBy = lib.mkForce [];
   systemd.targets."acme-finished-internal-${domain}".wantedBy = lib.mkForce [];
 
-  systemd.timers."internal-${domain}".timerConfig = {
+  systemd.timers."acme-internal-${domain}".timerConfig = {
     AccuracySec = lib.mkForce 60;
     RandomizedDelaySec = lib.mkForce "5m";
   };
