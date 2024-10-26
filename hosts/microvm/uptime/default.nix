@@ -50,7 +50,7 @@ in {
                       "[RESPONSE_TIME] < ${toString vHost.expectedMaxResponseTime}" # default 50
                     ];
 
-		    client.insecure = vHost.useInternalCA;
+                    client.insecure = vHost.useInternalCA;
                   })
                   vHost.locations)
               )

@@ -10,7 +10,8 @@ in {
       proto = "http";
       port = 8083;
     };
-    #bypassAuthForLAN = true; # TODO: mTLS
+    bypassAuthForLAN = true;
+    requireMTLS = true;
     csp = "none";
   };
   vHosts.owntracks-fe = {

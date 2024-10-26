@@ -14,11 +14,24 @@ with lib; let
   #universalSnippets = concatStrings (map (n: builtins.readFile "${snippetsDir}/${n}") (builtins.attrNames (builtins.readDir snippetsDir)));
 
   extraSnippets = {
-    certs = prefix: ''
-      ssl_certificate /ssl/${prefix}${domain}/fullchain.pem;
-      ssl_certificate_key /ssl/${prefix}${domain}/key.pem;
-      ssl_trusted_certificate /ssl/${prefix}${domain}/chain.pem;
-    '';
+    certs = {
+      prefix ? "",
+      requireMTLS ? false,
+    }:
+      ''
+        ssl_certificate /ssl/${prefix}${domain}/fullchain.pem;
+        ssl_certificate_key /ssl/${prefix}${domain}/key.pem;
+        ssl_trusted_certificate /ssl/${prefix}${domain}/chain.pem;
+      ''
+      + (
+        if requireMTLS
+        then ''
+          ssl_client_certificate /secrets/ca/chain.pem;
+          ssl_verify_depth       2;
+          ssl_verify_client      on;
+        ''
+        else ""
+      );
 
     necessary = ''
       # Custom headers
@@ -77,10 +90,10 @@ with lib; let
     '';
   };
 
-  extraConfig = certPrefix:
+  extraConfig = {certArgs ? {}}:
     with extraSnippets;
       concatStrings [
-        (certs certPrefix)
+        (certs certArgs)
         necessary
         secHeaders
         cors
@@ -96,7 +109,7 @@ with lib; let
     sslCertificateKey = "/ssl/${domain}/key.pem";
     sslTrustedCertificate = "/ssl/${domain}/chain.pem";
 
-    extraConfig = extraConfig "";
+    extraConfig = extraConfig {};
 
     kTLS = true;
     listen = [
@@ -297,14 +310,13 @@ in {
               extraConfig = limitedLocation;
             };
 
-            extraConfig = with extraSnippets;
-              concatStrings [
-                (extraConfig "")
-                ''
-                  add_header Content-Security-Policy "${csp.lax}" always;
-                  add_header Permissions-Policy '${permissionsPolicy {}}' always;
-                ''
-              ];
+            extraConfig = concatStrings [
+              (extraConfig {})
+              ''
+                add_header Content-Security-Policy "${csp.lax}" always;
+                add_header Permissions-Policy '${permissionsPolicy {}}' always;
+              ''
+            ];
           };
         }
 
@@ -332,11 +344,13 @@ in {
 
                 extraConfig = concatStrings [
                   (
-                    extraConfig (
-                      if vHost.useInternalCA
-                      then "internal-"
-                      else ""
-                    )
+                    extraConfig {
+                      certArgs.prefix =
+                        if vHost.useInternalCA
+                        then "internal-"
+                        else "";
+                      certArgs.requireMTLS = vHost.requireMTLS;
+                    }
                   )
                   ''
                     add_header Content-Security-Policy "${csp.${vHost.csp}}" always;

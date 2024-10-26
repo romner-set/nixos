@@ -180,6 +180,11 @@ in {
                     default = false;
                   };
 
+                  requireMTLS = mkOption {
+                    type = types.bool;
+                    default = false;
+                  };
+
                   csp = mkOption {
                     type = types.str;
                     default = "lax";

@@ -13,6 +13,7 @@ in {
     };
     #authPolicy = "bypass";
     bypassAuthForLAN = true;
+    requireMTLS = true;
 
     maxUploadSize = "50000M";
   };
@@ -40,7 +41,7 @@ in {
 
   oidc.enable = true;
   oidc.redirectUris = [
-    "app.immich:/" # mobile app
+    "app.immich:///oauth-callback" # mobile app
     "https://immich.${domain}/auth/login"
     "https://immich.${domain}/user-settings"
   ];

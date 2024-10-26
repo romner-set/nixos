@@ -55,7 +55,7 @@ with lib; {
         kitchenowl.enable = true;
 
         # misc
-        #owntracks.enable = true;
+        owntracks.enable = true;
         llm.enable = true;
         tor.enable = true;
         turn.enable = true;

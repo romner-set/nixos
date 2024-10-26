@@ -5,6 +5,7 @@
   ...
 }:
 with lib; let
+  inherit (config.cfg.microvm.host) net vms;
   compose = ./docker-compose.yml;
   inherit (config.networking) domain;
 in {

@@ -52,14 +52,8 @@
           # MicroVM
           microvm.nixosModules.host
           microvm.nixosModules.microvm
-          ({config, ...}: {
-            microvm = {
-              guest.enable = false; # the microvm modules need to be imported,
-              host.enable = false; # but should only be enabled when necessary
-            };
-
-            # include internal CA for domain
-            security.pki.certificates = [
+          ({config, ...}: let
+            cert =
               {
                 "cynosure.red" = ''
                   -----BEGIN CERTIFICATE-----
@@ -76,8 +70,16 @@
                   -----END CERTIFICATE-----
                 '';
               }
-              .${config.networking.domain}
-            ];
+              .${config.networking.domain};
+          in {
+            microvm = {
+              guest.enable = false; # the microvm modules need to be imported,
+              host.enable = false; # but should only be enabled when necessary
+            };
+
+            # include internal CA for domain
+            security.pki.certificates = [cert];
+            environment.etc."ssl/domain-ca.crt".text = cert;
           })
 
           # Misc. modules

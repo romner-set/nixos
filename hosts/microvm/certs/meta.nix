@@ -39,7 +39,7 @@ in rec {
       lib.attrsets.nameValuePair path {
         proto = "https";
         port = 443;
-      }) ["/root/" "= /renew" "= /1.0/sign" "= /providers"]);
+      }) ["= /roots.pem" "/root/" "= /renew" "= /1.0/sign" "= /providers"]);
 
     bypassAuthForLAN = true;
     useInternalCA = true;
@@ -55,7 +55,7 @@ in rec {
         sopsFile = "/secrets/${config.networking.hostName}/${name}";
       }) {
         "vm/certs/root.crt" = {};
-        "vm/certs/root.key" = {};
+        #"vm/certs/root.key" = {};
         "vm/certs/intermediate.crt" = {};
         "vm/certs/intermediate.key" = {};
         "vm/certs/ssh_host.key" = {};
@@ -67,6 +67,14 @@ in rec {
       "oidc/certs/secret" = {};
       "oidc/certs/secret_hash" = {};
     };
+
+  templates."ca/chain.pem" = {
+    mode = "0444";
+    content = ''
+      ${config.sops.placeholder."vm/certs/root.crt"}
+      ${config.sops.placeholder."vm/certs/intermediate.crt"}
+    '';
+  };
 
   templates."vm/certs/ca.json".file = (pkgs.formats.json {}).generate "ca.json" {
     root = "/secrets/root.crt";
@@ -121,38 +129,25 @@ in rec {
 
       policy = {
         x509 = {
-          allow.dns = ["${domain}" "*.${domain}" "*.vm.${domain}"];
+          allow.dns = [
+            "${domain}"
+            "*.${domain}"
+            "*.vm.${domain}"
+            "*.invalid" # client certs
+          ];
           allowWildcardNames = true;
         };
         ssh = {
-          user.allow.email = ["@${domain}"];
+          user.allow = {
+            principal = ["*"];
+            email = ["@${domain}"];
+          };
           host.allow.dns = ["*.${domain}" "*.vm.${domain}"];
+          allowWildcardNames = false;
         };
       };
 
-      provisioners = let
-        templates = {
-          ssh = (pkgs.formats.json {}).generate "ssh-template.tpl" {
-            type = "{{ toJson .Type }},";
-            keyId = "{{ toJson .KeyID }},";
-            principals = "{{ toJson .Principals }},";
-            extensions = "{{ toJson .Extensions }},";
-            criticalOptions = "{{ toJson .CriticalOptions }}";
-          };
-          x509 = pkgs.writeText "x509-template.tpl" ''
-            {
-              "subject": {{ toJson .Subject }},
-              "sans": {{ toJson .SANs }},
-            {{- if typeIs "*rsa.PublicKey" .Insecure.CR.PublicKey }}
-              "keyUsage": ["keyEncipherment", "digitalSignature"],
-            {{- else }}
-              "keyUsage": ["digitalSignature"],
-            {{- end }}
-              "extKeyUsage": ["serverAuth", "clientAuth"]
-            }
-          '';
-        };
-      in [
+      provisioners = [
         {
           type = "OIDC";
           name = "authelia";
@@ -165,36 +160,33 @@ in rec {
           configurationEndpoint = "https://auth.${domain}/.well-known/openid-configuration";
 
           claims = {
-            maxTLSCertDuration = "1680h";
-            defaultTLSCertDuration = "24h";
-          };
-          options = {
-            x509.templateFile = templates.x509;
-            ssh.templateFile = templates.ssh;
+            maxTLSCertDuration = "8760h"; # 1 year, used for mobile devices or browsers where ACME isn't possible
+            defaultTLSCertDuration = "8h";
+            enableSSHCA = true;
           };
         }
         {
           type = "SSHPOP";
           name = "sshpop";
           claims.enableSSHCA = true;
-          options.ssh.templateFile = templates.ssh;
         }
         {
           type = "ACME";
           name = "acme";
+
           forceCN = true;
-          claims = {
-            maxTLSCertDuration = "8h";
-            defaultTLSCertDuration = "2h";
-          };
-          caaIdentities = ["ca.${domain}"];
+          caaIdentities = [domain];
           challenges = ["dns-01"];
           attestationFormats = [
             "apple"
             "step"
             "tpm"
           ];
-          options.x509.templateFile = templates.x509;
+
+          claims = {
+            maxTLSCertDuration = "8h";
+            defaultTLSCertDuration = "2h";
+          };
         }
       ];
     };
