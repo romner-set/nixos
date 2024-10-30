@@ -5,7 +5,20 @@
   ...
 }:
 with lib; {
-  services.nginx = {
+  services.nginx = let
+    extraConfig = ''
+      autoindex on;
+
+      proxy_max_temp_file_size 0;
+
+      sendfile           on;
+      sendfile_max_chunk 1m;
+
+      tcp_nopush on;
+      tcp_nodelay       on;
+      keepalive_timeout 65;
+    '';
+  in {
     enable = true;
     enableReload = true;
 
@@ -22,7 +35,7 @@ with lib; {
       ];
       locations."/" = {
         root = "/srv/public";
-        extraConfig = "autoindex on;";
+        inherit extraConfig;
       };
     };
 
@@ -37,7 +50,7 @@ with lib; {
       ];
       locations."/" = {
         root = "/srv/private";
-        extraConfig = "autoindex on;";
+        inherit extraConfig;
       };
     };
   };

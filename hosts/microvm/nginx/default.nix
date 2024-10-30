@@ -58,6 +58,17 @@ with lib; let
       listen [::]:443 quic;
     '';
 
+    perf = ''
+      proxy_max_temp_file_size 0;
+
+      sendfile           on;
+      sendfile_max_chunk 1m;
+
+      tcp_nopush        on;
+      tcp_nodelay       on;
+      keepalive_timeout 65;
+    '';
+
     cors = ''
       #add_header Access-Control-Allow-Origin 'https://auth.${domain}' always;
       add_header 'Access-Control-Allow-Origin' '*' always;
@@ -95,6 +106,7 @@ with lib; let
       concatStrings [
         (certs certArgs)
         necessary
+	perf
         secHeaders
         cors
         authelia
