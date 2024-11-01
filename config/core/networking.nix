@@ -41,7 +41,7 @@ in {
     systemd.network = mkIf cfg.systemdDefault {
       enable = true;
       networks."10-wan" = {
-        matchConfig.Type = "ether";
+        matchConfig.Name = ["enp*" "eno*" "eth*"];
         networkConfig = {
           DHCP = "yes";
           IPv6AcceptRA = true;
