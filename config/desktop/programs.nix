@@ -99,6 +99,7 @@ in {
           obsidian
           tenacity
           prismlauncher
+          element-desktop
           element-desktop-wayland
         ]
       );
