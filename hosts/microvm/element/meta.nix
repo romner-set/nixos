@@ -21,6 +21,7 @@ in {
     permissionsPolicy = {
       camera = ["self"];
       microphone = ["self"];
+      display-capture = ["self"];
     };
   };
 }
