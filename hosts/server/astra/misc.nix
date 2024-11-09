@@ -40,9 +40,9 @@ with lib; {
       enable = true;
       disks = [
         "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
-        "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
-        "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
-        "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
+	"/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG8623N"
+	"/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCGEBXPM"
+	"/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCGH2EZM"
       ];
     };
   };
