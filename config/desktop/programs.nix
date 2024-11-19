@@ -94,7 +94,7 @@ in {
           vlc
           #qalculate-qt
           speedcrunch
-          libreoffice-qt
+          onlyoffice-bin
           moonlight-qt
           obsidian
           tenacity
