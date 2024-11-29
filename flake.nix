@@ -1,7 +1,7 @@
 {
   inputs = {
     ### Globally auto-updated ###
-    latest.url = "nixpkgs/nixos-24.05"; # used by VPSs & microvms for security's sake, updated every 24h (or less)
+    latest.url = "nixpkgs/nixos-24.11"; # used by VPSs & microvms for security's sake, updated every 24h (or less)
     latest-unstable.url = "nixpkgs/nixos-unstable";
 
     disko.url = "github:nix-community/disko"; #TODO: use disko for desktops & servers
