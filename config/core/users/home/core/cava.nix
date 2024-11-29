@@ -6,7 +6,7 @@
   home-manager.users =
     lib.attrsets.mapAttrs (name: _: {
       programs.cava = {
-        enable = true;
+        enable = false; #TEMP: https://github.com/NixOS/nixpkgs/issues/356817
         settings = {
           general.bar_width = 1;
           input.method = "pipewire";
