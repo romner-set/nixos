@@ -19,7 +19,7 @@
     home-manager.inputs.nixpkgs.follows = "desktop";
 
     # Servers
-    server.url = "nixpkgs/nixos-24.05"; #TODO: setup auto-update?
+    server.url = "nixpkgs/nixos-24.11"; #TODO: setup auto-update?
     server-unstable.url = "nixpkgs/nixos-unstable";
 
     microvm.url = "github:astro/microvm.nix";

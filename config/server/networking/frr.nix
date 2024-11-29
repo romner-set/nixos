@@ -32,9 +32,17 @@ in {
 
     sops.secrets.ospf-key = {};
 
-    sops.templates."ospfd.conf" = {
+    sops.templates."frr.conf" = {
       content = ''
+	! FRR Configuration
+	!
+	hostname ${config.networking.hostName}
+        log syslog
+        service password-encryption
+        service integrated-vtysh-config
         !
+	! OSPF
+	!
         key chain lan
         	key 0
         	key-string ${config.sops.placeholder.ospf-key}
@@ -43,29 +51,14 @@ in {
         interface ${net.interface}
         	ip ospf area 0.0.0.0
         	ip ospf authentication key-chain lan
+        	ipv6 ospf6 area 0.0.0.0
+        	ipv6 ospf6 authentication keychain lan
         !
         router ospf
         	ospf router-id ${ipv4.address}
         	redistribute static
         	redistribute kernel
         	redistribute connected
-        !
-        end
-      '';
-      owner = "frr";
-    };
-
-    sops.templates."ospf6d.conf" = {
-      content = ''
-        !
-        key chain lan
-        	key 0
-        	key-string ${config.sops.placeholder.ospf-key}
-        	cryptographic-algorithm hmac-sha-256
-        !
-        interface ${net.interface}
-        	ipv6 ospf6 area 0.0.0.0
-        	ipv6 ospf6 authentication keychain lan
         !
         router ospf6
         	ospf6 router-id ${ipv4.address}
@@ -78,14 +71,8 @@ in {
       owner = "frr";
     };
 
-    services.frr.ospf = mkIf cfg.ospf.enable {
-      enable = true;
-      configFile = config.sops.templates."ospfd.conf".path;
-    };
-
-    services.frr.ospf6 = mkIf cfg.ospf.enable {
-      enable = true;
-      configFile = config.sops.templates."ospf6d.conf".path;
-    };
+    services.frr.configFile = config.sops.templates."frr.conf".path;
+    services.frr.ospf.enable = cfg.ospf.enable;
+    services.frr.ospf6.enable = cfg.ospf.enable;
   };
 }
