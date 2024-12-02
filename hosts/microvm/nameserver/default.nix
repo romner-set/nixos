@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  configLib,
   ...
 }:
 with lib; let
@@ -31,11 +32,12 @@ with lib; let
   domainZone = pkgs.writeText "domain.zone" (import ./domain.zone.nix cfg);
 in {
   config = {
+    systemd.services.knot.serviceConfig.LoadCredential = configLib.toCredential ["rendered/acme.conf"];
+
     # KnotDNS
-    systemd.services.knot.serviceConfig.Group = lib.mkForce "root"; # access /secrets/rendered/acme.conf
     services.knot = {
       enable = true;
-      keyFiles = ["/secrets/rendered/acme.conf"];
+      keyFiles = ["/run/credentials/knot.service/rendered-acme.conf"];
       settings = {
         server = rec {
           listen = ["0.0.0.0@53" "::@53"];

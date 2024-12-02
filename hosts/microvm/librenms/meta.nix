@@ -20,7 +20,7 @@
     {
       proto = "virtiofs";
       tag = "librenms-secrets";
-      source = "/run/secrets-rendered/vm/librenms";
+      source = "/run/secrets/rendered/vm/librenms";
       mountPoint = "/secrets/rendered";
     }
   ];

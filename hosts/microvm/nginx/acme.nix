@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  configLib,
   ...
 }: let
   cfg = config.cfg.microvm.host;
@@ -11,18 +12,22 @@ in {
   security.acme = {
     preliminarySelfsigned = false;
     acceptTerms = true;
+    
+    defaults = {
+      dnsResolver = "${config.cfg.server.net.ipv6.subnet.microvm}::${toString cfg.vms.nameserver.id}";
+      #dnsResolver = "${cfg.vms.nameserver.name}.vm.${domain}";
+      reloadServices = ["nginx"];
+
+      group = "vm-nginx";
+    };
 
     certs."${domain}" = {
       extraDomainNames = [
         "*.${domain}"
         "*.vm.${domain}"
       ];
-      dnsResolver = "${config.cfg.server.net.ipv6.subnet.microvm}::${toString cfg.vms.nameserver.id}";
-      #dnsResolver = "${cfg.vms.nameserver.name}.vm.${domain}";
       dnsPropagationCheck = true;
 
-      group = "nginx";
-      reloadServices = ["nginx"];
       server = "https://acme.zerossl.com/v2/DV90";
       email = "admin@${domain}";
 
@@ -41,14 +46,9 @@ in {
         "*.${domain}"
         "*.vm.${domain}"
       ];
-      dnsResolver = "${config.cfg.server.net.ipv6.subnet.microvm}::${toString cfg.vms.nameserver.id}";
-      dnsPropagationCheck = true;
-
       validMinDays = 0; # short-lived certs, 28h by default -> 4h of use before renewal
       renewInterval = "hourly";
 
-      group = "nginx";
-      reloadServices = ["nginx"];
       server = "https://${cfg.vms.certs.name}.vm.${domain}/acme/acme/directory";
       email = "admin@${domain}";
 
@@ -60,7 +60,7 @@ in {
     };
   };
 
-  # don't block the boot sequence if a cert needs renewal - prevents microvm start timeout
+    # don't block the boot sequence if a cert needs renewal - prevents microvm start timeout
   systemd.services."acme-${domain}".serviceConfig.Type = lib.mkForce "simple";
   systemd.services."acme-internal-${domain}".serviceConfig.Type = lib.mkForce "simple";
 

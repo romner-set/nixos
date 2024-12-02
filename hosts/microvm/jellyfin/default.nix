@@ -4,5 +4,9 @@
   ...
 }: {
   #environment.systemPackages = with pkgs; [jellyfin-web];
-  services.jellyfin.enable = true;
+  services.jellyfin = {
+    enable = true;
+    user = "vm-jellyfin";
+    group = "vm-jellyfin";
+  };
 }

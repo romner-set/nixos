@@ -21,7 +21,7 @@ in {
     {
       proto = "virtiofs";
       tag = "nameserver-secrets";
-      source = "/run/secrets-rendered/vm/nameserver";
+      source = "/run/secrets/rendered/vm/nameserver";
       mountPoint = "/secrets/rendered";
     }
     {
@@ -37,7 +37,7 @@ in {
   };
 
   templates."vm/nameserver/acme.conf" = {
-    mode = "0440";
+    #mode = "0440";
     # I'd use (pkgs.formats.yaml {}).generate but knot is whitespace-sensitive for some reason...
     content = ''
       key:

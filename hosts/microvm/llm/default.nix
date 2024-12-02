@@ -28,11 +28,12 @@ in {
     package = unstable.ollama;
     enable = true;
     #acceleration = "rocm"; # note: takes *forever* to compile
-    listenAddress = "0.0.0.0:11434";
+    port = 11434;
+    host = "0.0.0.0";
     models = "/models";
     home = "/ollama";
-    writablePaths = ["/models" "/ollama"];
   };
+  systemd.services.ollama.serviceConfig.ReadWritePaths = ["/models" "/ollama"];
 
   /*
     microvm.devices = [

@@ -11,13 +11,13 @@ in {
     {
       proto = "virtiofs";
       tag = "nginx-secrets-ca";
-      source = "/run/secrets-rendered/ca";
+      source = "/run/secrets/rendered/ca";
       mountPoint = "/secrets/ca";
     }
     {
       proto = "virtiofs";
       tag = "nginx-secrets-rendered";
-      source = "/run/secrets-rendered/vm/nginx";
+      source = "/run/secrets/rendered/vm/nginx";
       mountPoint = "/secrets/rendered";
     }
     {

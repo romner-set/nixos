@@ -26,7 +26,7 @@ in rec {
     {
       proto = "virtiofs";
       tag = "certs-secrets-rendered";
-      source = "/run/secrets-rendered/vm/certs";
+      source = "/run/secrets/rendered/vm/certs";
       mountPoint = "/secrets/rendered";
     }
   ];
@@ -69,7 +69,7 @@ in rec {
     };
 
   templates."ca/chain.pem" = {
-    mode = "0444";
+    #mode = "0444";
     content = ''
       ${config.sops.placeholder."vm/certs/root.crt"}
       ${config.sops.placeholder."vm/certs/intermediate.crt"}

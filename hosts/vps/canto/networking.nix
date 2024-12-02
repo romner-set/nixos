@@ -11,7 +11,7 @@
       "2a01:4f8:c010:91ac::1/64"
     ];
     routes = [
-      {routeConfig.Gateway = "fe80::1";}
+      {Gateway = "fe80::1";}
     ];
   };
   networking.hostName = "canto";

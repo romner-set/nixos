@@ -173,8 +173,8 @@ in {
               "${ipv6.publicAddress}/64"
             ];
             routes = lists.optionals (!cfg.dontSetGateways) [
-              {routeConfig.Gateway = ipv4.gateway;}
-              {routeConfig.Gateway = ipv6.gateway;}
+              {Gateway = ipv4.gateway;}
+              {Gateway = ipv6.gateway;}
             ];
             linkConfig.RequiredForOnline = "routable";
 
@@ -234,9 +234,7 @@ in {
               DNS = ipv6.address;
             };
             ipv6Prefixes = [
-              {
-                ipv6PrefixConfig.Prefix = value.ipv6;
-              }
+              {Prefix = value.ipv6;}
             ];
             address = [value.ipv4 value.ipv6];
             linkConfig.RequiredForOnline = "routable";
@@ -258,9 +256,9 @@ in {
             linkConfig.MACAddress = "02:00:00:00:00:${configLib.strings.zeroPad 2 mac}";
             linkConfig.RequiredForOnline = "carrier";
             routes = [
-              {routeConfig.Destination = "${ipv4.subnet.microvm}.${toString vmData.id}/32";}
-              {routeConfig.Destination = "${ipv6.subnet.microvm}::${toString vmData.id}/128";}
-              {routeConfig.Destination = "${ipv6.subnet.microvmPublic}::${toString vmData.id}/128";}
+              {Destination = "${ipv4.subnet.microvm}.${toString vmData.id}/32";}
+              {Destination = "${ipv6.subnet.microvm}::${toString vmData.id}/128";}
+              {Destination = "${ipv6.subnet.microvmPublic}::${toString vmData.id}/128";}
             ];
             extraConfig = let
               fullMAC = "02:00:00:00:01:${configLib.strings.zeroPad 2 mac}";

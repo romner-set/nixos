@@ -9,7 +9,7 @@ in {
     {
       proto = "virtiofs";
       tag = "git-runner-secrets";
-      source = "/run/secrets-rendered/vm/git-runner";
+      source = "/run/secrets/rendered/vm/git-runner";
       mountPoint = "/secrets/rendered";
     }
     {

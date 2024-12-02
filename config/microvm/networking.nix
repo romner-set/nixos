@@ -28,19 +28,19 @@ in {
           #matchConfig.Type = "ether";
           networkConfig.LinkLocalAddressing = "no";
           addresses = [
-            {addressConfig = {Address = "${ipv4.subnet.microvm}.${toString self.id}/32";};}
-            {addressConfig = {Address = "${ipv6.subnet.microvm}::${toString self.id}/128";};}
-            {addressConfig = {Address = "${ipv6.subnet.microvmPublic}::${toString self.id}/128";};}
+            {Address = "${ipv4.subnet.microvm}.${toString self.id}/32";}
+            {Address = "${ipv6.subnet.microvm}::${toString self.id}/128";}
+            {Address = "${ipv6.subnet.microvmPublic}::${toString self.id}/128";}
           ];
           routes = [
             {
               # fe80:: is only used to discover MAC addr, so it works for IPv4 as well
               # with a static [Neighbor] entry it's not even necessary to set the address on the host iface
               # this is some actual black magic, I should be burned at the stake
-              routeConfig.Gateway = "fe80::";
-              routeConfig.Source = "${ipv4.subnet.microvm}.${toString self.id}";
+              Gateway = "fe80::";
+              Source = "${ipv4.subnet.microvm}.${toString self.id}";
             }
-            {routeConfig.Gateway = "fe80::";}
+            {Gateway = "fe80::";}
           ];
           linkConfig.RequiredForOnline = "routable";
           extraConfig = let

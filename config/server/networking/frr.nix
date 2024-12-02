@@ -72,7 +72,7 @@ in {
     };
 
     services.frr.configFile = config.sops.templates."frr.conf".path;
-    services.frr.ospf.enable = cfg.ospf.enable;
-    services.frr.ospf6.enable = cfg.ospf.enable;
+    services.frr.ospfd.enable = cfg.ospf.enable;
+    services.frr.ospf6d.enable = cfg.ospf.enable;
   };
 }

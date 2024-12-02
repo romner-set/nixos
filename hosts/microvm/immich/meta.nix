@@ -22,7 +22,7 @@ in {
     {
       proto = "virtiofs";
       tag = "immich-secrets";
-      source = "/run/secrets-rendered/vm/immich";
+      source = "/run/secrets/rendered/vm/immich";
       mountPoint = "/secrets/rendered";
     }
     {

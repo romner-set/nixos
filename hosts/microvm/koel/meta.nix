@@ -20,7 +20,7 @@ in {
     {
       proto = "virtiofs";
       tag = "koel-secrets";
-      source = "/run/secrets-rendered/vm/koel";
+      source = "/run/secrets/rendered/vm/koel";
       mountPoint = "/secrets/rendered";
     }
     {

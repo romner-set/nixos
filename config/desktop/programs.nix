@@ -55,7 +55,6 @@ in {
         (
           lib.optionals cfg.dev.enable
           [
-            git
             gh
             #git-credential-manager
             cargo

@@ -30,6 +30,8 @@
     }
   ];
 
+  users = [ "authelia" "authelia-redis" ];
+
   secrets = {
     "vm/authelia/db_pass" = {};
     "vm/authelia/mail_pass" = {};

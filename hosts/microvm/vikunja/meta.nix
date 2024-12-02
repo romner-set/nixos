@@ -28,7 +28,7 @@ in {
     {
       proto = "virtiofs";
       tag = "vikunja-secrets-rendered";
-      source = "/run/secrets-rendered/vm/vikunja";
+      source = "/run/secrets/rendered/vm/vikunja";
       mountPoint = "/secrets/rendered";
     }
   ];

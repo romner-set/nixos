@@ -34,6 +34,7 @@ in {
     programs = {
       fish.enable = true;
       fish.promptInit = "${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source";
+
       nano.enable = false; # ew
       neovim = {
         enable = true;
@@ -41,11 +42,14 @@ in {
         vimAlias = true;
         viAlias = true;
       };
+
       gnupg.agent = {
         enable = true;
         pinentryPackage = pkgs.pinentry-tty;
         enableSSHSupport = true;
       };
+
+      git.enable = true;
     };
     users.users.root.shell = pkgs.fish;
 
@@ -64,7 +68,6 @@ in {
         (btop.override {inherit (cfg.config.btop) cudaSupport rocmSupport;})
         wget
         kitty.terminfo
-        git
         any-nix-shell
 
         # misc tools

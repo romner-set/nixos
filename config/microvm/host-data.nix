@@ -36,7 +36,8 @@ in {
   };
 
   config = let
-    self = cfg.vms."${config.networking.hostName}";
+    inherit (cfg) vms vmsEnabled;
+    self = vms."${config.networking.hostName}";
     hexId = configLib.strings.zeroPad 2 (configLib.decToHex self.id "");
   in
     mkIf cfg.enable {
@@ -45,6 +46,25 @@ in {
       system.stateVersion = lib.mkForce config.system.nixos.release; # VMs are ephemeral, so stateVersion should always be latest
 
       cfg.server.microvm.enable = lib.mkForce false;
+
+      # users
+      users.users = attrsets.concatMapAttrs (vmName: vm:
+        builtins.listToAttrs (lists.imap0 (i: name: {
+            name = "vm-${name}";
+            value = {
+              uid = mkForce (100000 + vm.id * 100 + i);
+              isSystemUser = mkForce true;
+              group = mkForce "vm-${vmName}";
+            };
+          })
+          vm.users))
+      (attrsets.filterAttrs (_: vm: vm.users != []) vmsEnabled);
+      users.groups =
+        attrsets.mapAttrs' (vmName: vm: {
+          name = "vm-${vmName}";
+          value.gid = mkForce (100000 + vm.id * 100);
+        })
+        (attrsets.filterAttrs (_: vm: vm.users != []) vmsEnabled);
 
       microvm = {
         guest.enable = lib.mkForce true;

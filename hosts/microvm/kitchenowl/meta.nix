@@ -23,7 +23,7 @@ in {
     {
       proto = "virtiofs";
       tag = "kitchenowl-secrets";
-      source = "/run/secrets-rendered/vm/kitchenowl";
+      source = "/run/secrets/rendered/vm/kitchenowl";
       mountPoint = "/secrets/rendered";
     }
     {

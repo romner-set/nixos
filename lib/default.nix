@@ -16,7 +16,7 @@ with lib; rec {
         ) (builtins.readDir path)
       )
     );
-  scanPaths = paths: lib.lists.concatMap (dir: map (n: "${dir}/${n}") (builtins.attrNames (builtins.readDir dir))) paths;
+  scanPaths = lib.lists.concatMap (dir: map (n: "${dir}/${n}") (builtins.attrNames (builtins.readDir dir)));
 
   # MISC
   strings = rec {
@@ -25,6 +25,8 @@ with lib; rec {
       then zeroPad (len - 1) "0${n}"
       else n;
   };
+
+  toCredential = builtins.map (secret: "${builtins.replaceStrings ["/"] ["-"] secret}:/secrets/${secret}"); # used for systemd's LoadCredential in microvms
 
   # MATH
   mod = n: d: n - (n / d) * d;

@@ -7,7 +7,10 @@
 with lib; let
   inherit (config.networking) domain;
 in {
-  services.postgresql.dataDir = "/data/db";
+  services.postgresql = {
+    package = pkgs.postgresql_15;
+    dataDir = "/data/db";
+  };
   services.forgejo = {
     enable = true;
     #useWizard = true;

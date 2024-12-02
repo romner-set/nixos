@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  configLib,
   ...
 }:
 with lib; let
@@ -9,22 +10,16 @@ with lib; let
   inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
 in {
-  /*
-    users.users.vikunja = {
-    isSystemUser = true;
-    shell = pkgs.fish;
-    group = "vikunja";
-  };
-  users.groups.vikunja = {};
-  */
-
   systemd.services.vikunja.serviceConfig = {
-    User = "root";
+    User = "vm-vikunja";
+    Group = "vm-vikunja";
     DynamicUser = mkForce false;
     BindPaths = ["/data"];
+    LoadCredential = configLib.toCredential [ "rendered/config.yaml" ]; # sops template defined in meta.nix
   };
 
-  environment.etc."vikunja/config.yaml".source = mkForce "/secrets/rendered/config.yaml"; # sops template defined in meta.nix
+  environment.etc."vikunja/config.yaml".source = mkForce "/run/credentials/vikunja.service/rendered-config.yaml";
+  #environment.etc."vikunja/config.yaml".source = mkForce "/secrets/rendered/config.yaml"; # sops template defined in meta.nix
 
   services.vikunja = {
     enable = true;

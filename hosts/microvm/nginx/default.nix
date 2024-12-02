@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  configLib,
   unstable,
   ...
 }:
@@ -26,7 +27,7 @@ with lib; let
       + (
         if requireMTLS
         then ''
-          ssl_client_certificate /secrets/ca/chain.pem;
+          ssl_client_certificate /run/credentials/nginx.service/ca-chain.pem;
           ssl_verify_depth       2;
           ssl_verify_client      on;
         ''
@@ -208,14 +209,18 @@ with lib; let
 in {
   imports = [./acme.nix];
   config = {
-    users.users.nginx.uid = 60;
-    users.groups.nginx.gid = 60;
     environment.systemPackages = with pkgs; [curlHTTP3];
+
+    systemd.services.nginx.serviceConfig.LoadCredential = configLib.toCredential ["ca/chain.pem"];
+
     services.nginx = {
       #logError = "stderr debug";
       enable = true;
       package = pkgs.nginxQuic;
       enableReload = true;
+
+      user = "vm-nginx";
+      group = "vm-nginx";
 
       additionalModules = [
         #pkgs.nginxModules.njs

@@ -96,6 +96,11 @@ in {
               default = [];
             };
 
+            users = mkOption {
+              type = types.listOf types.str;
+              default = [ name ];
+            };
+
             ## sops-nix
             secrets = mkOption {
               type = types.attrs;
@@ -236,6 +241,15 @@ in {
   };
 
   config = {
+    systemd.services."microvm-tap-interfaces@".serviceConfig.ExecStop = let
+      stopScript = pkgs.writeShellScript "stop-microvm-tap-interfaces" ''
+	cd /var/lib/microvms/$1
+	for id in $(cat current/share/microvm/tap-interfaces); do
+		${pkgs.iproute2}/bin/ip link del $id
+	done
+      '';
+      in mkForce "${stopScript} %i";
+
     # VM metadata - always defined
     cfg.server.microvm.vms = listToAttrs (map (name: {
         inherit name;
@@ -249,23 +263,43 @@ in {
       (lists.optional cfg.autoUpdate "0 3 * * *    root    /run/current-system/sw/bin/git -C /etc/nixos pull && /etc/nixos/utils/microvm-update-all")
     ]);
 
+    # users
+    users.users = mkIf cfg.enable ((attrsets.concatMapAttrs (vmName: vm:
+        builtins.listToAttrs (lists.imap0 (i: name: {
+            name = "vm-${name}";
+            value = rec {
+              uid = 100000 + vm.id * 100 + i;
+              isSystemUser = true;
+              group = "vm-${vmName}";
+            };
+          })
+          vm.users))
+      (attrsets.filterAttrs (_: vm: vm.users != []) vmsEnabled))
+      // {
+        microvm.extraGroups = lib.mkForce ["keys"]; # allow access to sops keys
+      });
+    users.groups = mkIf cfg.enable (attrsets.mapAttrs' (vmName: vm: {
+        name = "vm-${vmName}";
+        value.gid = 100000 + vm.id * 100;
+      })
+      (attrsets.filterAttrs (_: vm: vm.users != []) vmsEnabled));
+
     ## sops-nix
-    sops.secrets = mkIf cfg.enable (attrsets.concatMapAttrs (vmName: vm: (
-        builtins.mapAttrs (_: secret:
-          {
-            sopsFile = "/secrets/${config.networking.hostName}/vm/${vmName}.yaml";
-          }
-          // secret)
-        vm.secrets
-      ))
-      vmsEnabled); #TODO: change /secrets/ path
+    sops.secrets =
+      mkIf
+      cfg.enable (attrsets.concatMapAttrs (vmName: vm: (
+          builtins.mapAttrs (_: secret:
+            {
+              sopsFile = "/secrets/${config.networking.hostName}/vm/${vmName}.yaml";
+            }
+            // secret)
+          vm.secrets
+        ))
+        vmsEnabled); #TODO: change /secrets/ path
     sops.templates = mkIf cfg.enable (attrsets.concatMapAttrs (_: vm: vm.templates) vmsEnabled);
     systemd.services."microvm-virtiofsd@".serviceConfig.TimeoutStopSec = 1;
 
     ## actual microvm defs
-    users.users.microvm = mkIf cfg.enable {
-      extraGroups = lib.mkForce ["keys"]; # allow access to sops keys
-    };
     microvm = mkIf cfg.enable {
       host.enable = lib.mkForce true;
 

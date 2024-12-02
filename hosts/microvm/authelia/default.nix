@@ -3,61 +3,71 @@
   pkgs,
   unstable,
   config,
+  configLib,
   ...
 }:
 with lib; let
   inherit (config.cfg.microvm.host) net vms vmsEnabled;
+  self = vms.${config.networking.hostName};
   inherit (net) ipv4 ipv6;
   inherit (config.networking) domain;
+
+  credsPath = "/run/credentials/authelia-main.service";
 in {
   # use unstable service
-  disabledModules = ["services/security/authelia.nix"];
-  imports = ["${unstable.path}/nixos/modules/services/security/authelia.nix"];
+  disabledModules = ["services/security/authelia.nix" "services/databases/redis.nix"];
+  imports = ["${unstable.path}/nixos/modules/services/databases/redis.nix" "${unstable.path}/nixos/modules/services/security/authelia.nix"];
 
   config = {
     services.redis.servers.authelia = {
       enable = true;
       unixSocket = "/run/redis-authelia/redis.sock";
-      user = "root";
+      user = "vm-authelia-redis";
+      group = "vm-authelia";
       settings = {
         dir = mkForce "/data/redis";
       };
     };
 
     systemd.services.redis-authelia.serviceConfig.BindPaths = ["/data/redis"];
-    systemd.services.authelia-main.serviceConfig.BindPaths = ["/data/auth" "/secrets" "/run/redis-authelia/redis.sock"];
 
-    /*
-      users.users.authelia = {
-      uid = 10000 + self.id;
-      isSystemUser = true;
-      group = "root";
+    systemd.services.authelia-main.serviceConfig = {
+      BindPaths = ["/data/auth" "/run/redis-authelia/redis.sock"];
+      LoadCredential = lists.flatten (
+        (configLib.toCredential [
+          "db_pass"
+          "mail_pass"
+          "jwt_secret"
+          "session_secret"
+          "oidc_hmac"
+          "oidc_jwk"
+        ])
+        ++ (attrsets.mapAttrsToList (
+          vmName: vm:
+            configLib.toCredential (attrsets.mapAttrsToList (n: _: n)
+              (attrsets.filterAttrs (n: v: strings.hasPrefix "oidc/" n) vm.secrets))
+        ) (attrsets.filterAttrs (n: v: v.oidc.enable) vmsEnabled))
+      );
     };
-    */
-    /*
-      users.groups.authelia = {
-      gid = 10000 + self.id;
-    };
-    */
 
     services.authelia.instances.main = {
       enable = true;
-      user = "root";
-      group = "root";
+      user = "vm-authelia";
+      group = "vm-authelia";
 
       package = unstable.authelia;
 
       secrets = {
-        storageEncryptionKeyFile = "/secrets/db_pass";
-        jwtSecretFile = "/secrets/jwt_secret";
-        sessionSecretFile = "/secrets/session_secret";
+        storageEncryptionKeyFile = "${credsPath}/db_pass";
+        jwtSecretFile = "${credsPath}/jwt_secret";
+        sessionSecretFile = "${credsPath}/session_secret";
 
-        oidcHmacSecretFile = "/secrets/oidc_hmac";
-        oidcIssuerPrivateKeyFile = "/secrets/oidc_jwk";
+        oidcHmacSecretFile = "${credsPath}/oidc_hmac";
+        oidcIssuerPrivateKeyFile = "${credsPath}/oidc_jwk";
       };
 
       environmentVariables = {
-        "AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE" = "/secrets/mail_pass";
+        "AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE" = "${credsPath}/mail_pass";
         "X_AUTHELIA_CONFIG_FILTERS" = "template"; # used for OIDC clients
       };
       settings = {
@@ -99,8 +109,8 @@ in {
           #TODO: authorization_policies = {};
           clients = attrsets.mapAttrsToList (vmName: vmData: {
             client_name = vmName;
-            client_id = "{{ secret \"/secrets/oidc/${vmName}/id\" }}";
-            client_secret = "{{ secret \"/secrets/oidc/${vmName}/secret_hash\" }}";
+            client_id = "{{ secret \"${credsPath}/oidc-${vmName}-id\" }}";
+            client_secret = "{{ secret \"${credsPath}/oidc-${vmName}-secret_hash\" }}";
             public = false;
             authorization_policy = "two_factor";
             redirect_uris = vmData.oidc.redirectUris;

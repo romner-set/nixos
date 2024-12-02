@@ -6,8 +6,6 @@
 }: {
   services.davis = {
     enable = true;
-    #user = "root";
-    #group = "root";
     dataDir = "/data";
     adminLogin = "admin";
     adminPasswordFile = "/secrets/passwd";

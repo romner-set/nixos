@@ -22,7 +22,6 @@ in {
 
   config = {
     ### ZFS ###
-    boot.kernelPackages = mkIf cfg.zfs.enable config.boot.zfs.package.latestCompatibleLinuxPackages;
     boot.loader.grub.zfsSupport = mkForce cfg.zfs.enable;
     boot.zfs.package = mkIf cfg.zfs.enable pkgs.zfs_unstable;
 

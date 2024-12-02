@@ -15,7 +15,7 @@
     {
       proto = "virtiofs";
       tag = "searxng-secrets";
-      source = "/run/secrets-rendered/vm/searxng";
+      source = "/run/secrets/rendered/vm/searxng";
       mountPoint = "/secrets/rendered";
     }
   ];

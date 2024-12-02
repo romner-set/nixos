@@ -20,33 +20,33 @@ with lib; {
     enable = true;
     openFirewall = true;
 
-    shares.data = {
+    settings.data = {
       path = "/shared/data";
       writable = "true";
     };
-    shares.misc = {
+    settings.misc = {
       path = "/shared/misc";
       writable = "true";
     };
-    shares.srv = {
+    settings.srv = {
       path = "/shared/srv";
       writable = "true";
     };
 
-    extraConfig = ''
-      server smb encrypt = required
+    settings.global = {
+      "server smb encrypt" = "required";
       # ^^ Note: Breaks `smbclient -L <ip/host> -U%` by default, might require the client to set `client min protocol`?
-      server min protocol = SMB3_00
+      "server min protocol" = "SMB3_00";
 
-      acl allow execute always = True
+      "acl allow execute always" = "True";
 
-      mangled names = no
-      dos charset = CP850
-      unix charset = UTF-8
-    '';
+      "mangled names" = "no";
+      "dos charset" = "CP850";
+      "unix charset" = "UTF-8";
+    };
 
-    enableWinbindd = false;
-    enableNmbd = false;
+    winbindd.enable = false;
+    nmbd.enable = false;
     nsswins = false;
 
     #invalidUsers = mkForce [];

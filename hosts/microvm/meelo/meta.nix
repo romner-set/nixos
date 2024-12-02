@@ -48,7 +48,7 @@ in {
     {
       proto = "virtiofs";
       tag = "meelo-secrets";
-      source = "/run/secrets-rendered/vm/meelo";
+      source = "/run/secrets/rendered/vm/meelo";
       mountPoint = "/secrets/rendered";
     }
   ];

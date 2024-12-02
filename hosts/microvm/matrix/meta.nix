@@ -15,11 +15,6 @@ in {
     authPolicy = "bypass";
     maxUploadSize = "5000M";
   };
-  vHosts."matrix-slidingsync" = {
-    locations."/".port = 8009;
-    authPolicy = "bypass";
-    maxUploadSize = "5000M";
-  };
   vHosts."matrix-federation" = {
     locations."/".port = 8448;
     authPolicy = "bypass";
@@ -36,7 +31,7 @@ in {
     {
       proto = "virtiofs";
       tag = "matrix-secrets-rendered";
-      source = "/run/secrets-rendered/vm/matrix";
+      source = "/run/secrets/rendered/vm/matrix";
       mountPoint = "/secrets/rendered";
     }
   ];
@@ -46,15 +41,13 @@ in {
 
   secrets = {
     "vm/matrix/synapse/db_pass" = {};
-    "vm/matrix/sliding-sync/db_pass" = {};
-    "vm/matrix/sliding-sync/secret" = {};
     "oidc/matrix/id" = {};
     "oidc/matrix/secret" = {};
     "oidc/matrix/secret_hash" = {};
   };
 
   templates."vm/matrix/synapse.yaml" = {
-    mode = "0440";
+    #mode = "0440";
     file = (pkgs.formats.yaml {}).generate "synapse.yaml" {
       turn_shared_secret = config.sops.placeholder."vm/turn/shared_secret";
       database = {
@@ -82,23 +75,13 @@ in {
   };
 
   templates."vm/matrix/db-init" = {
-    mode = "0440";
+    #mode = "0440";
     content = ''
       CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD '${config.sops.placeholder."vm/matrix/synapse/db_pass"}';
       CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
         TEMPLATE template0
         LC_COLLATE = "C"
         LC_CTYPE = "C";
-      CREATE ROLE "matrix-sliding-sync" WITH LOGIN PASSWORD '${config.sops.placeholder."vm/matrix/sliding-sync/db_pass"}';
-      CREATE DATABASE "matrix-sliding-sync" WITH OWNER "matrix-sliding-sync"
-        TEMPLATE template0
-        LC_COLLATE = "C"
-        LC_CTYPE = "C";
     '';
   };
-
-  templates."vm/matrix/sliding-sync.env".content = ''
-    SYNCV3_SECRET=${config.sops.placeholder."vm/matrix/sliding-sync/secret"}
-    SYNCV3_DB=postgres://matrix-sliding-sync:${config.sops.placeholder."vm/matrix/sliding-sync/db_pass"}@localhost:5432/matrix-sliding-sync?sslmode=disable
-  '';
 }

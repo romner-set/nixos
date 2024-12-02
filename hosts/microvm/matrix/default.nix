@@ -1,7 +1,8 @@
 {
-  config,
   lib,
   pkgs,
+  config,
+  configLib,
   unstable,
   domain,
   ...
@@ -13,19 +14,15 @@ in {
     enable = true;
     dataDir = "/data/db";
 
-    initialScript = "/secrets/rendered/db-init";
+    package = pkgs.postgresql_15;
+
+    initialScript = "/run/certificates/postgresql.service/rendered-db-init";
   };
 
   ## SYNAPSE
 
-  systemd.services.postgresql.serviceConfig = {
-    # allow reading necessary secrets with chmod 440
-    Group = mkForce "root";
-  };
-  systemd.services.matrix-synapse.serviceConfig = {
-    # allow reading necessary secrets with chmod 440
-    Group = mkForce "root";
-  };
+  systemd.services.postgresql.serviceConfig.LoadCredential = configLib.toCredential ["rendered/db-init"];
+  systemd.services.matrix-synapse.serviceConfig.LoadCredential = configLib.toCredential ["rendered/synapse.yaml"];
 
   services.matrix-synapse = {
     enable = true;
@@ -80,18 +77,7 @@ in {
     };
 
     extras = ["oidc"];
-    extraConfigFiles = ["/secrets/rendered/synapse.yaml"]; #defined in meta.ni
-  };
-
-  ## SLIDING SYNC
-
-  services.matrix-sliding-sync = {
-    enable = true;
-    environmentFile = "/secrets/rendered/sliding-sync.env";
-    settings = {
-      SYNCV3_BINDADDR = "[::]:8009";
-      SYNCV3_SERVER = "http://[::1]:8008";
-    };
+    extraConfigFiles = ["/run/credentials/matrix-synapse.service/rendered-synapse.yaml"]; #defined in meta.ni
   };
 
   /*
