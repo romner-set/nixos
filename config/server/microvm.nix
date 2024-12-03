@@ -53,7 +53,8 @@ in {
 
       hypervisor = mkOption {
         type = types.str;
-        default = "cloud-hypervisor";
+        default = "qemu";
+        #default = "cloud-hypervisor";
       };
     };
 

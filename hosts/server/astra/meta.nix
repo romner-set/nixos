@@ -18,7 +18,7 @@ with lib; {
       ];
       defaults.mem = {
         low = 1024;
-        mid = 2048;
+        mid = 2560;
         high = 12288;
       };
       vms = {
