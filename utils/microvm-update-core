@@ -12,3 +12,5 @@ systemctl restart microvm@$hostname:nginx &
 systemctl restart microvm@$hostname:unbound &
 systemctl restart microvm@$hostname:nameserver &
 systemctl restart microvm@$hostname:uptime
+
+systemctl restart systemd-networkd

@@ -5,3 +5,5 @@ for vm in *
 	microvm -u $vm
 end
 systemctl restart microvm@\*
+
+systemctl restart systemd-networkd
