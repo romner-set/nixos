@@ -37,6 +37,7 @@ with lib; {
 
         # media
         koel.enable = true;
+        swingmusic.enable = true;
         meelo.enable = true;
         immich.enable = true;
         jellyfin.enable = true;
