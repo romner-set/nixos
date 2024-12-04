@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -11,7 +12,7 @@ in {
   virtualisation.docker.enable = true;
   environment.systemPackages = with pkgs; [docker-compose];
   systemd.services.koel = {
-    script = ''
+    script =  ''
       docker-compose --env-file /secrets/rendered/env -f ${compose} up
     '';
     wantedBy = ["multi-user.target"];
