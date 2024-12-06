@@ -9,7 +9,6 @@ in {
 
   webPorts = [80];
   vcpu = cfg.defaults.vcpu.max;
-  mem = cfg.defaults.mem.high;
 
   vHosts.meelo = {
     locations."/" = {

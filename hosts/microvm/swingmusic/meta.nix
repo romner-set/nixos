@@ -5,7 +5,6 @@ in {
 
   webPorts = [1970];
   vcpu = cfg.defaults.vcpu.max;
-  mem = cfg.defaults.mem.high;
 
   vHosts.swing = {
     locations."/" = {
