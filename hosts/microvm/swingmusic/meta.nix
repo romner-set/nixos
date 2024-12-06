@@ -12,7 +12,6 @@ in {
       port = 1970;
     };
     #authPolicy = "bypass";
-    expectedMaxResponseTime = 500; # avg 256-267
   };
 
   shares = [
