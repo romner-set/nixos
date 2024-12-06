@@ -42,6 +42,7 @@ with lib; {
         immich.enable = true;
         jellyfin.enable = true;
         qbittorrent.enable = true;
+	invidious.enable = true;
 
         # other storage
         srv.enable = true;
