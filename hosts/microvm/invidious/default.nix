@@ -32,7 +32,7 @@ in {
     extraSettingsFile = "/run/credentials/invidious.service/rendered-session.json";
 
     settings = {
-      registration_enabled = true;
+      registration_enabled = false;
       captcha_enabled = false;
 
       channel_threads = 16;
