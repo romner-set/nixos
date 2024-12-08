@@ -32,9 +32,10 @@ in {
     systemd.services.redis-authelia.serviceConfig.BindPaths = ["/data/redis"];
 
     systemd.services.authelia-main.serviceConfig = {
-      BindPaths = ["/data/auth" "/run/redis-authelia/redis.sock"];
+      BindPaths = [ "/data/auth" "/run/redis-authelia/redis.sock" ];
       LoadCredential = lists.flatten (
         (configLib.toCredential [
+          "rendered/users.yml"
           "db_pass"
           "mail_pass"
           "jwt_secret"
@@ -89,7 +90,7 @@ in {
         authentication_backend = {
           password_reset = {disable = true;};
           file = {
-            path = "/data/auth/users.yml";
+            path = "${credsPath}/rendered-users.yml";
             watch = false;
             password = {
               algorithm = "argon2";
