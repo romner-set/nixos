@@ -10,7 +10,7 @@ in {
   webPorts = [80];
   vcpu = cfg.defaults.vcpu.max;
 
-  vHosts.iv = {
+  vHosts.invidious = {
     locations."/" = {
       proto = "http";
       port = 80;
