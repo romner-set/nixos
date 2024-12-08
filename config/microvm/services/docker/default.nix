@@ -23,6 +23,11 @@ in {
           compose = mkOption {
 	    type = types.path;
 	  };
+
+	  envFile = mkOption {
+	    type = types.str;
+	    default = "";
+	  };
         };
       }));
     default = {};
@@ -37,7 +42,7 @@ in {
 	inherit name;
 	value = {
           script = ''
-            docker-compose -f ${v.compose} up
+            docker-compose ${if v.envFile != "" then "--env-file ${v.envFile}" else ""} -f ${v.compose} up
           '';
           wantedBy = ["multi-user.target"];
           after = ["docker.service" "docker.socket"];
