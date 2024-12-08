@@ -35,14 +35,17 @@ with lib; {
         matrix.enable = true;
         element.enable = true;
 
+        # music
+        #koel.enable = true;
+        #swingmusic.enable = true;
+        #meelo.enable = true;
+        navidrome.enable = true;
+
         # media
-        koel.enable = true;
-        swingmusic.enable = true;
-        meelo.enable = true;
         immich.enable = true;
         jellyfin.enable = true;
         qbittorrent.enable = true;
-	invidious.enable = true;
+        invidious.enable = true;
 
         # other storage
         srv.enable = true;
