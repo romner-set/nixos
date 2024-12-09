@@ -40,6 +40,7 @@ with lib; {
         #swingmusic.enable = true;
         #meelo.enable = true;
         navidrome.enable = true;
+        slskd.enable = true;
 
         # media
         immich.enable = true;
