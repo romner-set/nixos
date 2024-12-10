@@ -56,7 +56,7 @@ in {
       global = {
         upload = {
           slots = 200;
-          speed_limit = 40000; # KiB/s
+          speed_limit = 50000; # KiB/s
         };
         limits.weekly.failures = 2000;
       };
