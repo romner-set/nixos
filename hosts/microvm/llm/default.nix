@@ -5,8 +5,8 @@
   unstable,
   ...
 }: with lib; {
-  cfg.microvm.services.watchtower.enable = true;
-  cfg.microvm.services.docker.open-webui = {
+  svc.watchtower.enable = true;
+  svc.docker.open-webui = {
     enable = true;
     compose = ./docker-compose.yml;
   };

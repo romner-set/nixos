@@ -4,9 +4,6 @@ with lib; {
     users.main.enable = mkDefault true;
     firmware.enable = mkDefault true;
     # per-host: boot.loader.<name>.enable = mkDefault true;
-    services = {
-      endlessh.enable = mkDefault true;
-    };
   };
 
   cfg.desktop = {
@@ -18,4 +15,6 @@ with lib; {
     # per-host: environment.<name>.enable = true;
     # per-host: graphics.<name>.enable = true;
   };
+
+  svc.endlessh.enable = mkDefault true;
 }

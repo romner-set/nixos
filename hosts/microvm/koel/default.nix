@@ -4,8 +4,8 @@
   pkgs,
   ...
 }: with lib; {
-  cfg.microvm.services.watchtower.enable = true;
-  cfg.microvm.services.docker.${config.networking.hostName} = {
+  svc.watchtower.enable = true;
+  svc.docker.${config.networking.hostName} = {
     enable = true;
     compose = ./docker-compose.yml;
     envFile = "/secrets/rendered/env"

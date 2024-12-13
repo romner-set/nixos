@@ -6,11 +6,11 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.microvm.services.docker;
+  cfg = config.svc.docker;
 in {
   imports = configLib.scanPath ./.;
 
-  options.cfg.microvm.services.docker = mkOption {
+  options.svc.docker = mkOption {
     type = with types;
       attrsOf (submodule ({name, ...}: {
         options = {

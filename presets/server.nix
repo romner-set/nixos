@@ -11,13 +11,6 @@ with lib; {
 
     hardening.allowForwarding = mkDefault true;
 
-    services = {
-      ssh.enable = mkDefault true;
-      ssh.openFirewall = mkDefault false;
-      ssh.ports = mkDefault [47];
-      endlessh.enable = mkDefault true;
-    };
-
     net = {
       dns.enable = mkDefault true;
       dns.nameservers = let
@@ -50,10 +43,15 @@ with lib; {
 
     sops.enable = mkDefault true;
     programs.enable = mkDefault true;
+  };
 
-    services = {
-      cron.enable = mkDefault true;
-      mail.enable = mkDefault true;
-    };
+  svc = {
+    ssh.enable = mkDefault true;
+    ssh.openFirewall = mkDefault false;
+    ssh.ports = mkDefault [47];
+    endlessh.enable = mkDefault true;
+
+    cron.enable = mkDefault true;
+    mail.enable = mkDefault true;
   };
 }

@@ -4,21 +4,26 @@
   networking.domain = "cynosure.red";
   system.stateVersion = "23.11";
 
-  cfg.core.firmware.enable = true;
-  cfg.core.boot.loader.grub.enable = true;
-  cfg.core.net.systemdDefault = true;
+  cfg.core = {
+    firmware.enable = true;
+    boot.loader.grub.enable = true;
+    net.systemdDefault = true;
 
-  cfg.desktop.graphics.nvidia.enable = true;
-  cfg.desktop.graphics.amdgpu.enable = true;
+    graphics.nvidia.enable = true;
+    graphics.amdgpu.enable = true;
+  };
 
-  cfg.desktop.environment.kde = {
+  cfg.desktop = {
+    environment.kde = {
     enable = true;
     session = "plasmax11";
     autoLogin.user = "main";
   };
 
-  cfg.server.libvirt.enable = true;
-  cfg.server.libvirt.vfio = false;
+  cfg.server = {
+    libvirt.enable = true;
+    libvirt.vfio = false;
+  };
   users.users.main.extraGroups = ["libvirtd"];
 
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod"];

@@ -3,8 +3,9 @@
   networking.hostId = "b94c87af";
   networking.domain = "cynosure.red";
 
-  cfg.core.services.ssh.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoGjgLjnlWmpGB+FSbSromjhnL1PRpnzBboXxDXtlw9"];
-  cfg.core.services.ssh.openFirewall = true;
+  svc.ssh.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoGjgLjnlWmpGB+FSbSromjhnL1PRpnzBboXxDXtlw9"];
+  svc.ssh.openFirewall = true;
+
   cfg.core.firmware.microcode = "intel";
 
   cfg.server.disks.zfs.enable = true;

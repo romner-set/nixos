@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.vps.services.unbound;
+  cfg = config.svc.unbound;
 in {
-  options.cfg.vps.services.unbound.enable = mkEnableOption "";
+  options.svc.unbound.enable = mkEnableOption "";
 
   config = mkIf cfg.enable {
     services.unbound = {

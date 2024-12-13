@@ -8,10 +8,10 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.server.services.tor;
+  cfg = config.svc.tor;
   hostName = config.networking.hostName;
 in {
-  options.cfg.server.services.tor = {
+  options.svc.tor = {
     enable = mkEnableOption "";
   };
 

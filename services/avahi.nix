@@ -7,20 +7,20 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.server.services.avahi.reflector;
+  cfg = config.svc.avahi;
 in {
-  options.cfg.server.services.avahi.reflector = {
+  options.svc.avahi.reflector = {
     enable = mkEnableOption "";
     interfaces = mkOption {
       type = types.listOf types.str;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.reflector.enable {
     services.avahi = {
       enable = true;
 
-      allowInterfaces = cfg.interfaces;
+      allowInterfaces = cfg.reflector.interfaces;
 
       wideArea = false;
       openFirewall = false;

@@ -5,14 +5,14 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.microvm.services.watchtower;
+  cfg = config.svc.watchtower;
 in {
-  options.cfg.microvm.services.watchtower = {
+  options.svc.watchtower = {
     enable = mkEnableOption "";
   };
 
   config = mkIf cfg.enable {
-    cfg.microvm.services.docker.watchtower = {
+    svc.docker.watchtower = {
       enable = true;
       compose = ./docker-compose.yml;
     };

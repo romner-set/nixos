@@ -1,5 +1,5 @@
 {
-  cfg.vps.services.knot = {
+  svc.knot = {
     quicKey = "qPn4VWWN4MlloImery9UMfDVE5QElGEXM0M60kBcpig=";
     primaryAddr = "93.185.10.73";
   };

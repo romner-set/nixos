@@ -36,16 +36,16 @@ in {
       ssh = {
         enable = true;
         hostKeys = ["/run/secrets/etc/ssh/ssh_host_ed25519_key.initrd"];
-        authorizedKeys = config.cfg.core.services.ssh.keys;
+        authorizedKeys = config.svc.ssh.keys;
         port = cfg.sshPort;
       };
     };
 
     # tor
-    boot.initrd.secrets = mkIf config.cfg.server.services.tor.enable {
+    boot.initrd.secrets = mkIf config.svc.tor.enable {
       "/etc/tor/onion/bootup" = /run/secrets/tor;
     };
-    boot.initrd.extraUtilsCommands = mkIf config.cfg.server.services.tor.enable ''
+    boot.initrd.extraUtilsCommands = mkIf config.svc.tor.enable ''
       copy_bin_and_libs ${pkgs.tor}/bin/tor
     '';
     boot.initrd.network.postCommands = strings.concatStrings [
@@ -59,7 +59,7 @@ in {
       )
 
       (
-        if config.cfg.server.services.tor.enable
+        if config.svc.tor.enable
         then
           (let
             torRc = pkgs.writeText "tor.rc" ''

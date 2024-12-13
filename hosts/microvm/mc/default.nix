@@ -7,8 +7,8 @@
   services.zerotierone.enable = true;
   services.zerotierone.joinNetworks = [];
 
-  #cfg.microvm.services.watchtower.enable = true;
-  cfg.microvm.services.docker = {
+  #svc.watchtower.enable = true;
+  svc.docker = {
     mc = {
       enable = false;
       compose = ./docker-compose.yml;

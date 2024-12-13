@@ -89,6 +89,8 @@
 
           # options.cfg.* declarations
           ./config
+	  # options.svc.* declarations
+	  ./services
         ];
 
         extraArgs = {

@@ -6,9 +6,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.desktop.services.sunshine;
+  cfg = config.svc.sunshine;
 in {
-  options.cfg.desktop.services.sunshine = {
+  options.svc.sunshine = {
     enable = mkEnableOption "";
     openFirewall = mkEnableOption "";
     monitor = mkOption {

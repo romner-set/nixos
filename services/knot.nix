@@ -6,9 +6,9 @@
 }:
 with lib; let
   inherit (config.networking) domain;
-  cfg = config.cfg.vps.services.knot;
+  cfg = config.svc.knot;
 in {
-  options.cfg.vps.services.knot = {
+  options.svc.knot = {
     enable = mkEnableOption "";
     quicKey = mkOption {type = types.str;};
     primaryAddr = mkOption {type = types.str;};

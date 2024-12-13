@@ -6,9 +6,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.server.services.cron;
+  cfg = config.svc.cron;
 in {
-  options.cfg.server.services.cron = {
+  options.svc.cron = {
     enable = mkEnableOption "";
   };
 

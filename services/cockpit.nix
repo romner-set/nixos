@@ -6,9 +6,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.server.services.cockpit;
+  cfg = config.svc.cockpit;
 in {
-  options.cfg.server.services.cockpit = {
+  options.svc.cockpit = {
     enable = mkEnableOption "";
   };
 

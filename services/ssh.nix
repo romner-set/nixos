@@ -6,9 +6,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.core.services;
+  cfg = config.svc;
 in {
-  options.cfg.core.services.ssh = {
+  options.svc.ssh = {
     enable = mkEnableOption "";
 
     openFirewall = mkEnableOption "";
@@ -23,7 +23,7 @@ in {
     };
     passwordAuth = mkEnableOption "";
   };
-  options.cfg.core.services.endlessh.enable = mkEnableOption "";
+  options.svc.endlessh.enable = mkEnableOption "";
 
   config = {
     # OpenSSH

@@ -12,8 +12,8 @@ with lib; let
   inherit (config.networking) domain;
 in {
   environment.etc."feishin.env".text = "SERVER_URL=https://navidrome.${domain}";
-  cfg.microvm.services.watchtower.enable = true;
-  cfg.microvm.services.docker.feishin = {
+  svc.watchtower.enable = true;
+  svc.docker.feishin = {
     enable = true;
     compose = ./docker-compose.yml;
     envFile = "/etc/feishin.env";

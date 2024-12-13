@@ -8,11 +8,6 @@ with lib; let
   inherit (net) ipv4 ipv6;
 in {
   cfg.core = {
-    services = {
-      ssh.enable = mkDefault true;
-      ssh.keys = mkDefault vmConf.sshKeys;
-      endlessh.enable = mkDefault false;
-    };
     net = {
       dns.enable = mkDefault true;
       dns.nameservers = mkDefault [
@@ -27,5 +22,11 @@ in {
     net = {
       enable = mkDefault true;
     };
+  };
+
+  svc = {
+    ssh.enable = mkDefault true;
+    ssh.keys = mkDefault vmConf.sshKeys;
+    endlessh.enable = mkDefault false;
   };
 }

@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.vps.services.rathole;
+  cfg = config.svc.rathole;
 in {
-  options.cfg.vps.services.rathole.enable = mkEnableOption "";
+  options.svc.rathole.enable = mkEnableOption "";
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [80 443 444];

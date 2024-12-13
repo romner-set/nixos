@@ -50,7 +50,7 @@ in {
           shell = pkgs.fish;
           #packages = with pkgs; [];
           hashedPasswordFile = "/home/${name}/.passwd"; #TODO: sops-nix declarative?
-          openssh.authorizedKeys.keys = cfg.sshKeys or config.cfg.core.services.ssh.keys;
+          openssh.authorizedKeys.keys = cfg.sshKeys or config.svc.ssh.keys;
         })
         users;
 

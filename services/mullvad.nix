@@ -7,9 +7,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.server.services.mullvad;
+  cfg = config.svc.mullvad;
 in {
-  options.cfg.server.services.mullvad = {
+  options.svc.mullvad = {
     enable = mkEnableOption "";
   };
 

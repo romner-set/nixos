@@ -7,9 +7,9 @@
   ...
 }:
 with lib; let
-  cfg = config.cfg.server.services.mail;
+  cfg = config.svc.mail;
 in {
-  options.cfg.server.services.mail = {
+  options.svc.mail = {
     enable = mkEnableOption "";
   };
 

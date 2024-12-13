@@ -12,30 +12,35 @@
   networking.domain = "cynosure.red";
   system.stateVersion = "23.11";
 
-  cfg.core.firmware.enable = false;
-  cfg.core.boot.loader.systemd-boot.enable = true;
-  cfg.core.net.systemdDefault = true;
-
-  cfg.desktop.graphics.nvidia.enable = true;
-
-  cfg.desktop.environment.kde = {
-    enable = true;
-    autoLogin.user = "main";
+  cfg.core = {
+    firmware.enable = false;
+    boot.loader.systemd-boot.enable = true;
+    net.systemdDefault = true;
   };
 
-  cfg.desktop.services.sunshine = {
-    enable = true;
-    openFirewall = true;
-    monitor = 1;
+  cfg.desktop = {
+    graphics.nvidia.enable = true;
+    environment.kde = {
+      enable = true;
+      autoLogin.user = "main";
+    };
+
+    boot.plymouth.enable = true;
   };
 
-  cfg.core.services.ssh = {
-    enable = true;
-    openFirewall = true;
-    ports = [443];
-  };
+  svc = {
+    ssh = {
+      enable = true;
+      openFirewall = true;
+      ports = [443];
+    };
 
-  cfg.desktop.boot.plymouth.enable = true;
+    sunshine = {
+      enable = true;
+      openFirewall = true;
+      monitor = 1;
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     androidStudioPackages.canary

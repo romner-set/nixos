@@ -8,14 +8,14 @@ with lib; {
     hardening.allowForwarding = mkDefault true;
     hardening.allowPing = mkDefault true;
 
-    services = {
-      ssh.enable = mkDefault true;
-      endlessh.enable = mkDefault false;
-    };
-
     net = {
       dns.enable = mkDefault true;
     };
+  };
+
+  svc = {
+    ssh.enable = mkDefault true;
+    endlessh.enable = mkDefault false;
   };
 
   networking.firewall.enable = false;
