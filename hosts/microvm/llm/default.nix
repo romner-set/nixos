@@ -1,28 +1,20 @@
 {
+  config,
   lib,
   pkgs,
   unstable,
   ...
-}:
-with lib; let
-  compose = ./docker-compose.yml;
-in {
+}: with lib; {
   cfg.microvm.services.watchtower.enable = true;
+  cfg.microvm.services.docker.open-webui = {
+    enable = true;
+    compose = ./docker-compose.yml;
+  };
 
-  virtualisation.docker.enable = true;
   environment.systemPackages = with pkgs; [
-    docker-compose
     #unstable.oterm
     oterm
   ];
-  systemd.services.open-webui = {
-    script = ''
-      docker-compose -f ${compose} up
-    '';
-    wantedBy = ["multi-user.target"];
-    after = ["docker.service" "docker.socket"];
-    path = [pkgs.docker-compose];
-  };
 
   services.ollama = {
     package = unstable.ollama;

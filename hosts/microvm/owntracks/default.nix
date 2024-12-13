@@ -6,11 +6,8 @@
 }:
 with lib; let
   inherit (config.cfg.microvm.host) net vms;
-  compose = ./docker-compose.yml;
   inherit (config.networking) domain;
 in {
-  cfg.microvm.services.watchtower.enable = true;
-
   environment.etc."owntracks/fe-config.js".text = ''
     window.owntracks = window.owntracks || {};
     window.owntracks.config = {
@@ -21,14 +18,9 @@ in {
     };
   '';
 
-  virtualisation.docker.enable = true;
-  environment.systemPackages = with pkgs; [docker-compose];
-  systemd.services.owntracks = {
-    script = ''
-      docker-compose -f ${compose} up
-    '';
-    wantedBy = ["multi-user.target"];
-    after = ["docker.service" "docker.socket"];
-    path = [pkgs.docker-compose];
+  cfg.microvm.services.watchtower.enable = true;
+  cfg.microvm.services.docker.${config.networking.hostName} = {
+    enable = true;
+    compose = ./docker-compose.yml;
   };
 }
