@@ -31,7 +31,7 @@ in {
     {
       proto = "virtiofs";
       tag = "jellyfin-media";
-      source = "/data/media";
+      source = "/data/media/structured";
       mountPoint = "/media";
     }
   ];

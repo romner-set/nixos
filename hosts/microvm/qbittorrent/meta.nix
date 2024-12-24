@@ -1,7 +1,7 @@
 {...}: {
   id = 17;
 
-  webPorts = [8080];
+  tcpPorts = [8080];
 
   vHosts.qb = {
     locations."/" = {
@@ -26,14 +26,8 @@
     {
       proto = "virtiofs";
       tag = "qbittorrent-media";
-      source = "/data/media";
+      source = "/data/media/qbittorrent";
       mountPoint = "/data/media";
-    }
-    {
-      proto = "virtiofs";
-      tag = "qbittorrent-misc";
-      source = "/misc/qbittorrent";
-      mountPoint = "/misc";
     }
     {
       proto = "virtiofs";

@@ -44,6 +44,7 @@ with lib; {
 
         # media
         immich.enable = true;
+        starr.enable = true;
         jellyfin.enable = true;
         qbittorrent.enable = true;
         invidious.enable = true;

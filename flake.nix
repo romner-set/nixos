@@ -94,8 +94,8 @@
 
           # options.cfg.* declarations
           ./config
-	  # options.svc.* declarations
-	  ./services
+          # options.svc.* declarations
+          ./services
         ];
 
         extraArgs = {
@@ -179,7 +179,8 @@
                 channels.nixpkgs.ref = latest;
                 channels.unstable.ref = latest-unstable;
 
-                channels.nixpkgs.config.allowUnfreePredicate = pkg:
+                /*
+                  channels.nixpkgs.config.allowUnfreePredicate = pkg:
                   builtins.elem (channels.nixpkgs.ref.lib.getName pkg) [
                     "zerotierone"
                   ];
@@ -187,6 +188,15 @@
                   builtins.elem (channels.unstable.ref.lib.getName pkg) [
                     "factorio-headless"
                   ];
+                */
+
+                # microvm/starr - sonarr
+                channels.nixpkgs.config.permittedInsecurePackages = [
+                  "aspnetcore-runtime-6.0.36"
+                  "aspnetcore-runtime-wrapped-6.0.36"
+                  "dotnet-sdk-6.0.428"
+                  "dotnet-sdk-wrapped-6.0.428"
+                ];
 
                 modules = [./hosts/server/${hypervisorName}/meta.nix];
                 extraArgs.misc = {inherit hypervisorName selfName;};

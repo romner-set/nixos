@@ -9,4 +9,5 @@
     user = "vm-jellyfin";
     group = "vm-jellyfin";
   };
+  systemd.services.jellyfin.serviceConfig.BindPaths = ["/media"];
 }
