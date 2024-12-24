@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: with lib; {
+}:
+with lib; {
   services.zerotierone.enable = true;
   services.zerotierone.joinNetworks = [];
 

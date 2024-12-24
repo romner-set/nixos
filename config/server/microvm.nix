@@ -99,7 +99,7 @@ in {
 
             users = mkOption {
               type = types.listOf types.str;
-              default = [ name ];
+              default = [name];
             };
 
             ## sops-nix
@@ -244,12 +244,13 @@ in {
   config = {
     systemd.services."microvm-tap-interfaces@".serviceConfig.ExecStop = let
       stopScript = pkgs.writeShellScript "stop-microvm-tap-interfaces" ''
-	cd /var/lib/microvms/$1
-	for id in $(cat current/share/microvm/tap-interfaces); do
-		${pkgs.iproute2}/bin/ip link del $id
-	done
+        cd /var/lib/microvms/$1
+        for id in $(cat current/share/microvm/tap-interfaces); do
+        	${pkgs.iproute2}/bin/ip link del $id
+        done
       '';
-      in mkForce "${stopScript} %i";
+    in
+      mkForce "${stopScript} %i";
 
     # VM metadata - always defined
     cfg.server.microvm.vms = listToAttrs (map (name: {

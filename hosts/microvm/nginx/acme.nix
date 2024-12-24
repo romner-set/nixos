@@ -12,7 +12,7 @@ in {
   security.acme = {
     preliminarySelfsigned = false;
     acceptTerms = true;
-    
+
     defaults = {
       dnsResolver = "${config.cfg.server.net.ipv6.subnet.microvm}::${toString cfg.vms.nameserver.id}";
       #dnsResolver = "${cfg.vms.nameserver.name}.vm.${domain}";
@@ -60,7 +60,7 @@ in {
     };
   };
 
-    # don't block the boot sequence if a cert needs renewal - prevents microvm start timeout
+  # don't block the boot sequence if a cert needs renewal - prevents microvm start timeout
   systemd.services."acme-${domain}".serviceConfig.Type = lib.mkForce "simple";
   systemd.services."acme-internal-${domain}".serviceConfig.Type = lib.mkForce "simple";
 

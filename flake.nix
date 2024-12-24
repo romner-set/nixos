@@ -90,7 +90,7 @@
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
-	  nur.modules.nixos.default
+          nur.modules.nixos.default
 
           # options.cfg.* declarations
           ./config

@@ -52,7 +52,7 @@ in {
   systemd.services.jellyseer = {
     environment.CONFIG_DIRECTORY = "/data/jellyseerr";
     serviceConfig = {
-      BindPaths = [ "/data/jellyseerr" ];
+      BindPaths = ["/data/jellyseerr"];
       User = user;
       Group = group;
       DynamicUser = lib.mkForce false;

@@ -13,17 +13,17 @@ with lib; let
 in {
   # ipv6 to ipv4 forwarding, since slskd can't do both natively
   systemd.services.slskd-6to4-web = {
-    script =  "socat TCP6-LISTEN:5030,fork,ipv6only=1 TCP4:127.0.0.1:5030";
+    script = "socat TCP6-LISTEN:5030,fork,ipv6only=1 TCP4:127.0.0.1:5030";
     wantedBy = ["multi-user.target"];
     path = [pkgs.socat];
   };
   systemd.services.slskd-6to4-slsk = {
-    script =  "socat TCP6-LISTEN:50300,fork,ipv6only=1 TCP4:127.0.0.1:50300";
+    script = "socat TCP6-LISTEN:50300,fork,ipv6only=1 TCP4:127.0.0.1:50300";
     wantedBy = ["multi-user.target"];
     path = [pkgs.socat];
   };
 
-  systemd.services.slskd.serviceConfig.ReadOnlyPaths = mkForce [ "/music" ];
+  systemd.services.slskd.serviceConfig.ReadOnlyPaths = mkForce ["/music"];
   services.slskd = {
     enable = true;
     openFirewall = true;

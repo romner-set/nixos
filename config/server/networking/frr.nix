@@ -34,39 +34,39 @@ in {
 
     sops.templates."frr.conf" = {
       content = ''
-	! FRR Configuration
-	!
-	hostname ${config.networking.hostName}
-        log syslog
-        service password-encryption
-        service integrated-vtysh-config
+        ! FRR Configuration
         !
-	! OSPF
-	!
-        key chain lan
-        	key 0
-        	key-string ${config.sops.placeholder.ospf-key}
-        	cryptographic-algorithm hmac-sha-256
+        hostname ${config.networking.hostName}
+               log syslog
+               service password-encryption
+               service integrated-vtysh-config
+               !
+        ! OSPF
         !
-        interface ${net.interface}
-        	ip ospf area 0.0.0.0
-        	ip ospf authentication key-chain lan
-        	ipv6 ospf6 area 0.0.0.0
-        	ipv6 ospf6 authentication keychain lan
-        !
-        router ospf
-        	ospf router-id ${ipv4.address}
-        	redistribute static
-        	redistribute kernel
-        	redistribute connected
-        !
-        router ospf6
-        	ospf6 router-id ${ipv4.address}
-        	redistribute static
-        	redistribute kernel
-        	redistribute connected
-        !
-        end
+               key chain lan
+               	key 0
+               	key-string ${config.sops.placeholder.ospf-key}
+               	cryptographic-algorithm hmac-sha-256
+               !
+               interface ${net.interface}
+               	ip ospf area 0.0.0.0
+               	ip ospf authentication key-chain lan
+               	ipv6 ospf6 area 0.0.0.0
+               	ipv6 ospf6 authentication keychain lan
+               !
+               router ospf
+               	ospf router-id ${ipv4.address}
+               	redistribute static
+               	redistribute kernel
+               	redistribute connected
+               !
+               router ospf6
+               	ospf6 router-id ${ipv4.address}
+               	redistribute static
+               	redistribute kernel
+               	redistribute connected
+               !
+               end
       '';
       owner = "frr";
     };

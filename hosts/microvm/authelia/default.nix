@@ -32,7 +32,7 @@ in {
     systemd.services.redis-authelia.serviceConfig.BindPaths = ["/data/redis"];
 
     systemd.services.authelia-main.serviceConfig = {
-      BindPaths = [ "/data/auth" "/run/redis-authelia/redis.sock" ];
+      BindPaths = ["/data/auth" "/run/redis-authelia/redis.sock"];
       LoadCredential = lists.flatten (
         (configLib.toCredential [
           "rendered/users.yml"

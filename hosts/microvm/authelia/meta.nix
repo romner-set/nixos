@@ -1,4 +1,8 @@
-{config, pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   id = 2;
 
   webPorts = [9091];
@@ -36,7 +40,7 @@
     }
   ];
 
-  users = [ "authelia" "authelia-redis" ];
+  users = ["authelia" "authelia-redis"];
 
   secrets = {
     "vm/authelia/admin_pass" = {};
@@ -56,7 +60,7 @@
       displayname = "admin";
       password = config.sops.placeholder."vm/authelia/admin_pass";
       email = "admin@${config.networking.domain}";
-      groups = [ "admin" ];
+      groups = ["admin"];
     };
   };
 }

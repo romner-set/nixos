@@ -21,13 +21,13 @@ in {
           };
 
           compose = mkOption {
-	    type = types.path;
-	  };
+            type = types.path;
+          };
 
-	  envFile = mkOption {
-	    type = types.str;
-	    default = "";
-	  };
+          envFile = mkOption {
+            type = types.str;
+            default = "";
+          };
         };
       }));
     default = {};
@@ -38,16 +38,22 @@ in {
       virtualisation.docker.enable = true;
       environment.systemPackages = with pkgs; [docker-compose];
 
-      systemd.services = attrsets.mapAttrs' (name: v: {
-	inherit name;
-	value = {
-          script = ''
-            docker-compose ${if v.envFile != "" then "--env-file ${v.envFile}" else ""} -f ${v.compose} up
-          '';
-          wantedBy = ["multi-user.target"];
-          after = ["docker.service" "docker.socket"];
-          path = [pkgs.docker-compose];
-	};
-      }) cfg;
+      systemd.services =
+        attrsets.mapAttrs' (name: v: {
+          inherit name;
+          value = {
+            script = ''
+              docker-compose ${
+                if v.envFile != ""
+                then "--env-file ${v.envFile}"
+                else ""
+              } -f ${v.compose} up
+            '';
+            wantedBy = ["multi-user.target"];
+            after = ["docker.service" "docker.socket"];
+            path = [pkgs.docker-compose];
+          };
+        })
+        cfg;
     };
 }

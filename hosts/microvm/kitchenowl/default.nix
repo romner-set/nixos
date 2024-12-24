@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: with lib; {
+}:
+with lib; {
   svc.watchtower.enable = true;
   svc.docker.${config.networking.hostName} = {
     enable = true;

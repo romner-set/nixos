@@ -15,7 +15,7 @@ in {
     Group = "vm-vikunja";
     DynamicUser = mkForce false;
     BindPaths = ["/data"];
-    LoadCredential = configLib.toCredential [ "rendered/config.yaml" ]; # sops template defined in meta.nix
+    LoadCredential = configLib.toCredential ["rendered/config.yaml"]; # sops template defined in meta.nix
   };
 
   environment.etc."vikunja/config.yaml".source = mkForce "/run/credentials/vikunja.service/rendered-config.yaml";

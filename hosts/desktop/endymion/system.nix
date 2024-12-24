@@ -13,8 +13,7 @@
     graphics.amdgpu.enable = true;
   };
 
-  cfg.desktop = {
-    environment.kde = {
+  cfg.desktop.environment.kde = {
     enable = true;
     session = "plasmax11";
     autoLogin.user = "main";

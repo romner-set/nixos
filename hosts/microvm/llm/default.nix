@@ -4,7 +4,8 @@
   pkgs,
   unstable,
   ...
-}: with lib; {
+}:
+with lib; {
   svc.watchtower.enable = true;
   svc.docker.open-webui = {
     enable = true;
