@@ -7,8 +7,11 @@
     disko.url = "github:nix-community/disko"; #TODO: use disko for desktops & servers
     disko.inputs.nixpkgs.follows = "latest";
 
-    sops-nix.url = "github:Mic92/sops-nix"; #TODO: auto-update
+    sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "latest";
+
+    nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "latest";
 
     ### Manually updated ###
 
@@ -37,6 +40,7 @@
     server-unstable,
     microvm,
     sops-nix,
+    nur,
   }: let
     inherit (self) outputs;
   in {
@@ -86,6 +90,7 @@
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
+	  nur.modules.nixos.default
 
           # options.cfg.* declarations
           ./config
