@@ -49,7 +49,7 @@ in {
     };
   };
 
-  systemd.services.jellyseer = {
+  systemd.services.jellyseerr = {
     environment.CONFIG_DIRECTORY = "/data/jellyseerr";
     serviceConfig = {
       BindPaths = ["/data/jellyseerr"];
