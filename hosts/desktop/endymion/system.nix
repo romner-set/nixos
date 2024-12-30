@@ -8,15 +8,17 @@
     firmware.enable = true;
     boot.loader.grub.enable = true;
     net.systemdDefault = true;
-
-    graphics.nvidia.enable = true;
-    graphics.amdgpu.enable = true;
   };
 
-  cfg.desktop.environment.kde = {
-    enable = true;
-    session = "plasmax11";
-    autoLogin.user = "main";
+  cfg.desktop = {
+    graphics.nvidia.enable = true;
+    graphics.amdgpu.enable = true;
+
+    environment.kde = {
+      enable = true;
+      session = "plasmax11";
+      autoLogin.user = "main";
+    };
   };
 
   cfg.server = {
