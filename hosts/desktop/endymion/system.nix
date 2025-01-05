@@ -14,6 +14,12 @@
     graphics.nvidia.enable = true;
     graphics.amdgpu.enable = true;
 
+    graphics.nvidia.prime = {
+      enable = true;
+      amdgpuBusId = "PCI:6:0:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+
     environment.kde = {
       enable = true;
       session = "plasmax11";

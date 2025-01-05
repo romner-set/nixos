@@ -2,8 +2,29 @@
   config,
   lib,
   ...
-}: {
-  config = lib.mkIf config.cfg.desktop.graphics.nvidia.enable {
+}:
+with lib; let
+  cfg = config.cfg.desktop.graphics.nvidia;
+in {
+  options.cfg.desktop.graphics.nvidia = {
+    prime = {
+      enable = mkEnableOption "";
+      amdgpuBusId = mkOption {
+        type = types.str;
+        default = "";
+      };
+      intelBusId = mkOption {
+        type = types.str;
+        default = "";
+      };
+      nvidiaBusId = mkOption {
+        type = types.str;
+        default = "";
+      };
+    };
+  };
+
+  config = mkIf cfg.enable {
     boot.initrd.kernelModules = [
       "nvidia"
       "nvidia_modeset"
@@ -21,6 +42,14 @@
 
       open = true;
       #package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+      prime = mkIf cfg.prime.enable {
+        inherit (cfg.prime) amdgpuBusId intelBusId nvidiaBusId;
+        offload = {
+          enable = true;
+          enableOffloadCmd = true;
+        };
+      };
     };
 
     services.xserver.videoDrivers = ["nvidia"];
