@@ -36,6 +36,7 @@ in {
       remotePlay.openFirewall = cfg.steam.openFirewall;
       dedicatedServer.openFirewall = cfg.steam.openFirewall;
       gamescopeSession.enable = true;
+      extraPackages = with pkgs; [xorg.libSM.out];
     };
     programs.virt-manager.enable = true;
     services.zerotierone.enable = cfg.zerotier.enable;
