@@ -67,6 +67,7 @@ in {
         neofetch
         (btop.override {inherit (cfg.config.btop) cudaSupport rocmSupport;})
         wget
+        anarchism
         kitty.terminfo
         any-nix-shell
 
