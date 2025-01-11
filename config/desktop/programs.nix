@@ -100,7 +100,6 @@ in {
           tenacity
           prismlauncher
           element-desktop
-          element-desktop-wayland
           jellyfin-media-player
         ]
       );
