@@ -41,7 +41,7 @@ in {
       nvidiaSettings = true;
 
       open = true;
-      #package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.latest;
 
       prime = mkIf cfg.prime.enable {
         inherit (cfg.prime) amdgpuBusId intelBusId nvidiaBusId;

@@ -147,6 +147,7 @@
 
               channels.nixpkgs.ref = desktop;
               channels.nixpkgs.config.allowUnfree = true;
+              channels.nixpkgs.config.cudaSupport = true;
             };
           }) (builtins.attrNames (builtins.readDir ./hosts/desktop)))
           ++
