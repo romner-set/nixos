@@ -49,6 +49,7 @@ in {
       script = ''
         for disk in ${strings.concatStrings (strings.intersperse " " cfg.standbyOnBoot.disks)}; do
           ${pkgs.hdparm}/bin/hdparm -S 6 $disk
+          ${pkgs.hdparm}/bin/hdparm -y $disk
         done
       '';
       serviceConfig = {

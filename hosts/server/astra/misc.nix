@@ -19,7 +19,7 @@ with lib; {
     power.ignoreKeys = true;
 
     disks.standbyOnBoot = {
-      enable = false;
+      enable = true;
       disks = [
         "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG675TN"
         "/dev/disk/by-id/ata-WDC_WD102KRYZ-01A5AB0_VCG8623N"
