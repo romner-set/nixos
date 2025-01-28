@@ -180,11 +180,11 @@
                 channels.nixpkgs.ref = latest;
                 channels.unstable.ref = latest-unstable;
 
-                /*
-                  channels.nixpkgs.config.allowUnfreePredicate = pkg:
+                channels.nixpkgs.config.allowUnfreePredicate = pkg:
                   builtins.elem (channels.nixpkgs.ref.lib.getName pkg) [
                     "zerotierone"
                   ];
+                /*
                 channels.unstable.config.allowUnfreePredicate = pkg:
                   builtins.elem (channels.unstable.ref.lib.getName pkg) [
                     "factorio-headless"

@@ -31,5 +31,19 @@ in {
       source = "/vm/mc/zerotier-one";
       mountPoint = "/var/lib/zerotier-one";
     }
+    {
+      proto = "virtiofs";
+      tag = "mc-secrets-rendered";
+      source = "/run/secrets/rendered/vm/mc";
+      mountPoint = "/secrets/rendered";
+    }
   ];
+
+  secrets = {
+    "vm/mc/api_key" = {};
+  };
+
+  templates."vm/mc/env".content = ''
+    CF_API_KEY=${config.sops.placeholder."vm/mc/api_key"}
+  '';
 }
