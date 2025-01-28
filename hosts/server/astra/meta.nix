@@ -48,6 +48,7 @@ with lib; {
         jellyfin.enable = true;
         qbittorrent.enable = true;
         invidious.enable = true;
+	calibre.enable = true;
 
         # other storage
         srv.enable = true;
