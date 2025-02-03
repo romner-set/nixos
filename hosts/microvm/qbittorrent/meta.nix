@@ -31,6 +31,12 @@
     }
     {
       proto = "virtiofs";
+      tag = "qbittorrent-misc";
+      source = "/data/misc";
+      mountPoint = "/data/misc";
+    }
+    {
+      proto = "virtiofs";
       tag = "qbittorrent-docker";
       source = "/vm/qbittorrent/docker";
       mountPoint = "/var/lib/docker";
