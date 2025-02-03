@@ -13,7 +13,7 @@ with lib; {
   cfg.server = {
     libvirt.hugepages = {
       enable = true;
-      count = 32;
+      count = 48;
     };
 
     power.ignoreKeys = true;

@@ -69,7 +69,15 @@ in {
       microvm = {
         guest.enable = lib.mkForce true;
 
-        inherit (self) vcpu mem hypervisor;
+        inherit (self) mem vcpu hypervisor;
+
+	#mem = self.fixedMem;
+	#balloonMem = self.mem;
+	#hugepageMem = true;
+
+	virtiofsd.extraArgs = ["--cache=metadata" "--allow-mmap"];
+	#virtiofsd.inodeFileHandles = "prefer";
+	virtiofsd.threadPoolSize = "0";
 
         interfaces = [
           {

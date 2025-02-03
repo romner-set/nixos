@@ -36,6 +36,10 @@ in {
         };
       };
       ## balanced around 16GB+ of RAM
+      fixedMem = mkOption {
+        type = types.int;
+	default = 256;
+      };
       mem = {
         low = mkOption {
           type = types.ints.positive;
@@ -53,8 +57,8 @@ in {
 
       hypervisor = mkOption {
         type = types.str;
-        default = "qemu";
-        #default = "cloud-hypervisor";
+        #default = "qemu";
+        default = "cloud-hypervisor";
       };
     };
 
@@ -81,6 +85,10 @@ in {
             vcpu = mkOption {
               type = types.ints.positive;
               default = cfg.defaults.vcpu.mid;
+            };
+            fixedMem = mkOption {
+              type = types.int;
+              default = cfg.defaults.fixedMem;
             };
             mem = mkOption {
               type = types.ints.positive;

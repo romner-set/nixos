@@ -3,7 +3,7 @@
 in {
   id = 100;
   tcpPorts = [25565 25555];
-  mem = 18432;
+  mem = 12288;
   vcpu = cfg.defaults.vcpu.max;
 
   shares = [

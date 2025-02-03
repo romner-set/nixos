@@ -21,7 +21,7 @@ with lib; {
     ### ZFS CONFIG ###
     zfs.extraPools = ["hdd"];
     zfs.requestEncryptionCredentials = ["nvme" "hdd"];
-    kernelParams = ["zfs.zfs_arc_max=17179869184"]; # 16G
+    kernelParams = ["zfs.zfs_arc_max=8589934592"]; # 8G
   };
 
   ### MOUNTS ###
