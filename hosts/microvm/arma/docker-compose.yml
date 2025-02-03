@@ -1,0 +1,11 @@
+---
+services:
+  arma3:
+    image: ghcr.io/brettmayson/arma3server/arma3server:latest
+    platform: linux/amd64
+    container_name: arma3
+    network_mode: host
+    volumes:
+      - /arma3:/arma3
+    env_file: /secrets/rendered/env
+    restart: unless-stopped

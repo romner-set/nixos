@@ -74,6 +74,7 @@ with lib; {
         # gaming
         #foundryvtt.enable = true;
 	mc.enable = true;
+	arma.enable = true;
       };
     };
 

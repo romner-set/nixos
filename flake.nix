@@ -183,6 +183,7 @@
                 channels.nixpkgs.config.allowUnfreePredicate = pkg:
                   builtins.elem (channels.nixpkgs.ref.lib.getName pkg) [
                     "zerotierone"
+		    "teamspeak-server"
                   ];
                 /*
                 channels.unstable.config.allowUnfreePredicate = pkg:
