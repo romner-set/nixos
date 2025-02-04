@@ -101,6 +101,11 @@ in {
           prismlauncher
           element-desktop
           jellyfin-media-player
+          feishin
+          arma3-unix-launcher
+          winetricks
+          protontricks
+          wineWowPackages.waylandFull
         ]
       );
   };
