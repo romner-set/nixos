@@ -1,8 +1,8 @@
-{modulesPath, ...}: {
+{lib, config, ...}: {
   networking.hostName = "endymion";
   networking.hostId = "3acb8e4a";
   networking.domain = "cynosure.red";
-  system.stateVersion = "23.11";
+  system.stateVersion = config.system.nixos.release; # / is on tmpfs, so this should be fine
 
   cfg.core = {
     firmware.enable = true;
@@ -20,11 +20,19 @@
       nvidiaBusId = "PCI:1:0:0";
     };
 
-    environment.kde = {
+    environment.hyprland = lib.mkIf (config.specialisation != {}) {
       enable = true;
-      session = "plasmax11";
       autoLogin.user = "main";
+
+      services.waybar.tempSensor = "/sys/class/hwmon/hwmon3/temp1_input";
+      services.hyprpaper.monitors."".wallpaper = "aurora.jpg";
     };
+  };
+
+  specialisation.KDE.configuration.cfg.desktop.environment.kde = {
+    enable = true;
+    session = "plasmax11";
+    autoLogin.user = "main";
   };
 
   cfg.server = {

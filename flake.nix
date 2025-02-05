@@ -13,10 +13,12 @@
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "latest";
 
+    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor"; # auto-update becacause I really can't be bothered typing the whole thing
+
     ### Manually updated ###
 
     # Desktops
-    desktop.url = "nixpkgs/nixos-unstable"; #TODO: setup auto-update?
+    desktop.url = "nixpkgs/nixos-unstable";
 
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "desktop";
@@ -41,6 +43,7 @@
     microvm,
     sops-nix,
     nur,
+    rose-pine-hyprcursor,
   }: let
     inherit (self) outputs;
   in {
@@ -148,6 +151,8 @@
               channels.nixpkgs.ref = desktop;
               channels.nixpkgs.config.allowUnfree = true;
               channels.nixpkgs.config.cudaSupport = true;
+
+              extraArgs = {inherit rose-pine-hyprcursor;};
             };
           }) (builtins.attrNames (builtins.readDir ./hosts/desktop)))
           ++

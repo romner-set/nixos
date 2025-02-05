@@ -106,6 +106,9 @@ in {
           winetricks
           protontricks
           wineWowPackages.waylandFull
+          brightnessctl
+          playerctl
+          kdePackages.xwaylandvideobridge
         ]
       );
   };
