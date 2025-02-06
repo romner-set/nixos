@@ -44,7 +44,7 @@ in {
     ARMA_CDLC=csla;gm;vn;ws;spe
     ARMA_CONFIG=main.cfg
     ARMA_LIMITFPS=240
-    ARMA_PARAMS=
+    ARMA_PARAMS=-autoInit
     ARMA_PROFILE=main
     ARMA_WORLD=vt7
     HEADLESS_CLIENTS=0
