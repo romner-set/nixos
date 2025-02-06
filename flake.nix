@@ -4,6 +4,9 @@
     latest.url = "nixpkgs/nixos-24.11"; # used by VPSs & microvms for security's sake, updated every 24h (or less)
     latest-unstable.url = "nixpkgs/nixos-unstable";
 
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    home-manager.inputs.nixpkgs.follows = "latest";
+
     disko.url = "github:nix-community/disko"; #TODO: use disko for desktops & servers
     disko.inputs.nixpkgs.follows = "latest";
 
@@ -20,8 +23,8 @@
     # Desktops
     desktop.url = "nixpkgs/nixos-unstable";
 
-    home-manager.url = "github:nix-community/home-manager/master";
-    home-manager.inputs.nixpkgs.follows = "desktop";
+    home-manager-desktop.url = "github:nix-community/home-manager/master";
+    home-manager-desktop.inputs.nixpkgs.follows = "desktop";
 
     # Servers
     server.url = "nixpkgs/nixos-24.11"; #TODO: setup auto-update?
@@ -35,9 +38,10 @@
     self,
     latest,
     latest-unstable,
+    home-manager,
     disko,
     desktop,
-    home-manager,
+    home-manager-desktop,
     server,
     server-unstable,
     microvm,
@@ -91,7 +95,6 @@
 
           # Misc. modules
           disko.nixosModules.disko
-          home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
           nur.modules.nixos.default
 
@@ -110,6 +113,7 @@
       builtins.mapAttrs (name: host: let
         nixpkgs = host.channels.nixpkgs;
         unstable = host.channels.unstable or nixpkgs;
+	home-manager = host.channels.home-manager or inputs.home-manager;
       in
         nixpkgs.ref.lib.nixosSystem rec {
           system = host.system;
@@ -133,6 +137,7 @@
             shared.modules
             ++ (host.modules or [])
             ++ [
+	      home-manager.nixosModules.home-manager
               {_module.args = shared.extraArgs // (host.extraArgs or {});}
               ./hosts/${host.preset}/${host.hostName or name}
               ./presets/${host.preset}.nix
@@ -151,6 +156,8 @@
               channels.nixpkgs.ref = desktop;
               channels.nixpkgs.config.allowUnfree = true;
               channels.nixpkgs.config.cudaSupport = true;
+
+	      channels.home-manager.ref = home-manager-desktop;
 
               extraArgs = {inherit rose-pine-hyprcursor;};
             };

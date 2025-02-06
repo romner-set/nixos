@@ -13,6 +13,7 @@ with lib; {
     sound.enable = mkDefault true;
     bluetooth.enable = mkDefault true;
     fonts.enable = mkDefault true;
+    home.enable = mkDefault true;
 
     # per-host: environment.<name>.enable = true;
     # per-host: graphics.<name>.enable = true;

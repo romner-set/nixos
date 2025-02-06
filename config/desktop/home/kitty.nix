@@ -3,10 +3,14 @@
   lib,
   config,
   ...
-}: let
-  cfg = config.cfg.desktop.programs;
+}: with lib; let
+  cfg = config.cfg.desktop.home;
 in {
-  config = lib.mkIf cfg.enable {
+  options.cfg.desktop.home.kitty.enable = mkOption {
+    type = types.bool;
+    default = cfg.enable;
+  };
+  config = mkIf cfg.kitty.enable {
     home-manager.users =
       lib.attrsets.mapAttrs (name: _: {
         programs.kitty = {

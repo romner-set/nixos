@@ -8,6 +8,7 @@ with lib; let
   inherit (net) ipv4 ipv6;
 in {
   cfg.core = {
+    home.enable = false; # readonly store, errors on boot
     net = {
       dns.enable = mkDefault true;
       dns.nameservers = mkDefault [

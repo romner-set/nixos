@@ -7,7 +7,7 @@ with lib; {
   networking.hostName = "astra";
   networking.hostId = "a6b703c2";
   networking.domain = "cynosure.red";
-  system.stateVersion = "23.11";
+  system.stateVersion = config.system.nixos.release; # root is on tmpfs, this should be fine;
 
   # NOTE: this file is directly imported by microVMs, so needs to be available in all servers using them
   cfg.server = {

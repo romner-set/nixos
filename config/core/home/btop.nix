@@ -3,22 +3,24 @@
   config,
   ...
 }: {
-  home-manager.users =
-    lib.attrsets.mapAttrs (name: _: {
-      programs.btop = {
-        enable = true;
-        settings = {
-          color_theme = "dracula";
-          theme_background = false;
-          truecolor = true;
+  config = lib.mkIf config.cfg.core.home.enable {
+    home-manager.users =
+      lib.attrsets.mapAttrs (name: _: {
+        programs.btop = {
+          enable = true;
+          settings = {
+            color_theme = "dracula";
+            theme_background = false;
+            truecolor = true;
 
-          vim_keys = true;
+            vim_keys = true;
 
-          proc_filter_kernel = true;
-          update_ms = 500;
-          shown_boxes = "cpu gpu0 proc mem net";
+            proc_filter_kernel = true;
+            update_ms = 500;
+            shown_boxes = "cpu gpu0 proc mem net";
+          };
         };
-      };
-    })
-    (config.cfg.core.users // {root = {};});
+      })
+      (config.cfg.core.users // {root = {};});
+  };
 }
