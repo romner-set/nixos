@@ -6,8 +6,10 @@
   inherit (lib) mkOption types;
   cfg = config.cfg.desktop.environment.hyprland;
 in {
-  /*options.cfg.desktop.environment.hyprland.services.hyprlock = {
-  };*/
+  /*
+    options.cfg.desktop.environment.hyprland.services.hyprlock = {
+  };
+  */
 
   config = lib.mkIf cfg.enable {
     home-manager.users =
@@ -64,7 +66,8 @@ in {
                 halign = "center";
                 valign = "center";
               }
-              /*{
+              /*
+                {
                 text = "$USER";
                 color = "rgba(216, 222, 233, 0.70)";
                 font_size = 25;
@@ -72,7 +75,8 @@ in {
                 position = "0, -130";
                 halign = "center";
                 valign = "center";
-              }*/
+              }
+              */
             ];
           };
         };

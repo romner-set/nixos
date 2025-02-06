@@ -6,8 +6,10 @@
   inherit (lib) mkOption types;
   cfg = config.cfg.desktop.environment.hyprland;
 in {
-  /*options.cfg.desktop.environment.hyprland.services.hypridle = {
-  };*/
+  /*
+    options.cfg.desktop.environment.hyprland.services.hypridle = {
+  };
+  */
 
   config = lib.mkIf cfg.enable {
     home-manager.users =

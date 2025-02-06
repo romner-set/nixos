@@ -48,7 +48,7 @@ with lib; {
         jellyfin.enable = true;
         qbittorrent.enable = true;
         invidious.enable = true;
-	calibre.enable = true;
+        calibre.enable = true;
 
         # other storage
         srv.enable = true;
@@ -73,8 +73,8 @@ with lib; {
 
         # gaming
         #foundryvtt.enable = true;
-	mc.enable = true;
-	arma.enable = true;
+        mc.enable = true;
+        arma.enable = true;
       };
     };
 

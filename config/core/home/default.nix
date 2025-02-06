@@ -3,7 +3,8 @@
   configLib,
   lib,
   ...
-}: with lib; let
+}:
+with lib; let
   cfg = config.cfg.core.users;
 in {
   imports = configLib.scanPath ./.;
@@ -16,11 +17,12 @@ in {
   config = mkIf config.cfg.core.home.enable {
     home-manager.users =
       (attrsets.mapAttrs (name: _: {
-        home.username = name;
-        home.homeDirectory = mkForce cfg.${name}.home.path;
-        home.stateVersion = cfg.${name}.home.stateVersion;
-      })
-      config.cfg.core.users) // {
+          home.username = name;
+          home.homeDirectory = mkForce cfg.${name}.home.path;
+          home.stateVersion = cfg.${name}.home.stateVersion;
+        })
+        config.cfg.core.users)
+      // {
         root.home = {
           username = "root";
           homeDirectory = mkForce "/root";

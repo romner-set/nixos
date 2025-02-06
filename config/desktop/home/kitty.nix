@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: with lib; let
+}:
+with lib; let
   cfg = config.cfg.desktop.home;
 in {
   options.cfg.desktop.home.kitty.enable = mkOption {

@@ -55,7 +55,11 @@ in {
                 orientation = "inherit";
                 modules = [
                   "cpu"
-                  (if cfg.services.waybar.tempSensor != null then "temperature" else null)
+                  (
+                    if cfg.services.waybar.tempSensor != null
+                    then "temperature"
+                    else null
+                  )
                   "memory"
                   "disk"
                 ];
@@ -182,18 +186,23 @@ in {
                 format-en-colemak = "clmk";
               };
 
-              /*"custom/power" = {
+              /*
+                "custom/power" = {
                 exec = "cat /sys/class/power_supply/BAT1/power_now 2> /dev/null | numfmt --to-unit=1000000 --format %.3fW";
                 interval = 5;
                 format = "{}";
-              };*/
-              /*"custom/keyboard" = {
+              };
+              */
+              /*
+                "custom/keyboard" = {
                 exec = "cat /home/main/.kbd-pipe";
                 restart-interval = {
                 };
                 format = " {}";
-              };A*/
-              /*"custom/media" = {
+              };A
+              */
+              /*
+                "custom/media" = {
                 format = "{icon}{}";
                 return-type = "json";
                 format-icons = {
@@ -203,7 +212,8 @@ in {
                 max-length = 70;
                 exec = "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{artist}} ~ {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
                 on-click = "playerctl play-pause";
-              };*/
+              };
+              */
 
               mpris = {
                 format = "{player_icon} {dynamic}";
@@ -224,11 +234,13 @@ in {
                     tooltip = true;
                     tooltip-icon-size = 24;
                   }
-                  /*{
+                  /*
+                    {
                     type = "audio-out";
                     tooltip = true;
                     tooltip-icon-size = 24;
-                  }*/
+                  }
+                  */
                   {
                     type = "audio-in";
                     tooltip = true;

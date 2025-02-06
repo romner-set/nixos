@@ -1,4 +1,9 @@
-{lib, pkgs, ...}: with lib; let
+{
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   tofi = import ./scripts/tofi.nix pkgs;
   functionKeys = import ./scripts/function-keys.nix pkgs;
 in ''
@@ -46,8 +51,8 @@ in ''
   bindel = CONTROL, XF86AudioLowerVolume, exec, fish ${functionKeys.volume} 0.1%-
   bindel = CONTROL, XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} 0.1%+
 
-  bindel = $mainMod, SPACE, exec, playerctl play-pause & ${functionKeys.media} 
-  bindel = , XF86AudioPlay, exec, playerctl play-pause & ${functionKeys.media} 
+  bindel = $mainMod, SPACE, exec, playerctl play-pause & ${functionKeys.media}
+  bindel = , XF86AudioPlay, exec, playerctl play-pause & ${functionKeys.media}
   bindel = , XF86AudioNext, exec, playerctl next & ${functionKeys.media}
   bindel = , XF86AudioPrev, exec, playerctl previous & ${functionKeys.media}
   bindel = SHIFT, XF86AudioNext, exec, playerctl position 10+ && dunstify "Skipped 10s"

@@ -113,7 +113,7 @@
       builtins.mapAttrs (name: host: let
         nixpkgs = host.channels.nixpkgs;
         unstable = host.channels.unstable or nixpkgs;
-	home-manager = host.channels.home-manager or inputs.home-manager;
+        home-manager = host.channels.home-manager or inputs.home-manager;
       in
         nixpkgs.ref.lib.nixosSystem rec {
           system = host.system;
@@ -137,7 +137,7 @@
             shared.modules
             ++ (host.modules or [])
             ++ [
-	      home-manager.nixosModules.home-manager
+              home-manager.nixosModules.home-manager
               {_module.args = shared.extraArgs // (host.extraArgs or {});}
               ./hosts/${host.preset}/${host.hostName or name}
               ./presets/${host.preset}.nix
@@ -157,7 +157,7 @@
               channels.nixpkgs.config.allowUnfree = true;
               channels.nixpkgs.config.cudaSupport = true;
 
-	      channels.home-manager.ref = home-manager-desktop;
+              channels.home-manager.ref = home-manager-desktop;
 
               extraArgs = {inherit rose-pine-hyprcursor;};
             };
@@ -195,7 +195,7 @@
                 channels.nixpkgs.config.allowUnfreePredicate = pkg:
                   builtins.elem (channels.nixpkgs.ref.lib.getName pkg) [
                     "zerotierone"
-		    "teamspeak-server"
+                    "teamspeak-server"
                   ];
                 /*
                 channels.unstable.config.allowUnfreePredicate = pkg:

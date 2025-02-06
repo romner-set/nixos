@@ -1,20 +1,20 @@
 pkgs: rec {
   powermenu = pkgs.writeText "tofi-powermenu.sh" ''
     case $(printf "%s\n" "shutdown" "reboot" "suspend" "hibernate" "cancel" | tofi --ascii-input true $@) in
-	    "shutdown")
-		    systemctl poweroff
-		    ;;
-	    "reboot")
-		    systemctl reboot
-		    ;;
-	    "suspend")
-		    systemctl suspend
-		    ;;
-	    "hibernate")
-		    systemctl hibernate
-		    ;;
+     "shutdown")
+      systemctl poweroff
+      ;;
+     "reboot")
+      systemctl reboot
+      ;;
+     "suspend")
+      systemctl suspend
+      ;;
+     "hibernate")
+      systemctl hibernate
+      ;;
     esac
-  ''; 
+  '';
 
   calc = pkgs.writeText "tofi-calc.bash" ''
     XDG_CACHE_HOME="''${XDG_CACHE_HOME:-$HOME/.cache}"
@@ -36,14 +36,14 @@ pkgs: rec {
 
     # Exit if no operation provided
     if [ -z "$operation" ]; then
-	    #notify-send "No operation provided." "Please provide a valid operation."
-	    exit
+     #notify-send "No operation provided." "Please provide a valid operation."
+     exit
     fi
 
     # Remove operation when using history values
     if [[ "$operation" == *"="* ]]; then
-	    operation=$(echo "$operation" | cut -d "=" -f 2)
-	    is_history_value=true
+     operation=$(echo "$operation" | cut -d "=" -f 2)
+     is_history_value=true
     fi
 
     # Calculate the result and delete new line or backslash characters
@@ -51,18 +51,18 @@ pkgs: rec {
 
     # Exit if invalid operation
     if [ -z "$result" ]; then
-	    notify-send "Invalid operation." "Please provide a valid operation."
-	    exit
+     notify-send "Invalid operation." "Please provide a valid operation."
+     exit
     fi
 
-    # Save the operation and result to history 
+    # Save the operation and result to history
     if [ "$is_history_value" = false ]; then
-	    if ! grep -q "$operation = $result" "$tmp_path"; then
-	        temp_file=$(mktemp)
-	        echo "$operation = $result" > "$temp_file"
-	        cat "$tmp_path" >> "$temp_file"
-	        mv "$temp_file" "$tmp_path"
-	    fi
+     if ! grep -q "$operation = $result" "$tmp_path"; then
+         temp_file=$(mktemp)
+         echo "$operation = $result" > "$temp_file"
+         cat "$tmp_path" >> "$temp_file"
+         mv "$temp_file" "$tmp_path"
+     fi
     fi
 
     # Copy the result to the clipboard

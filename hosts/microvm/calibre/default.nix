@@ -5,7 +5,8 @@
   pkgs,
   ...
 }: {
-  /*services.calibre-server = {
+  /*
+    services.calibre-server = {
     enable = true;
     user = "vm-calibre";
     group = "vm-calibre";
@@ -15,9 +16,11 @@
       "--disable-log-not-found"
       "--disable-use-bonjour"
     ];
-  };*/
+  };
+  */
 
-  /*services.calibre-web = {
+  /*
+    services.calibre-web = {
     enable = true;
     user = "vm-calibre";
     group = "vm-calibre";
@@ -28,7 +31,8 @@
       enableBookUploading = true;
       enableBookConversion = true;
     };
-  };*/
+  };
+  */
 
   svc.watchtower.enable = true;
   svc.docker.${config.networking.hostName} = {

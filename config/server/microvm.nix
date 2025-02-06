@@ -38,7 +38,7 @@ in {
       ## balanced around 16GB+ of RAM
       fixedMem = mkOption {
         type = types.int;
-	default = 256;
+        default = 256;
       };
       mem = {
         low = mkOption {

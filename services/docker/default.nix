@@ -52,7 +52,7 @@ in {
             wantedBy = ["multi-user.target"];
             after = ["docker.service" "docker.socket"];
             path = [pkgs.docker-compose];
-	    serviceConfig.Restart = "always";
+            serviceConfig.Restart = "always";
           };
         })
         cfg;

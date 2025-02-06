@@ -1,4 +1,8 @@
-{lib, config, ...}: {
+{
+  lib,
+  config,
+  ...
+}: {
   networking.hostName = "endymion";
   networking.hostId = "3acb8e4a";
   networking.domain = "cynosure.red";
