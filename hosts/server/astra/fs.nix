@@ -20,7 +20,7 @@ with lib; {
 
     ### ZFS CONFIG ###
     zfs.extraPools = ["hdd"];
-    zfs.requestEncryptionCredentials = ["nvme" "hdd"];
+    zfs.requestEncryptionCredentials = ["nvme" "hdd" "archive"];
     kernelParams = ["zfs.zfs_arc_max=8589934592"]; # 8G
   };
 

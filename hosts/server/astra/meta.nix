@@ -56,6 +56,7 @@ with lib; {
         git.enable = true;
         git-runner.enable = true;
         samba.enable = true;
+        archiveteam.enable = true;
 
         # task mgmt
         uptime.enable = true;
