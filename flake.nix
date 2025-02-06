@@ -113,7 +113,7 @@
       builtins.mapAttrs (name: host: let
         nixpkgs = host.channels.nixpkgs;
         unstable = host.channels.unstable or nixpkgs;
-        home-manager = host.channels.home-manager or inputs.home-manager;
+        home-manager = host.channels.home-manager.ref or inputs.home-manager;
       in
         nixpkgs.ref.lib.nixosSystem rec {
           system = host.system;
