@@ -66,7 +66,7 @@ in {
       wl-clipboard
       clipse
       physlock
-      #TODO: hyprsysteminfo
+      hyprsysteminfo
       rose-pine-hyprcursor.packages.${pkgs.system}.default
     ];
 
