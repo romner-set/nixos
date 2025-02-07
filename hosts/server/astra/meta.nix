@@ -13,6 +13,8 @@ with lib; {
   cfg.server = {
     microvm = {
       enable = true;
+      imperative = true;
+
       vmConf.sshKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMnFDhRTJyoFdhs31OHXvQwcQY3SlB9WX0bUCTlJKdJO root@astra"
       ];

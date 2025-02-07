@@ -197,12 +197,10 @@
                     "zerotierone"
                     "teamspeak-server"
                   ];
-                /*
                 channels.unstable.config.allowUnfreePredicate = pkg:
                   builtins.elem (channels.unstable.ref.lib.getName pkg) [
                     "factorio-headless"
                   ];
-                */
 
                 # microvm/starr - sonarr
                 channels.nixpkgs.config.permittedInsecurePackages = [

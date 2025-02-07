@@ -55,8 +55,14 @@ with lib; {
     #options = ["noexec" "nodev"];
   };
 
+  fileSystems."/var/lib/microvms" = {
+    device = "nvme/microvm";
+    fsType = "zfs";
+    #options = ["noexec" "nodev"];
+  };
+
   fileSystems."/vm" = {
-    device = "nvme/nix/vm-data";
+    device = "nvme/microvm/vm-data";
     fsType = "zfs";
     #options = ["noexec" "nodev"];
   };
