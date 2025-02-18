@@ -1,6 +1,8 @@
 {
-  modulesPath,
+  config,
+  lib,
   pkgs,
+  modulesPath,
   ...
 }: {
   imports = [
@@ -14,18 +16,40 @@
 
   cfg.core = {
     firmware.enable = false;
-    boot.loader.systemd-boot.enable = true;
+    boot.loader.grub.enable = true;
     net.systemdDefault = true;
   };
 
   cfg.desktop = {
     graphics.nvidia.enable = true;
-    environment.kde = {
+    #boot.plymouth.enable = true;
+
+    environment.kde = lib.mkIf (config.specialisation != {}) {
       enable = true;
       autoLogin.user = "main";
     };
+  };
 
-    boot.plymouth.enable = true;
+  specialisation.Hyprland.configuration.cfg.desktop.environment.hyprland = let
+    primaryM = "desc:AOC 32G1WG4 0x00001165";
+    secondaryM = "desc:Microstep MSI MAG275R 0x0000037E";
+  in {
+    enable = true;
+    autoLogin.user = "main";
+
+    services.hyprpaper.monitors.${primaryM}.wallpaper = "space.jpg";
+    services.hyprpaper.monitors.${secondaryM}.wallpaper = "abstract-portrait.jpg";
+
+    monitors = {
+      ${primaryM} = {
+        resolution = "1920x1080@144";
+        position = "1080x400";
+      };
+      ${secondaryM} = {
+        position = "0x0";
+        extraArgs = ", transform, 3"; # 270deg
+      };
+    };
   };
 
   svc = {
