@@ -235,8 +235,8 @@ in {
               "float,class:(clipse)" # ensure you have a floating window class set if you want this behavior
               "size 622 652,class:(clipse)" # set the size of the window as necessary
               # iwgtk
-              "float,class:(iwgtk)"
-              "size 622 652,class:(iwgtk)"
+              "float,class:(org.twosheds.iwgtk)"
+              "size 622 652,class:(org.twosheds.iwgtk)"
             ];
           };
         };
