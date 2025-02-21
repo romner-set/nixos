@@ -12,6 +12,26 @@ in {
   imports = configLib.scanPaths [./programs];
 
   options.cfg.desktop.environment.hyprland = {
+    binds = let
+      mkStrOption = default: mkOption {
+        type = types.str;
+        inherit default;
+      };
+    in {
+      volumeSteps = {
+        large = mkStrOption "25%";
+        normal = mkStrOption "5%";
+        small = mkStrOption "1%";
+        precise = mkStrOption "0.1%";
+      };
+      brightnessSteps = {
+        large = mkStrOption "25%";
+        normal = mkStrOption "5%";
+        small = mkStrOption "1%";
+        precise = mkStrOption "1";
+      };
+    };
+
     monitors = mkOption {
       type = with types;
         attrsOf (submodule ({name, ...}: {
@@ -44,10 +64,7 @@ in {
         }));
       default = {};
     };
-    extraConfig = mkOption {
-      type = types.lines;
-      default = "";
-    };
+
     inputDevices = mkOption {
       type = with types;
         attrsOf (submodule ({name, ...}: {
@@ -60,6 +77,11 @@ in {
           };
         }));
       default = {};
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
     };
   };
 

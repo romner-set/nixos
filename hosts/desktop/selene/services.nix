@@ -5,6 +5,8 @@
 }: {
   services.fprintd.enable = true;
 
+  /*
+  # note: fn + left/right arrow does the same thing
   services.keyd = {
     enable = true;
     keyboards.internal = {
@@ -15,4 +17,5 @@
       };
     };
   };
+  */
 }

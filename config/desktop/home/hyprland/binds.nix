@@ -1,11 +1,14 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }:
 with lib; let
   tofi = import ./scripts/tofi.nix pkgs;
   functionKeys = import ./scripts/function-keys.nix pkgs;
+
+  cfg = config.cfg.desktop.environment.hyprland.binds;
 in ''
   $mainMod = SUPER
 
@@ -33,26 +36,26 @@ in ''
   bindlp = ,switch:on:Lid Switch, exec, hyprlock --immediate
 
   # Brightness
-  bindelp = ,232, exec, sh ${functionKeys.brightness} 5%-
-  bindelp = ,233, exec, sh ${functionKeys.brightness} +5%
-  bindelp = SHIFT,232, exec, sh ${functionKeys.brightness} 1%-
-  bindelp = SHIFT,233, exec, sh ${functionKeys.brightness} +1%
-  bindelp = $mainMod,232, exec, sh ${functionKeys.brightness} 25%-
-  bindelp = $mainMod,233, exec, sh ${functionKeys.brightness} +25%
-  bindelp = CONTROL,232, exec, sh ${functionKeys.brightness} 1-
-  bindelp = CONTROL,233, exec, sh ${functionKeys.brightness} +1
+  bindelp = ,232, exec, sh ${functionKeys.brightness} ${cfg.brightnessSteps.normal}-
+  bindelp = ,233, exec, sh ${functionKeys.brightness} +${cfg.brightnessSteps.normal}
+  bindelp = SHIFT,232, exec, sh ${functionKeys.brightness} ${cfg.brightnessSteps.small}-
+  bindelp = SHIFT,233, exec, sh ${functionKeys.brightness} +${cfg.brightnessSteps.small}
+  bindelp = $mainMod,232, exec, sh ${functionKeys.brightness} ${cfg.brightnessSteps.large}-
+  bindelp = $mainMod,233, exec, sh ${functionKeys.brightness} +${cfg.brightnessSteps.large}
+  bindelp = CONTROL,232, exec, sh ${functionKeys.brightness} ${cfg.brightnessSteps.precise}-
+  bindelp = CONTROL,233, exec, sh ${functionKeys.brightness} +${cfg.brightnessSteps.precise}
 
   # Volume
   bindelp = , XF86AudioMute, exec, fish ${functionKeys.mute}
   bindelp = SHIFT, XF86AudioMute, exec, fish ${functionKeys.volumeLimit}
-  bindelp = , XF86AudioLowerVolume, exec, fish ${functionKeys.volume} 5%-
-  bindelp = , XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} 5%+
-  bindelp = SHIFT, XF86AudioLowerVolume, exec, fish ${functionKeys.volume} 1%-
-  bindelp = SHIFT, XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} 1%+
-  bindelp = $mainMod, XF86AudioLowerVolume, exec, fish ${functionKeys.volume} 25%-
-  bindelp = $mainMod, XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} 25%+
-  bindelp = CONTROL, XF86AudioLowerVolume, exec, fish ${functionKeys.volume} 0.1%-
-  bindelp = CONTROL, XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} 0.1%+
+  bindelp = , XF86AudioLowerVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.normal}-
+  bindelp = , XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.normal}+
+  bindelp = SHIFT, XF86AudioLowerVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.small}-
+  bindelp = SHIFT, XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.small}+
+  bindelp = $mainMod, XF86AudioLowerVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.large}-
+  bindelp = $mainMod, XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.large}+
+  bindelp = CONTROL, XF86AudioLowerVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.precise}-
+  bindelp = CONTROL, XF86AudioRaiseVolume, exec, fish ${functionKeys.volume} ${cfg.volumeSteps.precise}+
 
   bindelp = $mainMod, SPACE, exec, playerctl play-pause & ${functionKeys.media}
   bindelp = , XF86AudioPlay, exec, playerctl play-pause & ${functionKeys.media}

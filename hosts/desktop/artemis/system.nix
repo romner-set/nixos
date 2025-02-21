@@ -37,6 +37,12 @@
     enable = true;
     autoLogin.user = "main";
 
+    binds.volumeSteps = {
+      large = "10%";
+      normal = "2%";
+      small = "0.5%";
+    };
+
     services.hyprpaper.monitors.${primaryM}.wallpaper = "space.jpg";
     services.hyprpaper.monitors.${secondaryM}.wallpaper = "abstract-portrait.jpg";
 
