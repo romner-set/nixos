@@ -15,6 +15,8 @@ in {
 
     systemdDefault = mkEnableOption "";
 
+    useIwd = mkEnableOption "";
+
     dns = {
       enable = mkEnableOption "";
       nameservers = mkOption {
@@ -47,6 +49,14 @@ in {
           IPv6AcceptRA = true;
         };
         linkConfig.RequiredForOnline = "routable";
+      };
+    };
+
+    networking.wireless.iwd = mkIf cfg.useIwd {
+      enable = true;
+      settings = {
+        IPv6.Enabled = true;
+	Settings.AutoConnect = mkDefault true;
       };
     };
   };

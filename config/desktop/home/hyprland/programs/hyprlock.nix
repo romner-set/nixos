@@ -24,6 +24,8 @@ in {
               grace = 5;
             };
 
+	    auth."fingerprint:enabled" = true;
+
             background = {
               path = "${./hyprpaper/wallpapers/rocket.png}";
               blur_passes = 2;

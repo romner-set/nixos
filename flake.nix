@@ -26,6 +26,8 @@
     home-manager-desktop.url = "github:nix-community/home-manager/master";
     home-manager-desktop.inputs.nixpkgs.follows = "desktop";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     # Servers
     server.url = "nixpkgs/nixos-24.11"; #TODO: setup auto-update?
     server-unstable.url = "nixpkgs/nixos-unstable";
@@ -42,6 +44,7 @@
     disko,
     desktop,
     home-manager-desktop,
+    nixos-hardware,
     server,
     server-unstable,
     microvm,
@@ -159,7 +162,7 @@
 
               channels.home-manager.ref = home-manager-desktop;
 
-              extraArgs = {inherit rose-pine-hyprcursor;};
+              specialArgs = {inherit nixos-hardware;};
             };
           }) (builtins.attrNames (builtins.readDir ./hosts/desktop)))
           ++

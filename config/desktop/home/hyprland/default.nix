@@ -3,7 +3,7 @@
   config,
   configLib,
   pkgs,
-  rose-pine-hyprcursor,
+  inputs,
   ...
 } @ args:
 with lib; let
@@ -44,6 +44,10 @@ in {
         }));
       default = {};
     };
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+    };
     inputDevices = mkOption {
       type = with types;
         attrsOf (submodule ({name, ...}: {
@@ -67,7 +71,10 @@ in {
       clipse
       physlock
       hyprsysteminfo
-      rose-pine-hyprcursor.packages.${pkgs.system}.default
+      inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+      iwgtk
+      nautilus
+      overskride
     ];
 
     # default rule for undefined monitors
@@ -97,7 +104,7 @@ in {
           enable = true;
           systemd.enable = false; # UWSM support
 
-          extraConfig = import ./binds.nix args;
+          extraConfig = (import ./binds.nix args) + cfg.extraConfig;
           settings = {
             env = [
               "HYPRCURSOR_THEME,rose-pine-hyprcursor"
@@ -205,6 +212,9 @@ in {
               # clipse
               "float,class:(clipse)" # ensure you have a floating window class set if you want this behavior
               "size 622 652,class:(clipse)" # set the size of the window as necessary
+	      # iwgtk
+              "float,class:(iwgtk)"
+              "size 622 652,class:(iwgtk)"
             ];
           };
         };

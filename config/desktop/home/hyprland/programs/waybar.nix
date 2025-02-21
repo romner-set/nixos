@@ -259,6 +259,7 @@ in {
                 tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
                 tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
                 tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
+		on-click = "overskride";
               };
               tray = {
                 icon-size = 13;
@@ -287,7 +288,7 @@ in {
                 format-linked = "{ifname} (No IP) ";
                 format-disconnected = "睊 Disconnected";
                 tooltip-format-wifi = "Signal Strength: {signalStrength}% | Down Speed: {bandwidthDownBits}, Up Speed: {bandwidthUpBits}";
-                #TODO: on-click = "wifi4wofi";
+                on-click = "iwgtk";
               };
               user = {
                 format = "↑{work_H}:{work_M}:{work_S}";
