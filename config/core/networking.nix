@@ -56,7 +56,7 @@ in {
       enable = true;
       settings = {
         IPv6.Enabled = true;
-	Settings.AutoConnect = mkDefault true;
+        Settings.AutoConnect = mkDefault true;
       };
     };
   };

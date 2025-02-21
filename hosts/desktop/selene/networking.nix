@@ -23,7 +23,7 @@
       bridgeConfig = {};
       networkConfig = {
         DHCP = "yes";
-	IPv6AcceptRA = true;
+        IPv6AcceptRA = true;
       };
       linkConfig.RequiredForOnline = "routable";
     };
@@ -31,8 +31,8 @@
       matchConfig.Type = "wlan";
       networkConfig = {
         DHCP = "yes";
-	IPv6AcceptRA = true;
-	IgnoreCarrierLoss = "3s";
+        IPv6AcceptRA = true;
+        IgnoreCarrierLoss = "3s";
       };
       linkConfig.RequiredForOnline = "routable";
     };

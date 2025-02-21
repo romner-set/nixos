@@ -21,10 +21,10 @@ in {
       attrsets.mapAttrs (name: _: {
         home.sessionVariables.GTK_THEME = "Andromeda";
         gtk = {
-	  enable = true;
-	  theme.name = "Andromeda";
-	  iconTheme.name = "Dracula";
-	};
+          enable = true;
+          theme.name = "Andromeda";
+          iconTheme.name = "Dracula";
+        };
       })
       (config.cfg.core.users // {root = {};});
   };

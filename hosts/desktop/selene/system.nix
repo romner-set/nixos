@@ -27,9 +27,9 @@
       services.hyprpaper.monitors."".wallpaper = "aurora.jpg";
 
       monitors."desc:BOE NE135A1M-NY1" = {
-	resolution = "2880x1920@120";
+        resolution = "2880x1920@120";
         scale = 2;
-	extraArgs = ", vrr, 1";
+        extraArgs = ", vrr, 1";
       };
     };
   };

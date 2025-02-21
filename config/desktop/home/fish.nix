@@ -11,21 +11,21 @@ in {
     default = cfg.enable;
   };
   config = mkIf cfg.fish.enable {
-    home-manager.users =
-      attrsets.mapAttrs (name: _: {
-        programs.fish = {
-          enable = true;
-          functions = {
-	    "ccat" = "highlight -O truecolor -s neon $argv";
-	    "icat" = "kitty icat";
-	    "iptables" = "sudo iptables $argv";
-	    "ip6tables" = "sudo ip6tables $argv";
-	    "nix" = "sudo nix $argv";
-	    "nixos-rebuild" = "sudo nixos-rebuild $argv";
-	    "mount" = "sudo mount $argv";
-	    "umount" = "sudo umount $argv";
-	  };
+    home-manager.users = attrsets.mapAttrs (name: _: {
+      programs.fish = {
+        enable = true;
+        functions = {
+          "ccat" = "highlight -O truecolor -s neon $argv";
+          "icat" = "kitty icat";
+          "iptables" = "sudo iptables $argv";
+          "ip6tables" = "sudo ip6tables $argv";
+          "nix" = "sudo nix $argv";
+          "nixos-rebuild" = "sudo nixos-rebuild $argv";
+          "mount" = "sudo mount $argv";
+          "umount" = "sudo umount $argv";
         };
-      }) config.cfg.core.users;
+      };
+    })
+    config.cfg.core.users;
   };
 }

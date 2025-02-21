@@ -1,4 +1,4 @@
-{config,...}: {
+{config, ...}: {
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
