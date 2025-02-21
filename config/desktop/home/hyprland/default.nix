@@ -13,10 +13,11 @@ in {
 
   options.cfg.desktop.environment.hyprland = {
     binds = let
-      mkStrOption = default: mkOption {
-        type = types.str;
-        inherit default;
-      };
+      mkStrOption = default:
+        mkOption {
+          type = types.str;
+          inherit default;
+        };
     in {
       volumeSteps = {
         large = mkStrOption "25%";
