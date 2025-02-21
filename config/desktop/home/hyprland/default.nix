@@ -122,15 +122,16 @@ in {
           '';
         };
 
+        home.sessionVariables.NIXOS_OZONE_WL = "1";
+        home.sessionVariables.HYPRCURSOR_THEME = "rose-pine-hyprcursor";
+
         wayland.windowManager.hyprland = {
           enable = true;
           systemd.enable = false; # UWSM support
 
           extraConfig = (import ./binds.nix args) + cfg.extraConfig;
           settings = {
-            env = [
-              "HYPRCURSOR_THEME,rose-pine-hyprcursor"
-            ];
+            env = lib.mapAttrsToList (name: value: "${name},${value}") config.home-manager.users.${name}.home.sessionVariables;
 
             exec-once = [
               "systemctl start --user waybar"
@@ -240,8 +241,6 @@ in {
             ];
           };
         };
-
-        home.sessionVariables.NIXOS_OZONE_WL = "1";
       })
       config.cfg.core.users;
   };
