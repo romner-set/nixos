@@ -4,8 +4,9 @@
   ...
 }: {
   cfg.core.net.useIwd = true;
-  networking.useDHCP = false;
+  cfg.core.net.systemdDefault = true;
 
+  /*networking.useDHCP = false;
   systemd.network = {
     enable = true;
 
@@ -26,7 +27,8 @@
         IPv6AcceptRA = true;
       };
       linkConfig.RequiredForOnline = "routable";
-    };
+    };*/
+  systemd.network = {
     networks."35-wireless" = {
       matchConfig.Type = "wlan";
       networkConfig = {
