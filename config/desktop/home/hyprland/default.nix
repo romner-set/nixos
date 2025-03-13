@@ -90,6 +90,7 @@ in {
     environment.systemPackages = with pkgs; [
       tofi
       hyprpicker
+      hyprshot
       wl-clipboard
       clipse
       physlock

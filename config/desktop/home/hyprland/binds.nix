@@ -27,6 +27,7 @@ in ''
   bindp = $mainMod, L, togglesplit
   bindp = $mainMod, X, exec, hyprlock --immediate
   bindp = $mainMod SHIFT, F, fullscreen
+  bindp = ,Print, exec, hyprshot -m region
 
   bindp = $mainMod, R, exec, tofi-drun | xargs uwsm app --
   bindp = $mainMod, Z, exec, sh ${tofi.powermenu}
